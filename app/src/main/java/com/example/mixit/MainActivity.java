@@ -1,5 +1,6 @@
 package com.example.mixit;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -96,11 +97,16 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            googleSignIn();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void googleSignIn() {
+        Intent intent = new Intent(this, GoogleSignInActivity.class);
+        startActivity(intent);
     }
 }
