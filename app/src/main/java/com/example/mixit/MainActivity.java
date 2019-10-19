@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_tools) {
 
         } else if (id == R.id.nav_share) {
-
+            anonymousAuth();
         } else if (id == R.id.nav_send) {
             googleSignIn();
         }
@@ -107,6 +107,11 @@ public class MainActivity extends AppCompatActivity
 
     public void googleSignIn() {
         Intent intent = new Intent(this, GoogleSignInActivity.class);
+        startActivity(intent);
+    }
+
+    public void anonymousAuth() {
+        Intent intent = new Intent(this, AnonymousAuthActivity.class);
         startActivity(intent);
     }
 }
