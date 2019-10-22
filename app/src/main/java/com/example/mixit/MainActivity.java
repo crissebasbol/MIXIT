@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_tools) {
-
+            emailPassword();
         } else if (id == R.id.nav_share) {
             anonymousAuth();
         } else if (id == R.id.nav_send) {
@@ -112,6 +112,11 @@ public class MainActivity extends AppCompatActivity
 
     public void anonymousAuth() {
         Intent intent = new Intent(this, AnonymousAuthActivity.class);
+        startActivity(intent);
+    }
+
+    public void emailPassword() {
+        Intent intent = new Intent(xthis, EmailPasswordActivity.class);
         startActivity(intent);
     }
 }
