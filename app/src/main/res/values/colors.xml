@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#5d1885</color>
+    <color name="colorPrimaryDark">#250438</color>
+    <color name="colorSecundary">#9c0b66</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="institutionalColor">#AED208</color>
+    <color name="snackbar_action">@color/institutionalColor</color>
+    <color name="bg_item_select_vehicule">#E6E6E6</color>
+    <color name="bg_div_bar_trcp">#E6E6E6</color>
+    <color name="bg_div_bar_trcp_dark">#AAAAAA</color>
+    <color name="text_color_blue">#346689</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000</color>
+    <color name="white2">#FBFCFC</color>
+    <color name="gray">#656565</color>
+    <color name="gray_light">#656565</color>
+    <color name="gray_xx_light">#bcbcbc</color>
+    <color name="gray_xxx_light">#EFEFEF</color>
+    <color name="reply_blue">#344955</color>
+    <color name="gray600">#757575</color>
+    <color name="gray300">#6d6d6d</color>
+    <color name="reply_green">#687B49</color>
+    <color name="red">#da0400</color>
+    <color name="gray_blue">#23272d</color>
+    <color name="mostaza_light">#fff263</color>
+    <color name="yellow">#FDE01A</color>
+    <color name="yellow_dark">#DCC000</color>
+    <color name="blue">#0000ff</color>
+    <color name="startblue">#1BCC8E</color>
+    <color name="endblue">#379776</color>
+    <color name="blue_light">#66B9F9</color>
 </resources>
