@@ -14,18 +14,28 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
-    <!-- Start Activity -->
+    <!-- WalkthroughActivity Activity -->
     <string name="facebook_app_id">424317441819524</string>
     <string name="fb_login_protocol_scheme">fb424317441819524</string>
     <string name="action_register_email">Registrar con Email</string>
     <string name="action_continue_facebook">Continuar con Facebook</string>
     <string name="action_continue_google">Continuar con Google</string>
-    <!-- Walkthrough1 Fragment -->
+
+    <!-- Walkthrough Fragments -->
     <string name="action_skip">Omitir</string>
+    <string name="action_start">Comenzar</string>
     <string name="txt_skip_walkthrough">¿Ya formas parte de nuestra familia?
             <a href="">INICIAR SESIÓN</a>
         </string>
+    <string name="txt_walkthrough1_title">Prepara los mejores cócteles</string>
+    <string name="txt_walkthrough2_title">Crea tus propias recetas</string>
+    <string name="txt_walkthrough3_title">Recordatorios</string>
+    <string name="txt_walkthrough4_title">Filtra por licores</string>
     <string name="txt_walkthrough1_description">Consigue preparar los mejores cócteles con nuestras recetas, serás la sensación!</string>
+    <string name="txt_walkthrough2_description">Crea tus propios cócteles y almacenálo en nuestro sistema para que no los olvides!</string>
+    <string name="txt_walkthrough3_description">Agrega recordatorios a los cócteles que deseas preparar en un futuro</string>
+    <string name="txt_walkthrough4_description_1">¿Solo tienes unos cuantos ingrediente y no sabes qué preparar?</string>
+    <string name="txt_walkthrough4_description_2">No te preocupes, nosotros te ayudamos a buscar el cóctel ideal!</string>
 
     <!-- LogIn Activity -->
     <string name="action_forgot_password">¿Olvidó la contraseña?</string>
@@ -38,10 +48,14 @@
         <a href="/"> Términos de servicio y política de seguridad </a>
     </string>
     <string name="txt_start_session">¿Ya tienes una cuenta?</string>
-    <string name="txt_walkthrough1_title">Prepara los mejores cócteles</string>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_startt">startt</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 
 </resources>
