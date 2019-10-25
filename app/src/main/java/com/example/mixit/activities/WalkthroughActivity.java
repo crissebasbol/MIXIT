@@ -30,7 +30,4 @@ public class WalkthroughActivity extends AppCompatActivity {
         viewPager.setCurrentItem(index-1,true);
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem()+i;
-    }
 }

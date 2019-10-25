@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#250438</color>
     <color name="colorSecundary">#9c0b66</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="transparent">#0000</color>
     <color name="institutionalColor">#AED208</color>
     <color name="snackbar_action">@color/institutionalColor</color>
     <color name="bg_item_select_vehicule">#E6E6E6</color>

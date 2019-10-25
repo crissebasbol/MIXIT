@@ -24,9 +24,8 @@
     <!-- Walkthrough Fragments -->
     <string name="action_skip">Omitir</string>
     <string name="action_start">Comenzar</string>
-    <string name="txt_skip_walkthrough">¿Ya formas parte de nuestra familia?
-            <a href="">INICIAR SESIÓN</a>
-        </string>
+    <string name="action_txt_login">Iniciar sesión</string>
+    <string name="txt_skip_walkthrough">¿Ya formas parte de nuestra familia?</string>
     <string name="txt_walkthrough1_title">Prepara los mejores cócteles</string>
     <string name="txt_walkthrough2_title">Crea tus propias recetas</string>
     <string name="txt_walkthrough3_title">Recordatorios</string>

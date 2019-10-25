@@ -15,12 +15,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.mixit.R;
+import com.example.mixit.activities.LogInActivity;
 import com.example.mixit.activities.StartActivity;
 import com.example.mixit.activities.WalkthroughActivity;
 
 public class Walkthrough3Fragment extends Fragment implements View.OnClickListener {
 
-    Button skipButton;
+    Button skipButton, mLoginButton;
     RadioButton mRadioButtonW1, mRadioButtonW2, mRadioButtonW3, mRadioButtonW4;
     RadioGroup radioGroup;
 
@@ -44,6 +45,8 @@ public class Walkthrough3Fragment extends Fragment implements View.OnClickListen
         mRadioButtonW3.setOnClickListener(this);
         mRadioButtonW4.setOnClickListener(this);
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+        mLoginButton = view.findViewById(R.id.login_button);
+        mLoginButton.setOnClickListener(this);
         return view;
     }
 
@@ -57,9 +60,10 @@ public class Walkthrough3Fragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         int id = view.getId();
         //((WalkthroughActivity)getActivity()).changeFragment(id);
-        switch (id) {
+        Intent intent;
+        switch (id){
             case R.id.skipButton:
-                Intent intent = new Intent(getContext(), StartActivity.class);
+                intent = new Intent(getContext(), StartActivity.class);
                 startActivity(intent);
                 break;
             case R.id.radioButtonW1:
@@ -73,6 +77,10 @@ public class Walkthrough3Fragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.radioButtonW4:
                 ((WalkthroughActivity)getActivity()).changePage(4);
+                break;
+            case R.id.login_button:
+                intent = new Intent(getContext(), LogInActivity.class);
+                startActivity(intent);
                 break;
         }
     }

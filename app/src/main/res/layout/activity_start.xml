@@ -35,7 +35,7 @@
             android:outlineSpotShadowColor="@color/colorPrimaryDark"/>
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/facebook_button"
             style="@style/FacebookLoginButton"
             android:layout_width="match_parent"
             android:layout_marginStart="12dp"
@@ -46,10 +46,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+            app:layout_constraintTop_toBottomOf="@+id/google_button" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/google_button"
             style="@style/GoogleLoginButton"
             android:layout_width="match_parent"
             android:layout_marginStart="8dp"
@@ -62,7 +62,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/email_button"
             style="@style/EmailLoginButton"
             android:layout_width="match_parent"
             android:layout_marginStart="12dp"
@@ -73,10 +73,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button4" />
+            app:layout_constraintTop_toBottomOf="@+id/facebook_button" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -89,7 +89,7 @@
             android:textColor="@color/gray_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button3" />
+            app:layout_constraintTop_toBottomOf="@+id/email_button" />
 
         <TextView
             android:id="@+id/textView3"

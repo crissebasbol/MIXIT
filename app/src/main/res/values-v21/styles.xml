@@ -35,20 +35,17 @@
         <item name="android:background">@drawable/button_gray_custom</item>
     </style>
 
-    <style name="SkipButton">
-        <item name="android:text">@string/action_skip</item>
+    <style name="customButton">
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:background">@drawable/custom_button</item>
     </style>
 
-    <style name="startButton">
-        <item name="android:text">@string/action_start</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:background">@drawable/custom_button</item>
+
+    <style name="txtHrefButton">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
 </resources>
