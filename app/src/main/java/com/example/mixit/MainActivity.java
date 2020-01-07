@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void emailPassword() {
-        Intent intent = new Intent(xthis, EmailPasswordActivity.class);
+        Intent intent = new Intent(this, EmailPasswordActivity.class);
         startActivity(intent);
     }
 }
