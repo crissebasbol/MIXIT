@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.authentication.EmailPasswordActivity;
 import com.example.mixit.activities.authentication.GoogleSignInActivity;
+import com.example.mixit.services.JSONAPIRequest;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,6 +65,18 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mFacebookButton.setOnClickListener(this);
         mEmailButton.setOnClickListener(this);
 
+//  TODO
+//        JSONAPIRequest APIService = new JSONAPIRequest(this);
+//
+//        JSONArray filteredQuery = APIService.filteredQuery(null, "Alcoholic", null, null);
+//        String name = null;
+//        try {
+//            name = filteredQuery.getJSONObject(0).getString("strDrink");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Toast.makeText(this, name, Toast.LENGTH_LONG).show();
 
 //  THE FOLLOWING CODE ALLOWS TO TELL IF THERE IS AN AUTHENTICATED USER AND PLACE A TOAST NOTIFICATION.
 //  IT SHOULD BE USED TO DEFINED APP FLOW
