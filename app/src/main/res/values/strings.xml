@@ -76,4 +76,47 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
+
+    <!-- WalkthroughActivity Activity -->
+    <string name="facebook_app_id">424317441819524</string>
+    <string name="fb_login_protocol_scheme">fb424317441819524</string>
+    <string name="action_register_email">Registrar con Email</string>
+    <string name="action_continue_facebook">Continuar con Facebook</string>
+    <string name="action_continue_google">Continuar con Google</string>
+
+    <!-- Walkthrough Fragments -->
+    <string name="action_skip">Omitir</string>
+    <string name="action_start">Comenzar</string>
+    <string name="action_txt_login">Iniciar sesión</string>
+    <string name="txt_skip_walkthrough">¿Ya formas parte de nuestra familia?</string>
+    <string name="txt_walkthrough1_title">Prepara los mejores cócteles</string>
+    <string name="txt_walkthrough2_title">Crea tus propias recetas</string>
+    <string name="txt_walkthrough3_title">Recordatorios</string>
+    <string name="txt_walkthrough4_title">Filtra por licores</string>
+    <string name="txt_walkthrough1_description">Consigue preparar los mejores cócteles con nuestras recetas, serás la sensación!</string>
+    <string name="txt_walkthrough2_description">Crea tus propios cócteles y almacenálo en nuestro sistema para que no los olvides!</string>
+    <string name="txt_walkthrough3_description">Agrega recordatorios a los cócteles que deseas preparar en un futuro</string>
+    <string name="txt_walkthrough4_description_1">¿Solo tienes unos cuantos ingrediente y no sabes qué preparar?</string>
+    <string name="txt_walkthrough4_description_2">No te preocupes, nosotros te ayudamos a buscar el cóctel ideal!</string>
+
+    <!-- LogIn Activity -->
+    <string name="action_forgot_password">¿Olvidó la contraseña?</string>
+    <string name="action_sign_in">Iniciar sesión</string>
+    <string name="action_sign_up">Registrarse</string>
+    <string name="prompt_email">Ingrese su correo electrónico</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="txt_accept_register">Al registrarse, usted acepta los
+        <a href="/"> Términos de servicio y política de seguridad </a>
+    </string>
+    <string name="txt_start_session">¿Ya tienes una cuenta?</string>
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_startt">startt</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
 </resources>
