@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mixit.R;
 import com.example.mixit.activities.authentication.EmailPasswordActivity;
 import com.example.mixit.activities.authentication.GoogleSignInActivity;
+import com.example.mixit.services.authentication.GoogleAuth;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
@@ -17,6 +18,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     Button mLoginButton, mGoogleButton, mFacebookButton, mEmailButton;
 
     private FirebaseAuth mAuth;
+
+    GoogleAuth googleAuth;
 
     //public FragmentManager fm = getSupportFragmentManager();
     //public FragmentTransaction ft = fm.beginTransaction();
@@ -32,15 +35,15 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 //                intent = new Intent(this, AnonymousAuthActivity.class);
 //                break;
             case R.id.google_button:
-                intent = new Intent(this, GoogleSignInActivity.class);
+                googleAuth = new GoogleAuth(this);
                 break;
             case R.id.facebook_button:
                 break;
             case R.id.email_button:
                 intent = new Intent(this, EmailPasswordActivity.class);
+                startActivity(intent);
                 break;
         }
-        startActivity(intent);
     }
 
     //public GestureDetectorCompat mDetector;
@@ -59,7 +62,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mGoogleButton.setOnClickListener(this);
         mFacebookButton.setOnClickListener(this);
         mEmailButton.setOnClickListener(this);
-
 
 //  THE FOLLOWING CODE ALLOWS TO TELL IF THERE IS AN AUTHENTICATED USER AND PLACE A TOAST NOTIFICATION.
 //  IT SHOULD BE USED TO DEFINED APP FLOW

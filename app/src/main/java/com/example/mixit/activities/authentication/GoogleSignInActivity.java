@@ -1,3 +1,11 @@
+/*
+
+    DEPRECATED: ACTIVITY IS NO LONGER REQUIRED.
+    SIGNING IN USING GOOGLE IS PERFORMED USING
+    GOOGLE AUTH SERVICE.
+
+*/
+
 package com.example.mixit.activities.authentication;
 
 import android.content.Intent;
