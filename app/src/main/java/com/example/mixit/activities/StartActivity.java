@@ -9,17 +9,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.authentication.EmailPasswordActivity;
-import com.example.mixit.activities.authentication.GoogleSignInActivity;
+import com.example.mixit.services.authentication.AnonymousAuth;
 import com.example.mixit.services.authentication.GoogleAuth;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button mLoginButton, mGoogleButton, mFacebookButton, mEmailButton;
+    Button mLoginButton, mGoogleButton, mFacebookButton, mEmailButton, mAnonymousButton;
 
     private FirebaseAuth mAuth;
 
     GoogleAuth googleAuth;
+    AnonymousAuth anonymousAuth;
 
     //public FragmentManager fm = getSupportFragmentManager();
     //public FragmentTransaction ft = fm.beginTransaction();
@@ -31,9 +33,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 //            case R.id.login_button:
 //                intent = new Intent(this, LogInActivity.class);
 //                break;
-//            case R.id.anonymous_button:
-//                intent = new Intent(this, AnonymousAuthActivity.class);
-//                break;
+            case R.id.anonymous_button:
+                anonymousAuth = new AnonymousAuth(this);
+                break;
             case R.id.google_button:
                 googleAuth = new GoogleAuth(this);
                 break;
@@ -57,18 +59,24 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mGoogleButton = findViewById(R.id.google_button);
         mFacebookButton = findViewById(R.id.facebook_button);
         mEmailButton = findViewById(R.id.email_button);
+        mAnonymousButton = findViewById(R.id.anonymous_button);
 
         mLoginButton.setOnClickListener(this);
         mGoogleButton.setOnClickListener(this);
         mFacebookButton.setOnClickListener(this);
         mEmailButton.setOnClickListener(this);
+        mAnonymousButton.setOnClickListener(this);
 
-//  THE FOLLOWING CODE ALLOWS TO TELL IF THERE IS AN AUTHENTICATED USER AND PLACE A TOAST NOTIFICATION.
-//  IT SHOULD BE USED TO DEFINED APP FLOW
-//        if (currentUser != null) {
-//            Toast.makeText(this, "Authenticated",Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(this, "Unauthenticated",Toast.LENGTH_LONG).show();
-//        }
+        //  THE FOLLOWING CODE ALLOWS TO TELL IF THERE'S AN AUTHENTICATED USER PRESENT.
+        //  IT SHOULD BE USED TO DEFINED APP FLOW
+        mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            finish();
+            Intent mainActivity = new Intent(this, MainActivity.class);
+            startActivity(mainActivity);
+        }
     }
 }

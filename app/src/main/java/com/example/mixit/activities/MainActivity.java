@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mixit.R;
-import com.example.mixit.activities.authentication.AnonymousAuthActivity;
-import com.example.mixit.activities.authentication.EmailPasswordActivity;
-import com.example.mixit.activities.authentication.GoogleSignInActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,6 +15,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -28,6 +27,9 @@ import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,16 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            finish();
+            Intent startActivity = new Intent(this, StartActivity.class);
+            startActivity(startActivity);
+        }
     }
 
     @Override
@@ -97,30 +109,20 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_tools) {
-            emailPassword();
+
         } else if (id == R.id.nav_share) {
-            anonymousAuth();
+
         } else if (id == R.id.nav_send) {
-            googleSignIn();
+            mAuth.signOut();
+            if (currentUser == null) {
+                finish();
+                Intent startActivity = new Intent(this, StartActivity.class);
+                startActivity(startActivity);
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void googleSignIn() {
-        Intent intent = new Intent(this, GoogleSignInActivity.class);
-        startActivity(intent);
-    }
-
-    public void anonymousAuth() {
-        Intent intent = new Intent(this, AnonymousAuthActivity.class);
-        startActivity(intent);
-    }
-
-    public void emailPassword() {
-        Intent intent = new Intent(this, EmailPasswordActivity.class);
-        startActivity(intent);
     }
 }

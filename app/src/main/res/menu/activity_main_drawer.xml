@@ -35,4 +35,10 @@
         </menu>
     </item>
 
+    <menu>
+        <item
+            android:id="@+id/sign_out"
+            android:icon="@drawable"
+            android:title="@string/menu_share" />
+    </menu>
 </menu>

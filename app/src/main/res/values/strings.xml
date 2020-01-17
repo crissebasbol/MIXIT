@@ -110,8 +110,7 @@
         <a href="/"> Términos de servicio y política de seguridad </a>
     </string>
     <string name="txt_start_session">¿Ya tienes una cuenta?</string>
-
-
+    <string name="txt_start_anonymous">Continuar sin registrarse</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

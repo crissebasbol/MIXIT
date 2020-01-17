@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.R;
+import com.example.mixit.activities.MainActivity;
+import com.example.mixit.activities.StartActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,9 +35,13 @@ public class GoogleAuth extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
 
+    private Context context;
+
     // private Intent signInIntent;
 
     public GoogleAuth (Context context) {
+        this.context = context;
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(String.valueOf(R.string.default_web_client_id))
                 .requestEmail()
@@ -61,6 +67,7 @@ public class GoogleAuth extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+                startActivity(new Intent(context, MainActivity.class));
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
