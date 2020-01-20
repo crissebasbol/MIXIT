@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.authentication.EmailPasswordActivity"></activity>
+        <activity
+            android:name=".activities.authentication.EmailPasswordActivity">
+        </activity>
         <activity
             android:name=".activities.WalkthroughActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -48,6 +50,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".services.authentication.GoogleAuth" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

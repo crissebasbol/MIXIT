@@ -1,5 +1,6 @@
 package com.example.mixit.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,11 +21,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseAuth mAuth;
 
-    GoogleAuth googleAuth;
-    AnonymousAuth anonymousAuth;
+    private GoogleAuth googleAuth;
+    private AnonymousAuth anonymousAuth;
 
     //public FragmentManager fm = getSupportFragmentManager();
     //public FragmentTransaction ft = fm.beginTransaction();
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -49,6 +51,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 
     //public GestureDetectorCompat mDetector;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GoogleAuth.RC_SIGN_IN) {
+            googleAuth.authenticate(data);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
