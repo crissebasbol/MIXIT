@@ -71,11 +71,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_alarm_add_cyan_700_24dp"
+            android:layout_marginRight="10dp"
             />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_favorite_border_red_a700_24dp"
+            android:layout_marginRight="10dp"
             />
         <ImageView
             android:layout_width="wrap_content"
