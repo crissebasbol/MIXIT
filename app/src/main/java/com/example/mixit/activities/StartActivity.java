@@ -1,6 +1,6 @@
 package com.example.mixit.activities;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -33,7 +33,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = null;
         switch (id){
 //            case R.id.login_button:
-//                intent = new Intent(this, LogInActivity.class);
+//                intent = new Intent(this, EmailPasswordActivity.class);
+//                startActivity(intent);
+//                finish();
 //                break;
             case R.id.anonymous_button:
                 anonymousAuth = new AnonymousAuth(this);
@@ -45,7 +47,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.email_button:
                 intent = new Intent(this, EmailPasswordActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("register", true);
+                intent.putExtras(bundle);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

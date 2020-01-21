@@ -1,12 +1,7 @@
 package com.example.mixit.fragments.walkthrough;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +9,12 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.mixit.R;
-import com.example.mixit.activities.LogInActivity;
 import com.example.mixit.activities.StartActivity;
 import com.example.mixit.activities.WalkthroughActivity;
+import com.example.mixit.activities.authentication.EmailPasswordActivity;
 
 public class Walkthrough4Fragment extends Fragment implements View.OnClickListener {
 
@@ -79,7 +76,7 @@ public class Walkthrough4Fragment extends Fragment implements View.OnClickListen
                 ((WalkthroughActivity)getActivity()).changePage(4);
                 break;
             case R.id.login_button:
-                intent = new Intent(getContext(), LogInActivity.class);
+                intent = new Intent(getContext(), EmailPasswordActivity.class);
                 startActivity(intent);
                 break;
         }

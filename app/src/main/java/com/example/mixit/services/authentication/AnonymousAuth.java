@@ -13,29 +13,29 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class AnonymousAuth {
     private static final String TAG = "AnonymousAuth";
 
     private FirebaseAuth mAuth;
-    private Context context;
+    private Context mContext;
 
     public AnonymousAuth(Context context) {
-        mAuth = FirebaseAuth.getInstance();
-        this.context = context;
+        this.mAuth = FirebaseAuth.getInstance();
+        this.mContext = context;
         signInAnonymously();
     }
 
     private void signInAnonymously() {
         mAuth.signInAnonymously()
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener((Activity) mContext, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInAnonymously:success");
-                            context.startActivity(new Intent(context, MainActivity.class));
+                            mContext.startActivity(new Intent(mContext, MainActivity.class));
+                            ((Activity) mContext).finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInAnonymously:failure", task.getException());

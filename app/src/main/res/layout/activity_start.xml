@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,7 +11,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
-        app:srcCompat="@mipmap/background" />
+        app:srcCompat="@drawable/background" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/email_login_form"
@@ -35,7 +36,7 @@
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/logo" />
+            app:srcCompat="@drawable/logo" />
 
         <!--        <Button-->
         <!--            android:id="@+id/facebook_button"-->
@@ -87,6 +88,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
+            android:background="#0DFFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,10 +100,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:background="@null"
+            android:background="#0DFFFFFF"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
             android:text="@string/txt_start_session"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
@@ -118,7 +122,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:background="@null"
+            android:background="#0DFFFFFF"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
             android:text="@string/txt_start_anonymous"
             android:textColor="#CCFFFFFF"
             android:textSize="12sp"

@@ -1,18 +1,17 @@
 package com.example.mixit.activities.authentication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.StartActivity;
@@ -26,36 +25,43 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
     private static final String TAG = "EmailPassword";
 
-//    private TextView mStatusTextView;
-//    private TextView mDetailTextView;
-    private EditText mEmailField;
+    private AutoCompleteTextView mEmailField;
     private EditText mPasswordField;
 
     private FirebaseAuth mAuth;
 
+    Button mSignUpButton, mSignInButton, mForgotPasswordButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getIntent().getExtras();
+
         setContentView(R.layout.activity_email_password);
 
         mEmailField = findViewById(R.id.email);
         mPasswordField = findViewById(R.id.password);
 
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_up_button).setOnClickListener(this);
-//        findViewById(R.id.signOutButton).setOnClickListener(this);
+        mSignInButton = findViewById(R.id.sign_in_button);
+        mSignUpButton = findViewById(R.id.sign_up_button);
+        mForgotPasswordButton = findViewById(R.id.forgot_password_button);
+
+
+
+        if (bundle != null && bundle.getBoolean("register")) {
+            mSignInButton.setVisibility(View.GONE);
+            mForgotPasswordButton.setVisibility(View.GONE);
+            mSignUpButton.setOnClickListener(this);
+        } else {
+            mSignInButton.setOnClickListener(this);
+            mForgotPasswordButton.setOnClickListener(this);
+            mSignUpButton.setVisibility(View.GONE);
+        }
+        //        findViewById(R.id.signOutButton).setOnClickListener(this);
 //        findViewById(R.id.verifyEmailButton).setOnClickListener(this);
-        findViewById(R.id.forgot_password_button).setOnClickListener(this);
 
 
         mAuth = FirebaseAuth.getInstance();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
     }
 
     private void createAccount(String email, String password) {
@@ -70,7 +76,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(EmailPasswordActivity.this, StartActivity.class);
                             startActivity(intent);
 //                            updateUI(user);
