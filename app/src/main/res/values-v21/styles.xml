@@ -32,7 +32,7 @@
         <item name="android:padding">5dp</item>
         <item name="android:paddingStart">8dp</item>
         <item name="android:drawableStart">@drawable/baseline_email_black_18</item>
-        <item name="android:background">@drawable/button_gray_custom</item>
+        <item name="android:background">@drawable/custom_button</item>
     </style>
 
     <style name="customButton">

@@ -35,7 +35,6 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.ea.async:ea-async:1.2.3'
 }
 repositories {
     mavenCentral()

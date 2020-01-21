@@ -3,7 +3,7 @@
 <resources>
     <color name="colorPrimary">#5d1885</color>
     <color name="colorPrimaryDark">#250438</color>
-    <color name="colorSecundary">#9c0b66</color>
+    <color name="colorSecondary">#9c0b66</color>
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
@@ -12,7 +12,7 @@
     <color name="institutionalColor">#AED208</color>
     <color name="snackbar_action">@color/institutionalColor</color>
     <color name="bg_item_select_vehicule">#E6E6E6</color>
-    <color name="bg_div_bar_trcp">#E6E6E6</color>
+    <color name="bg_div_bar_trcp">#40FFFFFF</color>
     <color name="bg_div_bar_trcp_dark">#AAAAAA</color>
     <color name="text_color_blue">#346689</color>
     <color name="white">#FFFFFF</color>

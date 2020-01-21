@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mixit.R;
-import com.example.mixit.activities.authentication.AnonymousAuthActivity;
-import com.example.mixit.activities.authentication.EmailPasswordActivity;
-import com.example.mixit.activities.authentication.GoogleSignInActivity;
+import com.example.mixit.interfaces.VolleyCallback;
+import com.example.mixit.services.network.JSONAPIRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,6 +17,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -26,8 +27,17 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, VolleyCallback {
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,30 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            finish();
+            Intent startActivity = new Intent(this, StartActivity.class);
+            startActivity(startActivity);
+        }
+
+        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
+
+        HashMap params = new HashMap();
+        params.put("glass", null);
+        params.put("alcohol", "Alcoholic");
+        params.put("category", null);
+        params.put("ingredient", null);
+
+        HashMap query = new HashMap();
+        query.put("type", "filter");
+        query.put("params", params);
+
+        APIService.execute(query);
     }
 
     @Override
@@ -97,11 +131,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_tools) {
-            emailPassword();
+
         } else if (id == R.id.nav_share) {
-            anonymousAuth();
+
         } else if (id == R.id.nav_send) {
-            googleSignIn();
+            mAuth.signOut();
+            Intent startIntent = new Intent(this, StartActivity.class);
+            startActivity(startIntent);
+            finish();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -109,18 +146,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void googleSignIn() {
-        Intent intent = new Intent(this, GoogleSignInActivity.class);
-        startActivity(intent);
-    }
-
-    public void anonymousAuth() {
-        Intent intent = new Intent(this, AnonymousAuthActivity.class);
-        startActivity(intent);
-    }
-
-    public void emailPassword() {
-        Intent intent = new Intent(this, EmailPasswordActivity.class);
-        startActivity(intent);
+    @Override
+    public void onSuccess(JSONArray response) {
+        System.out.println("LENGTH ACTIVITY "+response.length());
+        // TODO
     }
 }

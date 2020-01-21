@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.authentication.EmailPasswordActivity"></activity>
-        <activity android:name=".activities.authentication.AnonymousAuthActivity" />
-        <activity android:name=".activities.authentication.GoogleSignInActivity" />
+        <activity
+            android:name=".activities.authentication.EmailPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".activities.WalkthroughActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -23,16 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LogInActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".activities.StartActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -49,6 +48,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".services.authentication.GoogleAuth" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
