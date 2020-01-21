@@ -48,7 +48,7 @@ public class AnonymousAuthActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if User is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -60,12 +60,12 @@ public class AnonymousAuthActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, update UI with the signed-in User's information
                             Log.d(TAG, "signInAnonymously:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign in fails, display a message to the User.
                             Log.w(TAG, "signInAnonymously:failure", task.getException());
                             Toast.makeText(AnonymousAuthActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();

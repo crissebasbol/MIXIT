@@ -68,7 +68,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
+//                            updateUI(User);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
@@ -93,7 +93,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
+//                            updateUI(User);
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
@@ -116,8 +116,8 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 //    private void sendEmailVerification() {
 //        findViewById(R.id.verifyEmailButton).setEnabled(false);
 //
-//        final FirebaseUser user = mAuth.getCurrentUser();
-//        user.sendEmailVerification()
+//        final FirebaseUser User = mAuth.getCurrentUser();
+//        User.sendEmailVerification()
 //                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<Void> task) {
@@ -125,7 +125,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 //
 //                        if (task.isSuccessful()) {
 //                            Toast.makeText(EmailPasswordActivity.this,
-//                                    "Verification email sent to " + user.getEmail(),
+//                                    "Verification email sent to " + User.getEmail(),
 //                                    Toast.LENGTH_SHORT).show();
 //                        } else {
 //                            Log.e(TAG, "sendEmailVerification", task.getException());
@@ -160,17 +160,17 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
     }
 
 //    TODO
-//    private void updateUI(FirebaseUser user) {
-//        if (user != null) {
+//    private void updateUI(FirebaseUser User) {
+//        if (User != null) {
 //            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-//                    user.getEmail(), user.isEmailVerified()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+//                    User.getEmail(), User.isEmailVerified()));
+//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, User.getUid()));
 //
 //            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
 //            findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
 //            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
 //
-//            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+//            findViewById(R.id.verifyEmailButton).setEnabled(!User.isEmailVerified());
 //        } else {
 //            mStatusTextView.setText(R.string.signed_out);
 //            mDetailTextView.setText(null);

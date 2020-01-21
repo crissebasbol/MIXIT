@@ -4,6 +4,7 @@
     <color name="colorPrimary">#5d1885</color>
     <color name="colorPrimaryDark">#250438</color>
     <color name="colorSecundary">#9c0b66</color>
+    <color name="thirdColor">#A1C7BDE0</color>
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
