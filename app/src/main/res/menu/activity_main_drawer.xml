@@ -6,32 +6,45 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_home_white_48dp"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_filter"
+            android:icon="@drawable/ic_filter_list_white_48dp"
+            android:title="Filtrar" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_favourites"
+            android:icon="@drawable/ic_star_white_48dp"
+            android:title="Favoritos" />
         <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:id="@+id/nav_remember"
+            android:icon="@drawable/ic_alarm_on_cyan_700_24dp"
+            android:title="Recordar" />
+        <item
+            android:id="@+id/nav_my_cocktails"
+            android:icon="@drawable/ic_library_books_white_48dp"
+            android:title="Mis cocteles" />
+        <item
+            android:id="@+id/nav_surprise"
+            android:icon="@drawable/ic_swap_calls_white_48dp"
+            android:title="¡Sorpréndeme!" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:id="@+id/other_options"
+        android:title="Otras opciones">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_settings_white_48dp"
+            android:title="Mi cuenta" />
+        <item
+            android:id="@+id/nav_privacy_terms"
+            android:icon="@drawable/ic_lock_white_48dp"
+            android:title="Privacidad y términos" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_highlight_off_white_48dp"
+            android:title="Cerrar sesión" />
         </menu>
     </item>
 </menu>
