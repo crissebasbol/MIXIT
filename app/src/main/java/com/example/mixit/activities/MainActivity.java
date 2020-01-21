@@ -14,17 +14,22 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mixit.R;
+import com.example.mixit.interfaces.VolleyCallback;
 import com.example.mixit.models.Item;
+import com.example.mixit.services.network.JSONAPIRequest;
 import com.example.mixit.utilities.ListViewAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, VolleyCallback {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -97,6 +102,20 @@ public class MainActivity extends AppCompatActivity
             Intent startActivity = new Intent(this, StartActivity.class);
             startActivity(startActivity);
         }
+
+        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
+
+        HashMap params = new HashMap();
+        params.put("glass", null);
+        params.put("alcohol", "Alcoholic");
+        params.put("category", null);
+        params.put("ingredient", null);
+
+        HashMap query = new HashMap();
+        query.put("type", "filter");
+        query.put("params", params);
+
+        APIService.execute(query);
     }
 
     @Override
@@ -158,5 +177,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onSuccess(JSONArray response) {
+        System.out.println("LENGTH ACTIVITY "+response.length());
+        // TODO
     }
 }

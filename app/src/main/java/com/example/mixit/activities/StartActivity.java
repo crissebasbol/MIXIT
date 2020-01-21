@@ -1,6 +1,5 @@
 package com.example.mixit.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -83,6 +82,13 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mEmailButton.setOnClickListener(this);
         mAnonymousButton.setOnClickListener(this);
 
+//  THE FOLLOWING CODE ALLOWS TO TELL IF THERE IS AN AUTHENTICATED USER AND PLACE A TOAST NOTIFICATION.
+//  IT SHOULD BE USED TO DEFINED APP FLOW
+//        if (currentUser != null) {
+//            Toast.makeText(this, "Authenticated",Toast.LENGTH_LONG).show();
+//        } else {
+//            Toast.makeText(this, "Unauthenticated",Toast.LENGTH_LONG).show();
+//        }
         //  THE FOLLOWING CODE ALLOWS TO TELL IF THERE'S AN AUTHENTICATED USER PRESENT.
         //  IT SHOULD BE USED TO DEFINED APP FLOW
         mAuth = FirebaseAuth.getInstance();
