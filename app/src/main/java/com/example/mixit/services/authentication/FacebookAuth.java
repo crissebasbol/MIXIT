@@ -54,6 +54,8 @@ public class FacebookAuth {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             Log.v("LoginActivity Response", response.toString());
+                            //imagehttp://graph.facebook.com/2695999640436532/picture?type=large -- square, normal, album
+                            //https://developers.facebook.com/docs/graph-api/reference/v2.2/user/picture
                             try {
                                 String Name = object.getString("name");
                                 String FEmail = object.getString("email");
