@@ -18,6 +18,7 @@ import com.example.mixit.interfaces.VolleyCallback;
 import com.example.mixit.models.Item;
 import com.example.mixit.services.network.JSONAPIRequest;
 import com.example.mixit.utilities.ListViewAdapter;
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity
 //        }
         else if (id == R.id.nav_logout) {
             mAuth.signOut();
+            LoginManager.getInstance().logOut();
             Intent startIntent = new Intent(this, StartActivity.class);
             startActivity(startIntent);
             finish();

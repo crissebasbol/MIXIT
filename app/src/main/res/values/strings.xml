@@ -14,7 +14,6 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
-    <!--    <string name="facebook_app_id">513355139240986</string>-->
 
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
