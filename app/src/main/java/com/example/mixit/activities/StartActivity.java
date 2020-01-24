@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.authentication.CreateAccountActivity;
+import com.example.mixit.activities.authentication.SignInActivity;
 import com.example.mixit.services.authentication.AnonymousAuth;
 import com.example.mixit.services.authentication.FacebookAuth;
 import com.example.mixit.services.authentication.FireBaseAuth;
@@ -75,11 +76,10 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         int id = view.getId();
         Intent intent = null;
         switch (id){
-//            case R.id.login_button:
-//                intent = new Intent(this, SignInActivity.class);
-//                startActivity(intent);
-//                finish();
-//                break;
+            case R.id.login_button:
+                intent = new Intent(this, SignInActivity.class);
+                startActivity(intent);
+                break;
             case R.id.anonymous_button:
                 anonymousAuth = new AnonymousAuth(this);
                 break;

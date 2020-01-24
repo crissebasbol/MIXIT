@@ -145,11 +145,13 @@
                     android:text="@string/txt_back"
                     android:textColor="#BFFFFFFF"
                     android:textStyle="bold" />
-                <TextView
+                <Button
+                    android:id="@+id/register_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_asking_account"
                     android:gravity="center"
+                    android:background="@color/transparent"
                     android:textColor="@color/blue_light"/>
             </LinearLayout>
         </LinearLayout>

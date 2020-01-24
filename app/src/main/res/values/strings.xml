@@ -126,5 +126,11 @@
     <string name="txt_create_account">Crear Cuenta</string>
     <string name="txt_back">Regresar</string>
     <string name="txt_asking_account">¿Necesitas una cuenta?</string>
+    <string name="txt_welcome_again">¡Es un placer tenerte de vuelta!</string>
+    <string name="txt_successful_password_reset">Te hemos enviado un link para reiniciar tu clave, revisa tu correo</string>
+    <string name="txt_error_password_reset">El correo para restablecer la contraseña no fie enviado, por favor intenta más tarde</string>
+    <string name="txt_error_login">Error al iniciar sesión</string>
+    <string name="txt_successful_register">Te has registrado exitosamente!</string>
+    <string name="txt_error_register">El registro ha fallado, por favor intenta más tarde</string>
 
 </resources>

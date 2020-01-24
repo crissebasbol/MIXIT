@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.StartActivity;
+import com.example.mixit.services.authentication.FireBaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,14 +24,14 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "EmailPassword";
+    private static final String TAG = "SigIn";
 
     private AutoCompleteTextView mEmailField;
     private EditText mPasswordField;
 
-    private FirebaseAuth mAuth;
+    private FireBaseAuth fireBaseAuth;
 
-    Button mSignInButton, mForgotPasswordButton;
+    Button mSignInButton, mForgotPasswordButton, mBackButton, mRegister_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,136 +43,56 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         mEmailField = findViewById(R.id.email);
         mPasswordField = findViewById(R.id.password);
 
+        mBackButton = findViewById(R.id.back_button);
         mSignInButton = findViewById(R.id.sign_in_button);
         mForgotPasswordButton = findViewById(R.id.forgot_password_button);
+        mRegister_button = findViewById(R.id.register_button);
 
+        mSignInButton.setOnClickListener(this);
+        mForgotPasswordButton.setOnClickListener(this);
+        mBackButton.setOnClickListener(this);
+        mRegister_button.setOnClickListener(this);
 
-
-        if (bundle != null && bundle.getBoolean("register")) {
-            mSignInButton.setVisibility(View.GONE);
-            mForgotPasswordButton.setVisibility(View.GONE);
-        } else {
-            mSignInButton.setOnClickListener(this);
-            mForgotPasswordButton.setOnClickListener(this);
-        }
-        //        findViewById(R.id.signOutButton).setOnClickListener(this);
-//        findViewById(R.id.verifyEmailButton).setOnClickListener(this);
-
-
-        mAuth = FirebaseAuth.getInstance();
+        fireBaseAuth = new FireBaseAuth(this, this);
     }
 
-    private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
-        if (!validateForm()) {
-            return;
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.forgot_password_button) {
+            sendPasswordResetEmail(mEmailField.getText().toString());
         }
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Intent intent = new Intent(SignInActivity.this, StartActivity.class);
-                            startActivity(intent);
-//                            updateUI(user);
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                        }
-
-                    }
-                });
-    }
-
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
+        else if (i == R.id.sign_in_button) {
+            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
         }
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(SignInActivity.this, "Authentication was successful!",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignInActivity.this, StartActivity.class);
-                            startActivity(intent);
-//                            updateUI(user);
-                        } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                        }
-
-//                        if (!task.isSuccessful()) {
-//                            mStatusTextView.setText(R.string.auth_failed);
-//                        }
-                    }
-                });
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-//        updateUI(null);
+        else if (i == R.id.back_button){
+            onBackPressed();
+        }
+        else if (i == R.id.register_button){
+            Intent intent = new Intent(this, CreateAccountActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void sendPasswordResetEmail (final String email) {
-        Log.d(TAG, "Reset email: "+email);
         if (!validateEmail()) {
             return;
         }
-
-        mAuth.sendPasswordResetEmail(email)
+        fireBaseAuth.getmAuth().sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "Reset email sent to "+email);
-                            Toast.makeText(SignInActivity.this, "We've sent a reset email to "+email, Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignInActivity.this, R.string.txt_successful_password_reset, Toast.LENGTH_LONG).show();
                         } else {
-                            Log.d(TAG, "Reset email couldn't be sent to "+email);
-                            Toast.makeText(SignInActivity.this, "Reset email wasn't sent, try again later", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignInActivity.this, R.string.txt_error_password_reset, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
-//    TODO
-//    private void sendEmailVerification() {
-//        findViewById(R.id.verifyEmailButton).setEnabled(false);
-//
-//        final FirebaseUser user = mAuth.getCurrentUser();
-//        user.sendEmailVerification()
-//                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        findViewById(R.id.verifyEmailButton).setEnabled(true);
-//
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(SignInActivity.this,
-//                                    "Verification email sent to " + user.getEmail(),
-//                                    Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Log.e(TAG, "sendEmailVerification", task.getException());
-//                            Toast.makeText(SignInActivity.this,
-//                                    "Failed to send verification email.",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
 
     private boolean validateEmail() {
         boolean valid = true;
-
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
@@ -179,8 +100,30 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             mEmailField.setError(null);
         }
-
         return valid;
+    }
+
+    private void signIn(String email, String password) {
+        if (!validateForm()) {
+            return;
+        }
+        fireBaseAuth.getmAuth().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = fireBaseAuth.getmAuth().getCurrentUser();
+                            Toast.makeText(SignInActivity.this, R.string.txt_welcome_again, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(SignInActivity.this, StartActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, R.string.txt_error_login,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private boolean validateForm() {
@@ -205,44 +148,4 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         return valid;
     }
 
-//    TODO
-//    private void updateUI(FirebaseUser user) {
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-//                    user.getEmail(), user.isEmailVerified()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
-//            findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
-//            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-//
-//            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
-//            findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
-//            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-//        }
-//    }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.sign_up_button) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.sign_in_button) {
-            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        }
-//        else if (i == R.id.signOutButton) {
-//            signOut();
-//        }
-        else if (i == R.id.forgot_password_button) {
-            sendPasswordResetEmail(mEmailField.getText().toString());
-        }
-//        else if (i == R.id.verifyEmailButton) {
-//            sendEmailVerification();
-//        }
-    }
 }
