@@ -90,6 +90,11 @@ public class JSONAPIRequest extends AsyncTask<HashMap, Void, JSONArray> {
 
                 performQuery(queryURL);
                 break;
+            case "search":
+                queryURL = URL + "search.php?s=" + query[0].get("search");
+
+                performQuery(queryURL);
+                break;
         }
         return null;
     }

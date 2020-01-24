@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,10 +61,25 @@ public class MainActivity extends AppCompatActivity
         stubList.inflate();
         listView = (ListView) findViewById(R.id.my_list_view);
         setAdapters();
+
+        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
+
+        HashMap params = new HashMap();
+        params.put("glass", null);
+        params.put("alcohol", "Alcoholic");
+        params.put("category", null);
+        params.put("ingredient", null);
+
+        HashMap query = new HashMap();
+        query.put("type", "search");
+        query.put("search", "");
+        // query.put("params", params);
+
+        APIService.execute(query);
         //get list of product
-        for(byte x=0;x<numberItems;x++){
-            getItemList();
-        }
+//        for(byte x=0;x<numberItems;x++){
+//            getItemList();
+//        }
 
     }
 
@@ -74,48 +91,36 @@ public class MainActivity extends AppCompatActivity
         else {
             listViewAdapter.notifyDataSetChanged();
         }
-        if (itemList.size()>numberItems-1){
-            add = true;
-        }
+//        if (itemList.size()>numberItems-1){
+//            add = true;
+//        }
     }
 
-    public void getItemList() {
-        Item item = new Item();
-        item.setId(1);
-        item.setTitle("Margarita");
-        item.setAlarm(null);
-        item.setCreatorsEmail("crissebas@unicauca.edu.co");
-        item.setDescription("Descripción...");
-        item.setTutorial("Tutorial...");
-        item.setPrepared(false);
-        item.setImage(null);
-        item.setFavourite(false);
-        itemList.add(item);
+    public void getItemList(JSONObject object) {
+//        Item item = new Item();
+//        item.setId(1);
+//        item.setTitle("Margarita");
+//        item.setAlarm(null);
+//        item.setCreatorsEmail("crissebas@unicauca.edu.co");
+//        item.setDescription("Descripción...");
+//        item.setTutorial("Tutorial...");
+//        item.setPrepared(false);
+//        item.setImage(null);
+//        item.setFavourite(false);
+//        itemList.add(item);
+        itemList.add(new Item(object));
         setAdapters();
 
-        mAuth = FirebaseAuth.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
+//
+//        currentUser = mAuth.getCurrentUser();
+//
+//        if (currentUser == null) {
+//            finish();
+//            Intent startActivity = new Intent(this, StartActivity.class);
+//            startActivity(startActivity);
+//        }
 
-        currentUser = mAuth.getCurrentUser();
-
-        if (currentUser == null) {
-            finish();
-            Intent startActivity = new Intent(this, StartActivity.class);
-            startActivity(startActivity);
-        }
-
-        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
-
-        HashMap params = new HashMap();
-        params.put("glass", null);
-        params.put("alcohol", "Alcoholic");
-        params.put("category", null);
-        params.put("ingredient", null);
-
-        HashMap query = new HashMap();
-        query.put("type", "filter");
-        query.put("params", params);
-
-        APIService.execute(query);
     }
 
     @Override
@@ -182,7 +187,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSuccess(JSONArray response) {
-        System.out.println("LENGTH ACTIVITY "+response.length());
-        // TODO
+        for (int i = 0; i < response.length(); i++) {
+            try {
+                getItemList((JSONObject) response.get(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

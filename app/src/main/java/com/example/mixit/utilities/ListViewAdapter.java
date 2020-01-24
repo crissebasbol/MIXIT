@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import com.example.mixit.R;
 import com.example.mixit.models.Item;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ListViewAdapter extends ArrayAdapter<Item> {
@@ -46,7 +47,8 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         }
         txtTitle.setText(item.getTitle());
         txtDescription.setText(item.getDescription());
-        txtTutorial.setText(item.getTutorial());
+        HashMap tutorial = item.getTutorial();
+        txtTutorial.setText((CharSequence) tutorial.get("instructions"));
 
         return v;
     }
