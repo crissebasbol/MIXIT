@@ -14,10 +14,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.StartActivity;
+import com.example.mixit.activities.TermsAndConditionsActivity;
 import com.example.mixit.services.authentication.FireBaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,12 +34,16 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText mPasswordField, mPasswordField2;
     private FireBaseAuth fireBaseAuth;
 
+    private TextView mTermsConditions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
         fireBaseAuth = new FireBaseAuth(this, this);
+
+        mTermsConditions = findViewById(R.id.terms_conditions);
 
         mNameField = findViewById(R.id.input_name);
         mEmailField = findViewById(R.id.email);
@@ -57,6 +63,13 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            }
+        });
+        mTermsConditions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CreateAccountActivity.this, TermsAndConditionsActivity.class);
+                startActivity(intent);
             }
         });
 

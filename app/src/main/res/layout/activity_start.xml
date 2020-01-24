@@ -136,10 +136,10 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/textView3"/>
+            app:layout_constraintBottom_toTopOf="@+id/terms_conditions"/>
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/terms_conditions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

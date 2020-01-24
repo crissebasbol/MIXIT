@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +26,9 @@ import java.util.Arrays;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button mLoginButton, mGoogleButton, mEmailButton, mAnonymousButton, mFacebookButton;
+    private Button mLoginButton, mGoogleButton, mEmailButton, mAnonymousButton, mFacebookButton;
+
+    private TextView mTermsConditions;
 
     private CallbackManager callbackManager;
     private LoginButton loginButtonFacebook;
@@ -40,6 +43,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        mTermsConditions = findViewById(R.id.terms_conditions);
+
         mLoginButton = findViewById(R.id.login_button);
         mGoogleButton = findViewById(R.id.google_button);
         mEmailButton = findViewById(R.id.email_button);
@@ -51,6 +56,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mEmailButton.setOnClickListener(this);
         mAnonymousButton.setOnClickListener(this);
         mFacebookButton.setOnClickListener(this);
+        mTermsConditions.setOnClickListener(this);
 
         fireBaseAuth = new FireBaseAuth(this, this);
 
@@ -99,6 +105,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 //finish();
                 break;
+            case R.id.terms_conditions:
+                intent = new Intent(this, TermsAndConditionsActivity.class);
+                startActivity(intent);
         }
     }
 

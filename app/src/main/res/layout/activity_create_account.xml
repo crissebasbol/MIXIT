@@ -165,7 +165,7 @@
 
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/terms_conditions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_accept_register"
