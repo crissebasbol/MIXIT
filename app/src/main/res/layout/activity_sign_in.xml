@@ -6,30 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.authentication.EmailPasswordActivity">
-
-    <ImageView
-        android:id="@+id/formBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/custom_button"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background" />
-
-    <ImageView
-        android:id="@+id/formLogo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp"
-        android:adjustViewBounds="true"
-        android:maxWidth="180dp"
-        android:maxHeight="180dp"
-        android:src="@drawable/round_logo"
-        app:srcCompat="@drawable/logo" />
+    tools:context=".activities.authentication.SignInActivity"
+    android:background="@drawable/gradient_background">
 
     <!-- Login progress -->
     <ProgressBar
@@ -43,23 +21,43 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/formLogo"
-        android:padding="10sp">
+        android:layout_height="match_parent"
+        android:foregroundGravity="center">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/form_email_password"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/formLogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="15dp"
+                android:adjustViewBounds="true"
+                android:maxWidth="60dp"
+                android:maxHeight="60dp"
+                app:srcCompat="@drawable/logo" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="@string/action_txt_login"
+                style="@style/ThemeOverlay.MyTitleText"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
                 android:paddingBottom="15dp">
 
                 <AutoCompleteTextView
@@ -106,44 +104,53 @@
                     android:paddingLeft="10dp"
                     android:textSize="14sp" />
 
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/forgot_password_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_marginTop="8dp"
+                android:gravity="right"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:text="@string/action_forgot_password"
-                android:textColor="#BFFFFFFF" />
+                android:textColor="@color/gray_xx_light" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:gravity="center">
-
+                android:gravity="center"
+                android:orientation="vertical">
                 <Button
                     android:id="@+id/sign_in_button"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="200dp"
-                    android:layout_height="35dp"
-                    android:background="#26FFFFFF"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/action_sign_in"
-                    android:textColor="#BFFFFFFF"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/sign_up_button"
                     style="?android:textAppearanceSmall"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
+                    android:padding="5dp"
                     android:layout_height="35dp"
+                    android:layout_margin="5dp"
                     android:background="#26FFFFFF"
-                    android:text="@string/action_sign_up"
+                    android:text="@string/action_txt_login"
                     android:textColor="#BFFFFFFF"
                     android:textStyle="bold" />
+                <Button
+                    android:id="@+id/back_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_height="35dp"
+                    android:padding="5dp"
+                    android:background="#26FFFFFF"
+                    android:text="@string/txt_back"
+                    android:textColor="#BFFFFFFF"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_asking_account"
+                    android:gravity="center"
+                    android:textColor="@color/blue_light"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

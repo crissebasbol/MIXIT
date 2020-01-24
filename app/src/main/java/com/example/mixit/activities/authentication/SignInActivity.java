@@ -21,7 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class EmailPasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "EmailPassword";
 
@@ -30,20 +30,19 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
     private FirebaseAuth mAuth;
 
-    Button mSignUpButton, mSignInButton, mForgotPasswordButton;
+    Button mSignInButton, mForgotPasswordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
 
-        setContentView(R.layout.activity_email_password);
+        setContentView(R.layout.activity_sign_in);
 
         mEmailField = findViewById(R.id.email);
         mPasswordField = findViewById(R.id.password);
 
         mSignInButton = findViewById(R.id.sign_in_button);
-        mSignUpButton = findViewById(R.id.sign_up_button);
         mForgotPasswordButton = findViewById(R.id.forgot_password_button);
 
 
@@ -51,11 +50,9 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         if (bundle != null && bundle.getBoolean("register")) {
             mSignInButton.setVisibility(View.GONE);
             mForgotPasswordButton.setVisibility(View.GONE);
-            mSignUpButton.setOnClickListener(this);
         } else {
             mSignInButton.setOnClickListener(this);
             mForgotPasswordButton.setOnClickListener(this);
-            mSignUpButton.setVisibility(View.GONE);
         }
         //        findViewById(R.id.signOutButton).setOnClickListener(this);
 //        findViewById(R.id.verifyEmailButton).setOnClickListener(this);
@@ -76,12 +73,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
-                            Intent intent = new Intent(EmailPasswordActivity.this, StartActivity.class);
+                            Intent intent = new Intent(SignInActivity.this, StartActivity.class);
                             startActivity(intent);
 //                            updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
                         }
@@ -103,14 +100,14 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication was successful!",
+                            Toast.makeText(SignInActivity.this, "Authentication was successful!",
                                     Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(EmailPasswordActivity.this, StartActivity.class);
+                            Intent intent = new Intent(SignInActivity.this, StartActivity.class);
                             startActivity(intent);
 //                            updateUI(user);
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
                         }
@@ -139,10 +136,10 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Reset email sent to "+email);
-                            Toast.makeText(EmailPasswordActivity.this, "We've sent a reset email to "+email, Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignInActivity.this, "We've sent a reset email to "+email, Toast.LENGTH_LONG).show();
                         } else {
                             Log.d(TAG, "Reset email couldn't be sent to "+email);
-                            Toast.makeText(EmailPasswordActivity.this, "Reset email wasn't sent, try again later", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignInActivity.this, "Reset email wasn't sent, try again later", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -159,12 +156,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 //                        findViewById(R.id.verifyEmailButton).setEnabled(true);
 //
 //                        if (task.isSuccessful()) {
-//                            Toast.makeText(EmailPasswordActivity.this,
+//                            Toast.makeText(SignInActivity.this,
 //                                    "Verification email sent to " + user.getEmail(),
 //                                    Toast.LENGTH_SHORT).show();
 //                        } else {
 //                            Log.e(TAG, "sendEmailVerification", task.getException());
-//                            Toast.makeText(EmailPasswordActivity.this,
+//                            Toast.makeText(SignInActivity.this,
 //                                    "Failed to send verification email.",
 //                                    Toast.LENGTH_SHORT).show();
 //                        }

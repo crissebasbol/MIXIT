@@ -104,7 +104,8 @@
     <string name="action_sign_up">Registrarse</string>
     <string name="prompt_email">Ingrese su correo electrónico</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_password">Ingrese una contraseña</string>
+    <string name="prompt_confirmed_password">Repita la contraseña</string>
     <string name="txt_accept_register">Al registrarse, usted acepta los
         <a href="/"> Términos de servicio y política de seguridad </a>
     </string>
@@ -121,5 +122,9 @@
     <string name="txt_tutorial">Tutorial</string>
     <string name="txt_title">TÍTULO</string>
     <string name="action_search">Buscar</string>
+    <string name="promp_name">Ingrese su nombre completo</string>
+    <string name="txt_create_account">Crear Cuenta</string>
+    <string name="txt_back">Regresar</string>
+    <string name="txt_asking_account">¿Necesitas una cuenta?</string>
 
 </resources>

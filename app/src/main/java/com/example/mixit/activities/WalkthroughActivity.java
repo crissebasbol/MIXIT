@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mixit.activities.ui.start.SectionsPagerAdapter;
+import com.example.mixit.services.authentication.FireBaseAuth;
 
 public class WalkthroughActivity extends AppCompatActivity {
     public ViewPager viewPager;
@@ -19,6 +20,12 @@ public class WalkthroughActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walkthrough);
+
+        //Check if a user signed in
+        FireBaseAuth fireBaseAuth = new FireBaseAuth(this, this);
+        if (fireBaseAuth.checkSigned()){
+            fireBaseAuth.setMainActivity();
+        }
 
         //adapters
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());

@@ -31,9 +31,7 @@ import org.json.JSONObject;
 
 public class FacebookAuth {
     private static final String TAG = "FacebookAuth";
-    public static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
-    private GoogleSignInClient mGoogleSignInClient;
     private Context mContext;
     private Activity activity;
 

@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity
             mAuth.signOut();
             LoginManager.getInstance().logOut();
             Intent startIntent = new Intent(this, StartActivity.class);
+            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(startIntent);
             finish();
         }

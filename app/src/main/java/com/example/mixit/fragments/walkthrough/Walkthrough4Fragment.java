@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.mixit.R;
 import com.example.mixit.activities.StartActivity;
 import com.example.mixit.activities.WalkthroughActivity;
-import com.example.mixit.activities.authentication.EmailPasswordActivity;
+import com.example.mixit.activities.authentication.SignInActivity;
 
 public class Walkthrough4Fragment extends Fragment implements View.OnClickListener {
 
@@ -62,6 +62,7 @@ public class Walkthrough4Fragment extends Fragment implements View.OnClickListen
             case R.id.skipButton:
                 intent = new Intent(getContext(), StartActivity.class);
                 startActivity(intent);
+                getActivity().finish();
                 break;
             case R.id.radioButtonW1:
                 ((WalkthroughActivity)getActivity()).changePage(1);
@@ -76,7 +77,7 @@ public class Walkthrough4Fragment extends Fragment implements View.OnClickListen
                 ((WalkthroughActivity)getActivity()).changePage(4);
                 break;
             case R.id.login_button:
-                intent = new Intent(getContext(), EmailPasswordActivity.class);
+                intent = new Intent(getContext(), SignInActivity.class);
                 startActivity(intent);
                 break;
         }
