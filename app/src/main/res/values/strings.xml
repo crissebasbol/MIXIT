@@ -122,5 +122,6 @@
     <string name="txt_tutorial">Tutorial</string>
     <string name="txt_title">TÍTULO</string>
     <string name="action_search">Buscar</string>
+    <string name="title_activity_show_item">ShowItemActivity</string>
 
 </resources>

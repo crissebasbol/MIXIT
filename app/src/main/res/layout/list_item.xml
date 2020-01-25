@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/product_tittle"
+        android:id="@+id/product_title"
         android:text="@string/txt_title"
         android:maxLines="1"
         android:ellipsize="end"
