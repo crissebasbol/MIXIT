@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.mixit.activities.MainActivity;
+import com.example.mixit.activities.StartActivity;
+import com.example.mixit.activities.authentication.SignInActivity;
 import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -34,6 +37,7 @@ public class FacebookAuth {
     private FirebaseAuth mAuth;
     private Context mContext;
     private Activity activity;
+    private String urlPhoto;
 
     public FacebookAuth(Context context, FirebaseAuth mAuth, Activity activity){
         this.mContext = context;
@@ -44,24 +48,19 @@ public class FacebookAuth {
         @Override
         public void onSuccess(LoginResult loginResult) {
             Log.d(TAG, "onSuccess");
-            AccessToken accessToken = loginResult.getAccessToken();
-            Profile profile = Profile.getCurrentProfile();
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
-                            Log.v("LoginActivity Response", response.toString());
+                            Log.v(TAG, response.toString());
+                            try {
+                                urlPhoto = "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large";
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             //imagehttp://graph.facebook.com/2695999640436532/picture?type=large -- square, normal, album
                             //https://developers.facebook.com/docs/graph-api/reference/v2.2/user/picture
-                            try {
-                                String Name = object.getString("name");
-                                String FEmail = object.getString("email");
-                                Log.v("Email =",""+FEmail);
-                                Toast.makeText(mContext,"Name"+Name, Toast.LENGTH_LONG).show();
-                            }catch (JSONException e){
-                            }
-
                         }
                     }
             );
@@ -69,7 +68,6 @@ public class FacebookAuth {
             parameters.putString("fields", "id,name,email");
             request.setParameters(parameters);
             request.executeAsync();
-
             handleFacebookAccessToken(loginResult.getAccessToken());
         }
         @Override
@@ -83,7 +81,6 @@ public class FacebookAuth {
     };
 
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -92,9 +89,8 @@ public class FacebookAuth {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            mContext.startActivity(new Intent(mContext, MainActivity.class));
-                            ((Activity) mContext).finish();
+                            FireBaseAuth fireBaseAuth = new FireBaseAuth(mContext, activity);
+                            fireBaseAuth.updatePhotoUri(urlPhoto, StartActivity.class);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

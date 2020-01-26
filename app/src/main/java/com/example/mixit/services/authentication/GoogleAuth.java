@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.MainActivity;
+import com.example.mixit.activities.StartActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -69,7 +70,7 @@ public class GoogleAuth {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            mContext.startActivity(new Intent(mContext, MainActivity.class));
+                            mContext.startActivity(new Intent(mContext, StartActivity.class));
                             ((Activity) mContext).finish();
                         } else {
                             // If sign in fails, display a message to the user.

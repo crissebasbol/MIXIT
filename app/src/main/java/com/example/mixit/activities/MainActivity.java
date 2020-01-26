@@ -1,11 +1,13 @@
 package com.example.mixit.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewStub;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.mixit.R;
 import com.example.mixit.interfaces.VolleyCallback;
 import com.example.mixit.models.Item;
+import com.example.mixit.models.User;
+import com.example.mixit.preferences.SessionPreferences;
+import com.example.mixit.services.authentication.FireBaseAuth;
 import com.example.mixit.services.network.JSONAPIRequest;
 import com.example.mixit.utilities.ListViewAdapter;
 import com.facebook.login.LoginManager;
@@ -29,22 +34,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends GenericAbstractActivity
         implements NavigationView.OnNavigationItemSelectedListener, VolleyCallback {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
+    private User user;
+
     private ListView listView;
     private ViewStub stubList;
     private ListViewAdapter listViewAdapter;
     private List<Item> itemList = new ArrayList<>();
+    private TextView mNameUser, mEmailUser;
     private int numberItems=10;
     private boolean add = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupGUINavigationDrawer();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -54,7 +63,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
         //---------------------------
         stubList = (ViewStub) findViewById(R.id.stub_list);
         stubList.inflate();
@@ -151,31 +159,15 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-//            // Handle the camera action
+
         }
-        // else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_tools) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        }
         else if (id == R.id.nav_logout) {
-            mAuth.signOut();
-            LoginManager.getInstance().logOut();
-            Intent startIntent = new Intent(this, StartActivity.class);
-            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(startIntent);
-            finish();
+            logOut();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

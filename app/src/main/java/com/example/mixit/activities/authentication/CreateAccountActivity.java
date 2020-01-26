@@ -7,6 +7,7 @@ import androidx.core.app.NavUtils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -80,17 +81,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         if (!validateForm()) {
             return;
         }
-
         fireBaseAuth.getmAuth().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(CreateAccountActivity.this, R.string.txt_successful_register, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(CreateAccountActivity.this, StartActivity.class);
-                            startActivity(intent);
-                            finish();
+                            fireBaseAuth.updateNameFireBase(mNameField.getText().toString(), StartActivity.class);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(CreateAccountActivity.this, R.string.txt_error_register,

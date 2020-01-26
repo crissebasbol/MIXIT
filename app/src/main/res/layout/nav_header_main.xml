@@ -13,7 +13,6 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
         android:layout_width="110dp"
         android:layout_height="110dp"
@@ -23,6 +22,7 @@
         android:layout_gravity="center"/>
 
     <TextView
+        android:id="@+id/name_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
@@ -31,7 +31,7 @@
         android:gravity="center"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/email_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle"

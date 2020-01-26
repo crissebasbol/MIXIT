@@ -1,6 +1,7 @@
 package com.example.mixit.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mixit.R;
 import com.example.mixit.activities.authentication.CreateAccountActivity;
 import com.example.mixit.activities.authentication.SignInActivity;
+import com.example.mixit.models.User;
+import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.authentication.AnonymousAuth;
 import com.example.mixit.services.authentication.FacebookAuth;
 import com.example.mixit.services.authentication.FireBaseAuth;
@@ -21,6 +24,8 @@ import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 
 
@@ -73,6 +78,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         //Utilities.printHashKey(this);
         // Check if user is signed in (non-null) and update UI accordingly.
         if(fireBaseAuth.checkSigned()){
+            String email = fireBaseAuth.getmAuth().getCurrentUser().getEmail();
+            String name = fireBaseAuth.getmAuth().getCurrentUser().getDisplayName();
+            String photo = String.valueOf(fireBaseAuth.getmAuth().getCurrentUser().getPhotoUrl());
+            User user = new User(email, name, photo);
+            SessionPreferences sessionPreferences = new SessionPreferences(this, this);
+            sessionPreferences.saveSessionUser(user);
             fireBaseAuth.setMainActivity();
         }
     }
