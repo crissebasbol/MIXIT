@@ -51,9 +51,9 @@ public class Item implements Serializable {
     private String parseDescription(JSONObject object) {
         String description = new String();
         try {
-            if (!object.get("strCategory").toString().equals("null")) description += object.get("strCategory").toString() + " - ";
-            if (!object.get("strIBA").toString().equals("null")) description += object.get("strIBA").toString() + " - ";
-            if (!object.get("strAlcoholic").toString().equals("null")) description += object.get("strAlcoholic").toString() + " - ";
+            if (!object.get("strCategory").toString().equals("null")) description += object.get("strCategory").toString() + "\n";
+            if (!object.get("strIBA").toString().equals("null")) description += object.get("strIBA").toString() + "\n";
+            if (!object.get("strAlcoholic").toString().equals("null")) description += object.get("strAlcoholic").toString() + "\n";
             if (!object.get("strGlass").toString().equals("null")) description += object.get("strGlass").toString();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -61,16 +61,18 @@ public class Item implements Serializable {
         return description.trim();
     }
 
-    private List<String> parseIngredients(JSONObject object) {
-        List<String> tutorial = new ArrayList<>();
+    private String parseIngredients(JSONObject object) {
+        String tutorial = "";
         for (Integer i = 1; i <= 15; i++) {
             try {
                 if (!(object.get("strIngredient"+i).toString().equals("null"))) {
                     if (!(object.get("strMeasure"+i).toString().equals("null"))) {
-                        tutorial.add(object.get("strIngredient"+i).toString()+" - "+object.get("strMeasure"+i).toString().trim());
+                        tutorial += "•\t" + object.get("strIngredient"+i).toString()
+                                +" - "+object.get("strMeasure"+i).toString().trim() + "\n";
                     } else {
-                        tutorial.add(object.get("strIngredient"+i).toString().trim());
+                        tutorial += "•\t" + object.get("strIngredient"+i).toString().trim() + "\n";
                     }
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

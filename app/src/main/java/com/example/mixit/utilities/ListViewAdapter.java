@@ -55,8 +55,8 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         }
         txtTitle.setText(item.getTitle());
         txtDescription.setText(item.getDescription());
-//        HashMap tutorial = item.getTutorial();
-//        txtTutorial.setText((CharSequence) tutorial.get("instructions"));
+        HashMap tutorial = item.getTutorial();
+        txtTutorial.setText((CharSequence) tutorial.get("ingredients"));
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
