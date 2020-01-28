@@ -52,7 +52,7 @@ public class ShowItemActivity extends AppCompatActivity implements FetchCallback
         AssetFetch assetFetch = new AssetFetch(this);
         HashMap params = new HashMap();
         params.put("type", "image");
-        params.put("url", item.getImage());
+        params.put("url", item.getImageUrl());
         assetFetch.execute(params);
 
         DisplayMetrics display = getResources().getDisplayMetrics();

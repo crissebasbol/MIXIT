@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import com.example.mixit.R;
 import com.example.mixit.activities.ShowItemActivity;
 import com.example.mixit.models.Item;
+import com.example.mixit.services.network.AssetFetch;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,10 +49,9 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         TextView txtDescription = (TextView) v.findViewById(R.id.product_description);
         TextView txtTutorial = (TextView) v.findViewById(R.id.product_tutorial);
 
-        if(item.getImage() == null || item.getImage().equals("") || item.getImage().equals("null"))
-            img.setImageDrawable(getContext().getResources().getDrawable(R.drawable.no_image));
-        else {
-            //img.setImageBitmap(Utilities.convertStringToImag(item.getImage()));
+        if(item.getImage() != null) {
+            v.findViewById(R.id.loading_panel).setVisibility(View.GONE);
+            img.setImageBitmap(item.getImage());
         }
         txtTitle.setText(item.getTitle());
         txtDescription.setText(item.getDescription());

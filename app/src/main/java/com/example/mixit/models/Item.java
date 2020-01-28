@@ -1,23 +1,24 @@
 package com.example.mixit.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.graphics.Bitmap;
+
+import com.example.mixit.interfaces.FetchCallback;
+import com.example.mixit.services.network.AssetFetch;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
-public class Item implements Serializable {
+public class Item implements Serializable, FetchCallback {
     private String title;
     private String description;
     private HashMap tutorial;
     private String id;
-    private String image;
+    private transient Bitmap image;
+    private String imageUrl;
     private String creatorsEmail;
     private Date alarm;
     private Boolean favourite;
@@ -25,11 +26,16 @@ public class Item implements Serializable {
 
     public Item(JSONObject object) {
         HashMap tutorial = new HashMap();
+        HashMap params = new HashMap();
+        AssetFetch assetFetch = new AssetFetch(this);
+        params.put("type", "image");
 
         try {
             this.id = (String) object.get("idDrink");
             this.title = (String) object.get("strDrink");
-            this.image = (String) object.get("strDrinkThumb");
+            this.imageUrl = (String) object.get("strDrinkThumb");
+            params.put("url", object.get("strDrinkThumb"));
+            assetFetch.execute(params);
             tutorial.put("instructions", object.get("strInstructions"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -113,11 +119,15 @@ public class Item implements Serializable {
         this.id = id;
     }
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -153,4 +163,8 @@ public class Item implements Serializable {
         this.prepared = prepared;
     }
 
+    @Override
+    public void onSuccess(Bitmap picture) {
+        this.image = picture;
+    }
 }
