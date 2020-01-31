@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities.ShowItemActivity"
-    tools:showIn="@layout/activity_show_item">
+    tools:context=".fragments.main.ShowFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,7 +67,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingLeft="25dp"
-            android:paddingTop="10dp"
             android:paddingRight="25dp"
             android:paddingBottom="10dp">
 
@@ -80,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
                 android:gravity="center"
-                android:padding="10dp"
+                android:isScrollContainer="false"
+                android:padding="5dp"
                 android:text="TextView"
                 android:textAllCaps="true"
                 android:textColor="@color/colorSecondary"
@@ -92,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:text="TextView"
                 android:textSize="16sp"
                 android:textStyle="italic" />
@@ -111,4 +108,5 @@
         </LinearLayout>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

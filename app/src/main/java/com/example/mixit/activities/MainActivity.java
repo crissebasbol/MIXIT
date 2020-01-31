@@ -1,11 +1,12 @@
 package com.example.mixit.activities;
 
-import android.content.Intent;
+import android.app.FragmentTransaction;
+import android.app.FragmentManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewStub;
-import android.widget.ListView;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,113 +15,51 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mixit.R;
-import com.example.mixit.interfaces.VolleyCallback;
-import com.example.mixit.models.Item;
-import com.example.mixit.services.network.JSONAPIRequest;
-import com.example.mixit.utilities.ListViewAdapter;
+import com.example.mixit.fragments.main.ItemListFragment;
+import com.example.mixit.fragments.main.ShowFragment;
+import com.example.mixit.services.network.NetworkFunctions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, VolleyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener {
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
-    private ListView listView;
-    private ViewStub stubList;
-    private ListViewAdapter listViewAdapter;
-    private List<Item> itemList = new ArrayList<>();
-    private int numberItems=10;
-    private boolean add = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setTitle("");
 
-        //---------------------------
-        stubList = (ViewStub) findViewById(R.id.stub_list);
-        stubList.inflate();
-        listView = (ListView) findViewById(R.id.my_list_view);
-        setAdapters();
+        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
+        if (!isConnected) {
+            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
-
-        HashMap params = new HashMap();
-        params.put("glass", null);
-        params.put("alcohol", "Alcoholic");
-        params.put("category", null);
-        params.put("ingredient", null);
-
-        HashMap query = new HashMap();
-        query.put("type", "search");
-        query.put("search", "");
-        // query.put("params", params);
-
-        APIService.execute(query);
-        //get list of product
-//        for(byte x=0;x<numberItems;x++){
-//            getItemList();
-//        }
-
-    }
-
-    private void setAdapters() {
-        if (listViewAdapter == null) {
-            listViewAdapter = new ListViewAdapter(this, R.layout.list_item, itemList);
-            listView.setAdapter(listViewAdapter);
+                        }
+                    }).show();
+        } else {
+            ItemListFragment itemListFragment = new ItemListFragment();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
+            fragmentTransaction.commit();
         }
-        else {
-            listViewAdapter.notifyDataSetChanged();
-        }
-//        if (itemList.size()>numberItems-1){
-//            add = true;
-//        }
-    }
-
-    public void getItemList(JSONObject object) {
-//        Item item = new Item();
-//        item.setId(1);
-//        item.setTitle("Margarita");
-//        item.setAlarm(null);
-//        item.setCreatorsEmail("crissebas@unicauca.edu.co");
-//        item.setDescription("Descripción...");
-//        item.setTutorial("Tutorial...");
-//        item.setPrepared(false);
-//        item.setImage(null);
-//        item.setFavourite(false);
-//        itemList.add(item);
-        itemList.add(new Item(object));
-        setAdapters();
-
-//        mAuth = FirebaseAuth.getInstance();
-//
-//        currentUser = mAuth.getCurrentUser();
-//
-//        if (currentUser == null) {
-//            finish();
-//            Intent startActivity = new Intent(this, StartActivity.class);
-//            startActivity(startActivity);
-//        }
-
     }
 
     @Override
@@ -152,6 +91,15 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        // Add the new tab fragment
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, ItemListFragment.newInstance())
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit();
+        setTitle("");
         return super.onOptionsItemSelected(item);
     }
 
@@ -174,10 +122,10 @@ public class MainActivity extends AppCompatActivity
 //
 //        }
         else if (id == R.id.nav_logout) {
-            mAuth.signOut();
-            Intent startIntent = new Intent(this, StartActivity.class);
-            startActivity(startIntent);
-            finish();
+//            mAuth.signOut();
+//            Intent startIntent = new Intent(this, StartActivity.class);
+//            startActivity(startIntent);
+//            finish();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -186,13 +134,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSuccess(JSONArray response) {
-        for (int i = 0; i < response.length(); i++) {
-            try {
-                getItemList((JSONObject) response.get(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

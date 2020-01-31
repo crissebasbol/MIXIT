@@ -16,7 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
-public class AssetFetch extends AsyncTask<HashMap, Void, Object> {
+public class AssetFetch extends NetworkFunctions {
     private FetchCallback mCallback;
 
     public AssetFetch (FetchCallback callback) {

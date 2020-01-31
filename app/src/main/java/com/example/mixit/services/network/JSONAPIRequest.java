@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class JSONAPIRequest extends AsyncTask<HashMap, Void, JSONArray> {
+public class JSONAPIRequest extends NetworkFunctions {
 
     private final String TAG = "JSONAPIRequest";
     private static final String URL = "https://www.thecocktaildb.com/api/json/v1/1/";
@@ -64,6 +64,7 @@ public class JSONAPIRequest extends AsyncTask<HashMap, Void, JSONArray> {
 
     @Override
     protected JSONArray doInBackground(HashMap... query) {
+        cancel(checkNetworkStatus(mContext));
         String queryURL = null;
         HashMap params = null;
 

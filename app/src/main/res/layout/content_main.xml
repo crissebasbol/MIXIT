@@ -9,12 +9,19 @@
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical">
 
-    <ViewStub
-        android:id="@+id/stub_list"
+    <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout="@layout/my_listview"
-        />
+        android:layout_height="match_parent" />
+
+
+<!--    <ViewStub-->
+<!--        android:id="@+id/stub_list"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout="@layout/my_listview" />-->
+
+
 
 </LinearLayout>
