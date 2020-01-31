@@ -1,31 +1,90 @@
 package com.example.mixit.models;
 
-import java.util.Date;
+import android.graphics.Bitmap;
 
-public class Item {
+import com.example.mixit.interfaces.FetchCallback;
+import com.example.mixit.services.network.AssetFetch;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+
+public class Item implements Serializable, FetchCallback {
     private String title;
     private String description;
-    private String tutorial;
-    private int id;
-    private String image;
+    private HashMap tutorial;
+    private String id;
+    private transient Bitmap image;
+    private String imageUrl;
     private String creatorsEmail;
     private Date alarm;
     private Boolean favourite;
     private Boolean prepared;
 
+    public Item(JSONObject object) {
+        HashMap tutorial = new HashMap();
+        HashMap params = new HashMap();
+        AssetFetch assetFetch = new AssetFetch(this);
+        params.put("type", "image");
 
-    public Item() {	}
+        try {
+            this.id = (String) object.get("idDrink");
+            this.title = (String) object.get("strDrink");
+            this.imageUrl = (String) object.get("strDrinkThumb");
+            params.put("url", object.get("strDrinkThumb"));
+            assetFetch.execute(params);
+            tutorial.put("instructions", object.get("strInstructions"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-    public Item(String title, String description, String tutorial, int id, String image, String creatorsEmail, Date alarm, Boolean favourite, Boolean prepared) {
-        this.title = title;
-        this.description = description;
+        tutorial.put("ingredients", parseIngredients(object));
+
         this.tutorial = tutorial;
-        this.id = id;
-        this.image = image;
+
+        this.description = parseDescription(object);
+
         this.creatorsEmail = creatorsEmail;
+
         this.alarm = alarm;
         this.favourite = favourite;
         this.prepared = prepared;
+    }
+
+    private String parseDescription(JSONObject object) {
+        String description = new String();
+        try {
+            if (!object.get("strCategory").toString().equals("null")) description += object.get("strCategory").toString() + "\n";
+            if (!object.get("strIBA").toString().equals("null")) description += object.get("strIBA").toString() + "\n";
+            if (!object.get("strAlcoholic").toString().equals("null")) description += object.get("strAlcoholic").toString() + "\n";
+            if (!object.get("strGlass").toString().equals("null")) description += object.get("strGlass").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return description.trim();
+    }
+
+    private String parseIngredients(JSONObject object) {
+        String tutorial = "";
+        for (Integer i = 1; i <= 15; i++) {
+            try {
+                if (!(object.get("strIngredient"+i).toString().equals("null"))) {
+                    if (!(object.get("strMeasure"+i).toString().equals("null"))) {
+                        tutorial += "•\t" + object.get("strIngredient"+i).toString()
+                                +" - "+object.get("strMeasure"+i).toString().trim() + "\n";
+                    } else {
+                        tutorial += "•\t" + object.get("strIngredient"+i).toString().trim() + "\n";
+                    }
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return tutorial;
     }
 
     public String getTitle() {
@@ -44,27 +103,31 @@ public class Item {
         this.description = description;
     }
 
-    public String getTutorial() {
+    public HashMap getTutorial() {
         return tutorial;
     }
 
-    public void setTutorial(String tutorial) {
+    public void setTutorial(HashMap tutorial) {
         this.tutorial = tutorial;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -98,5 +161,10 @@ public class Item {
 
     public void setPrepared(Boolean prepared) {
         this.prepared = prepared;
+    }
+
+    @Override
+    public void onSuccess(Bitmap picture) {
+        this.image = picture;
     }
 }

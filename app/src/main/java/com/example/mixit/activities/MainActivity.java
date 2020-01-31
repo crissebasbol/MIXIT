@@ -2,12 +2,16 @@ package com.example.mixit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.app.FragmentTransaction;
+import android.app.FragmentManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,28 +28,23 @@ import com.example.mixit.services.authentication.FireBaseAuth;
 import com.example.mixit.services.network.JSONAPIRequest;
 import com.example.mixit.utilities.ListViewAdapter;
 import com.facebook.login.LoginManager;
+import com.example.mixit.fragments.main.ItemListFragment;
+import com.example.mixit.fragments.main.ShowFragment;
+import com.example.mixit.services.network.NetworkFunctions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends GenericAbstractActivity
-        implements NavigationView.OnNavigationItemSelectedListener, VolleyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener {
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
     private User user;
 
     private ListView listView;
     private ViewStub stubList;
     private ListViewAdapter listViewAdapter;
-    private List<Item> itemList = new ArrayList<>();
     private TextView mNameUser, mEmailUser;
     private int numberItems=10;
     private boolean add = false;
@@ -56,75 +55,33 @@ public class MainActivity extends GenericAbstractActivity
         setupGUINavigationDrawer();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        //---------------------------
-        stubList = (ViewStub) findViewById(R.id.stub_list);
-        stubList.inflate();
-        listView = (ListView) findViewById(R.id.my_list_view);
-        setAdapters();
-        //get list of product
-        for(byte x=0;x<numberItems;x++){
-            getItemList();
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setTitle("");
+
+        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
+        if (!isConnected) {
+            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    }).show();
+        } else {
+            ItemListFragment itemListFragment = new ItemListFragment();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
+            fragmentTransaction.commit();
         }
-
-    }
-
-    private void setAdapters() {
-        if (listViewAdapter == null) {
-            listViewAdapter = new ListViewAdapter(this, R.layout.list_item, itemList);
-            listView.setAdapter(listViewAdapter);
-        }
-        else {
-            listViewAdapter.notifyDataSetChanged();
-        }
-        if (itemList.size()>numberItems-1){
-            add = true;
-        }
-    }
-
-    public void getItemList() {
-        Item item = new Item();
-        item.setId(1);
-        item.setTitle("Margarita");
-        item.setAlarm(null);
-        item.setCreatorsEmail("crissebas@unicauca.edu.co");
-        item.setDescription("Descripción...");
-        item.setTutorial("Tutorial...");
-        item.setPrepared(false);
-        item.setImage(null);
-        item.setFavourite(false);
-        itemList.add(item);
-        setAdapters();
-
-        mAuth = FirebaseAuth.getInstance();
-
-        currentUser = mAuth.getCurrentUser();
-
-        if (currentUser == null) {
-            finish();
-            Intent startActivity = new Intent(this, StartActivity.class);
-            startActivity(startActivity);
-        }
-
-        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
-
-        HashMap params = new HashMap();
-        params.put("glass", null);
-        params.put("alcohol", "Alcoholic");
-        params.put("category", null);
-        params.put("ingredient", null);
-
-        HashMap query = new HashMap();
-        query.put("type", "filter");
-        query.put("params", params);
-
-        APIService.execute(query);
     }
 
     @Override
@@ -156,16 +113,36 @@ public class MainActivity extends GenericAbstractActivity
             return true;
         }
 
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        // Add the new tab fragment
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, ItemListFragment.newInstance())
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit();
+        setTitle("");
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
 
         }
+        // else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_tools) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        }
         else if (id == R.id.nav_logout) {
             logOut();
         }
@@ -176,8 +153,7 @@ public class MainActivity extends GenericAbstractActivity
     }
 
     @Override
-    public void onSuccess(JSONArray response) {
-        System.out.println("LENGTH ACTIVITY "+response.length());
-        // TODO
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

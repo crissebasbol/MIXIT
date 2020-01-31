@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.main.ShowFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/loading_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" >
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/cocktail_picture"
+                android:layout_width="match_parent"
+                android:layout_height="214dp"
+                android:layout_margin="10sp"
+                android:layout_marginLeft="15sp"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/cocktail_favorite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_favorite_white_24dp" />
+
+                <Button
+                    android:id="@+id/cocktail_alarm"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_alarm_add_white_24dp" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/cocktail_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/cocktail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:gravity="center"
+                android:isScrollContainer="false"
+                android:padding="5dp"
+                android:text="TextView"
+                android:textAllCaps="true"
+                android:textColor="@color/colorSecondary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cocktail_tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="5dp"
+                android:text="TextView"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/cocktail_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="TextView"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
