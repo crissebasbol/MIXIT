@@ -85,7 +85,7 @@ public class ShowFragment extends Fragment {
         description.setText(this.mItem.getDescription());
         tutorial.setText(this.mItem.getTutorial().get("instructions").toString());
         ingredients.setText(this.mItem.getTutorial().get("ingredients").toString());
-        picture.setImageBitmap(this.mItem.getImage().copy(this.mItem.getImage().getConfig(), false));
+        picture.setImageBitmap(this.mItem.getImage());
         Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
         picture.setBackground(drawablePicture);
         getActivity().setTitle(this.mItem.getTitle());
