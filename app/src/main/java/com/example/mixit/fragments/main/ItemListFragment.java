@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.example.mixit.R;
@@ -34,17 +35,23 @@ import java.util.List;
 // * Use the {@link ListFragment#newInstance} factory method to
 // * create an instance of this fragment.
 // */
-public class ItemListFragment extends Fragment implements VolleyCallback {
+public class ItemListFragment extends Fragment implements VolleyCallback, AbsListView.OnScrollListener {
 
     private View mView;
     private ListView listView;
     private ViewStub stubList;
     private ListViewAdapter listViewAdapter = null;
     private List<Item> itemList = new ArrayList<>();
+    private JSONArray APIResponse;
     private Context mContext;
     private FragmentManager mFragmentManager;
 
     private OnFragmentInteractionListener mListener;
+
+    private Integer itemsByDefault = 10;
+    private Integer itemWindows;
+    private Integer windowCount = 0;
+    private Integer currentPosition = 0;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -106,21 +113,9 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
             stubList = mView.findViewById(R.id.stub_list);
             stubList.inflate();
             listView = mView.findViewById(R.id.my_list_view);
+            listView.setOnScrollListener(this);
             setAdapters();
-
-            JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
-
-            HashMap params = new HashMap();
-            params.put("glass", null);
-            params.put("alcohol", "Alcoholic");
-            params.put("category", null);
-            params.put("ingredient", null);
-
-            HashMap query = new HashMap();
-            query.put("type", "search");
-            query.put("search", "");
-
-            APIService.execute(query);
+            fetchItems();
         }
 
         return mView;
@@ -152,15 +147,22 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
 
     @Override
     public void onSuccess(JSONArray response) {
-        for (int i = 0; i < response.length(); i++) {
-            try {
-                itemList.add(new Item((JSONObject) response.get(i)));
-                setAdapters();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        itemWindows = (int) Math.ceil(response.length() / itemsByDefault);
+        APIResponse = response;
+        paginateItems();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        System.out.println("[ FRAGMENT ] onScrollStateChange => Scroll state changed");
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int currentItemCount = firstVisibleItem+visibleItemCount;
+        if ((currentItemCount == totalItemCount) && (currentItemCount > 0)) {
+            paginateItems();
         }
-        
     }
 
     /**
@@ -184,6 +186,48 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
             listView.setAdapter(listViewAdapter);
         } else {
             listViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void fetchItems () {
+        JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
+
+        HashMap params = new HashMap();
+        params.put("glass", null);
+        params.put("alcohol", "Alcoholic");
+        params.put("category", null);
+        params.put("ingredient", null);
+
+        HashMap query = new HashMap();
+        query.put("type", "search");
+        query.put("search", "");
+
+        APIService.execute(query);
+    }
+
+    private void paginateItems () {
+        if ((itemWindows == windowCount) && (itemList.size() < APIResponse.length())) {
+
+            for (int i = currentPosition; i < APIResponse.length(); i++) {
+                try {
+                    itemList.add(new Item((JSONObject) APIResponse.get(i)));
+                    setAdapters();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (itemWindows > windowCount) {
+            windowCount++;
+            for (int i = currentPosition; i < windowCount*itemsByDefault; i++) {
+                try {
+                    itemList.add(new Item((JSONObject) APIResponse.get(i)));
+                    setAdapters();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                currentPosition++;
+            }
+            if (windowCount == itemWindows-1) windowCount++;
         }
     }
 }
