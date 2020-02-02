@@ -3,6 +3,7 @@ package com.example.mixit.models;
 import android.graphics.Bitmap;
 
 import com.example.mixit.interfaces.FetchCallback;
+import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.services.network.AssetFetch;
 
 import org.json.JSONException;
@@ -23,6 +24,7 @@ public class Item implements Serializable, FetchCallback {
     private Date alarm;
     private Boolean favourite;
     private Boolean prepared;
+    private transient UpdateCallback updateCallback;
 
     public Item(JSONObject object) {
         HashMap tutorial = new HashMap();
@@ -163,8 +165,13 @@ public class Item implements Serializable, FetchCallback {
         this.prepared = prepared;
     }
 
+    public void setUpdateCallback(UpdateCallback updateCallback) {
+        this.updateCallback = updateCallback;
+    }
+
     @Override
     public void onSuccess(Bitmap picture) {
         this.image = picture;
+        if (this.updateCallback != null) this.updateCallback.onUpdate(this.id);
     }
 }

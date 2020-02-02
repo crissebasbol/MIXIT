@@ -70,6 +70,22 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            //Restore the fragment's state here
+
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Save the fragment's state here
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mContext = getContext();
@@ -83,26 +99,30 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_list, container, false);
-        stubList = mView.findViewById(R.id.stub_list);
-        stubList.inflate();
-        listView = mView.findViewById(R.id.my_list_view);
-        setAdapters();
+        this.setRetainInstance(true);
+        if (mView == null) {
+            // Inflate the layout for this fragment
+            mView = inflater.inflate(R.layout.fragment_list, container, false);
+            stubList = mView.findViewById(R.id.stub_list);
+            stubList.inflate();
+            listView = mView.findViewById(R.id.my_list_view);
+            setAdapters();
 
-        JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
+            JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
 
-        HashMap params = new HashMap();
-        params.put("glass", null);
-        params.put("alcohol", "Alcoholic");
-        params.put("category", null);
-        params.put("ingredient", null);
+            HashMap params = new HashMap();
+            params.put("glass", null);
+            params.put("alcohol", "Alcoholic");
+            params.put("category", null);
+            params.put("ingredient", null);
 
-        HashMap query = new HashMap();
-        query.put("type", "search");
-        query.put("search", "");
+            HashMap query = new HashMap();
+            query.put("type", "search");
+            query.put("search", "");
 
-        APIService.execute(query);
+            APIService.execute(query);
+        }
+
         return mView;
     }
 

@@ -1,36 +1,27 @@
 package com.example.mixit.activities;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.app.FragmentTransaction;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mixit.R;
-import com.example.mixit.interfaces.VolleyCallback;
-import com.example.mixit.models.Item;
-import com.example.mixit.models.User;
-import com.example.mixit.preferences.SessionPreferences;
-import com.example.mixit.services.authentication.FireBaseAuth;
-import com.example.mixit.services.network.JSONAPIRequest;
-import com.example.mixit.utilities.ListViewAdapter;
-import com.facebook.login.LoginManager;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
+import com.example.mixit.models.User;
 import com.example.mixit.services.network.NetworkFunctions;
+import com.example.mixit.utilities.ListViewAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -39,6 +30,7 @@ public class MainActivity extends GenericAbstractActivity
         ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+    private static final String ITEM_LIST_FRAGMENT_TAG = "item_list_fragment";
 
     private User user;
 
@@ -46,11 +38,20 @@ public class MainActivity extends GenericAbstractActivity
     private ViewStub stubList;
     private ListViewAdapter listViewAdapter;
     private TextView mNameUser, mEmailUser;
-    private int numberItems=10;
-    private boolean add = false;
+
+    private ItemListFragment itemListFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        itemListFragment = new ItemListFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.frame_layout, itemListFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
         setContentView(R.layout.activity_main);
         setupGUINavigationDrawer();
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -67,21 +68,25 @@ public class MainActivity extends GenericAbstractActivity
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle("");
 
-        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
-        if (!isConnected) {
-            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Retry", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+//        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
+//        if (!isConnected) {
+//            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
+//                    .setAction("Retry", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                        }
+//                    }).show();
+//        } else {
+//
+//        }
+    }
 
-                        }
-                    }).show();
-        } else {
-            ItemListFragment itemListFragment = new ItemListFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
-            fragmentTransaction.commit();
-        }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+//        getFragmentManager().putFragment(outState, "itemListFragment", itemListFragment);
     }
 
     @Override
@@ -90,7 +95,8 @@ public class MainActivity extends GenericAbstractActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            // super.onBackPressed();
+            returnToFragment();
         }
     }
 
@@ -113,16 +119,20 @@ public class MainActivity extends GenericAbstractActivity
             return true;
         }
 
+        returnToFragment();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void returnToFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         // Add the new tab fragment
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, ItemListFragment.newInstance())
+                .replace(R.id.frame_layout, itemListFragment)
                 .addToBackStack(BACK_STACK_ROOT_TAG)
                 .commit();
         setTitle("");
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
