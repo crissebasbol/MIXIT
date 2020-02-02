@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -115,7 +116,9 @@ public class ItemListFragment extends Fragment implements VolleyCallback, AbsLis
             listView = mView.findViewById(R.id.my_list_view);
             listView.setOnScrollListener(this);
             setAdapters();
-            fetchItems();
+            Random random = new Random();
+            char randomChar = (char)(random.nextInt(26) + 'a');
+            searchItems(Character.toString(randomChar));
         }
 
         return mView;
@@ -189,7 +192,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback, AbsLis
         }
     }
 
-    private void fetchItems () {
+    private void searchItems (String search) {
         JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
 
         HashMap params = new HashMap();
@@ -200,7 +203,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback, AbsLis
 
         HashMap query = new HashMap();
         query.put("type", "search");
-        query.put("search", "");
+        query.put("search", search);
 
         APIService.execute(query);
     }
