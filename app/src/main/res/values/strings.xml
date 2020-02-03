@@ -217,5 +217,24 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="message_no_internet">Revisa tu conexión a internet</string>
+    <string name="message_updated_name_successful">Nombre acualizado correctamente</string>
+    <string name="message_updated_password_successful">Contraseña acualizada correctamente</string>
+    <string name="message_updated_successful">Información acualizada correctamente</string>
+    <string name="txt_retry">Retry</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_update_profile">ACTUALIZAR PERFIL</string>
+    <string name="txt_change_name">Cambiar Nombre</string>
+    <string name="txt_change_password">Cambiar Contraseña</string>
+    <string name="txt_new_password1">Ingrese una nueva contraseña</string>
+    <string name="txt_new_password2">Confirme su nueva contraseña</string>
+    <string name="txt_error_same_passwords">Las contraseñas no son iguales</string>
+    <string name="txt_min_characteres">Escribe al menos 6 caracteres</string>
+    <string name="txt_camera">Cámara</string>
+    <string name="txt_gallery">Galeria</string>
+    <string name="txt_cancel">cancelar</string>
+    <string name="txt_title_change_profile_picture">Cambiar foto de perfil</string>
 
 </resources>

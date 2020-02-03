@@ -82,7 +82,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             String name = fireBaseAuth.getmAuth().getCurrentUser().getDisplayName();
             String photo = String.valueOf(fireBaseAuth.getmAuth().getCurrentUser().getPhotoUrl());
             User user = new User(email, name, photo);
-            SessionPreferences sessionPreferences = new SessionPreferences(this, this);
+            SessionPreferences sessionPreferences = new SessionPreferences(this, this, null);
             sessionPreferences.saveSessionUser(user);
             fireBaseAuth.setMainActivity();
         }

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray_xxx_light"
+    tools:context=".fragments.ProfileFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/profile_image_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_profile_picture" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@id/profile_image"
+                    android:layout_alignBottom="@id/profile_image"
+                    android:src="@color/gray_xx_light"
+                    />
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@id/profile_image"
+                    android:layout_alignBottom="@id/profile_image"
+                    android:drawableStart="@drawable/ic_menu_camera"
+                    android:padding="3dp"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/txt_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="prueba@gmail.com"
+                android:textColor="@color/white" />
+        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/thirdColor">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/txt_change_name" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/input_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_person_black_24dp"
+                        android:drawablePadding="5dp"
+                        android:hint="@string/promp_name"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/thirdColor">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/txt_change_password" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/password1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/baseline_vpn_key_black_24"
+                        android:drawablePadding="5dp"
+                        android:hint="@string/txt_new_password1"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/password2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/baseline_vpn_key_black_24"
+                        android:drawablePadding="5dp"
+                        android:hint="@string/txt_new_password2"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/btn_update_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorSecundary"
+        android:drawableStart="@drawable/baseline_check_circle_white_24"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/txt_update_profile"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+</RelativeLayout>

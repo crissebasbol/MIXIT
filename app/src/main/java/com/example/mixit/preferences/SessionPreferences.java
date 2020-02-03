@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.example.mixit.models.User;
 import com.example.mixit.services.authentication.FireBaseAuth;
 import com.google.gson.Gson;
@@ -24,14 +26,18 @@ public class SessionPreferences {
     private static SessionPreferences INSTANCE;
     private static boolean REREAD_PREFERENCES = false;
 
-    public SessionPreferences(Context context, Activity activity){
+    public SessionPreferences(Context context, Activity activity, @Nullable FireBaseAuth fireBaseAuth){
         this.context = context;
-        fireBaseAuth = new FireBaseAuth(context, activity);
+        if (fireBaseAuth == null){
+            this.fireBaseAuth = new FireBaseAuth(context, activity);
+        }else{
+            this.fireBaseAuth = fireBaseAuth;
+        }
         preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         REREAD_PREFERENCES = false;
         editor = preferences.edit();
         Gson gson = new Gson();
-        if(fireBaseAuth.checkSigned()){
+        if(this.fireBaseAuth.checkSigned()){
             String userJson = preferences.getString(PREF_USER, null);
             if (!TextUtils.isEmpty(preferences.getString(PREF_USER, null))) {
                 currentUser = gson.fromJson(userJson, User.class);
@@ -42,9 +48,12 @@ public class SessionPreferences {
         }
     }
 
-    public static SessionPreferences get(Context context, Activity activity) {
+    public static SessionPreferences get(Context context, Activity activity, @Nullable FireBaseAuth fireBaseAuth) {
         if (INSTANCE == null || REREAD_PREFERENCES) {
-            INSTANCE = new SessionPreferences(context, activity);
+            if (fireBaseAuth != null)
+                INSTANCE = new SessionPreferences(context, activity, fireBaseAuth);
+            else
+                INSTANCE = new SessionPreferences(context, activity, null);
         }
         return INSTANCE;
     }

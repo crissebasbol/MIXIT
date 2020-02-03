@@ -1,42 +1,36 @@
 package com.example.mixit.activities;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.app.FragmentTransaction;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mixit.R;
-import com.example.mixit.interfaces.VolleyCallback;
-import com.example.mixit.models.Item;
-import com.example.mixit.models.User;
-import com.example.mixit.preferences.SessionPreferences;
-import com.example.mixit.services.authentication.FireBaseAuth;
-import com.example.mixit.services.network.JSONAPIRequest;
-import com.example.mixit.utilities.ListViewAdapter;
-import com.facebook.login.LoginManager;
+import com.example.mixit.fragments.ProfileFragment;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
+import com.example.mixit.models.User;
 import com.example.mixit.services.network.NetworkFunctions;
+import com.example.mixit.utilities.ListViewAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends GenericAbstractActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener {
+        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
@@ -69,11 +63,12 @@ public class MainActivity extends GenericAbstractActivity
 
         boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
         if (!isConnected) {
-            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Retry", new View.OnClickListener() {
+            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), getString(R.string.message_no_internet), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.txt_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            finish();
+                            startActivity(getIntent());
                         }
                     }).show();
         } else {
@@ -81,6 +76,7 @@ public class MainActivity extends GenericAbstractActivity
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
             fragmentTransaction.commit();
+
         }
     }
 
@@ -132,17 +128,25 @@ public class MainActivity extends GenericAbstractActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
+            ItemListFragment itemListFragment = new ItemListFragment();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
+            fragmentTransaction.commit();
         }
         // else if (id == R.id.nav_gallery) {
 //
 //        } else if (id == R.id.nav_slideshow) {
 //
-//        } else if (id == R.id.nav_tools) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        }
+        else if (id == R.id.nav_account) {
+            ProfileFragment profileFragment = new ProfileFragment();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, profileFragment);
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.nav_privacy_terms) {
+            Intent intent = new Intent(this, TermsAndConditionsActivity.class);
+            startActivity(intent);
+        }
         else if (id == R.id.nav_logout) {
             logOut();
         }
@@ -155,5 +159,14 @@ public class MainActivity extends GenericAbstractActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public void refreshNavigationDrawer(){
+        setupGUINavigationDrawer();
     }
 }

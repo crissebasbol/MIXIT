@@ -37,7 +37,7 @@ public abstract class GenericAbstractActivity extends AppCompatActivity implemen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionPreferences = SessionPreferences.get(this, this);
+        sessionPreferences = SessionPreferences.get(this, this, null);
         fireBaseAuth = new FireBaseAuth(this, this);
         checkAndSetupLogin();
     }
@@ -48,7 +48,7 @@ public abstract class GenericAbstractActivity extends AppCompatActivity implemen
         }
     }
 
-    protected void setupGUINavigationDrawer() {
+    public void setupGUINavigationDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         //toolbar.setLogo();
         //toolbar.setTitle();
