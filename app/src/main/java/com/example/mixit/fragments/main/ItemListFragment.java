@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.example.mixit.R;
 import com.example.mixit.interfaces.VolleyCallback;
@@ -36,7 +37,8 @@ import java.util.Random;
 // * Use the {@link ListFragment#newInstance} factory method to
 // * create an instance of this fragment.
 // */
-public class ItemListFragment extends Fragment implements VolleyCallback, AbsListView.OnScrollListener {
+public class ItemListFragment extends Fragment implements VolleyCallback,
+        AbsListView.OnScrollListener, SearchView.OnQueryTextListener {
 
     private View mView;
     private ListView listView;
@@ -150,14 +152,16 @@ public class ItemListFragment extends Fragment implements VolleyCallback, AbsLis
 
     @Override
     public void onSuccess(JSONArray response) {
-        itemWindows = (int) Math.ceil(response.length() / itemsByDefault);
-        APIResponse = response;
-        paginateItems();
+        if (response != null) {
+            itemWindows = (int) Math.ceil(response.length() / itemsByDefault);
+            APIResponse = response;
+            paginateItems();
+        }
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        System.out.println("[ FRAGMENT ] onScrollStateChange => Scroll state changed");
+
     }
 
     @Override
@@ -166,6 +170,17 @@ public class ItemListFragment extends Fragment implements VolleyCallback, AbsLis
         if ((currentItemCount == totalItemCount) && (currentItemCount > 0)) {
             paginateItems();
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        searchItems(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     /**
@@ -204,6 +219,11 @@ public class ItemListFragment extends Fragment implements VolleyCallback, AbsLis
         HashMap query = new HashMap();
         query.put("type", "search");
         query.put("search", search);
+
+        currentPosition = 0;
+        windowCount = 0;
+        itemWindows = null;
+        itemList.clear();
 
         APIService.execute(query);
     }

@@ -10,8 +10,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 
 import com.example.mixit.R;
 import com.example.mixit.fragments.main.ShowFragment;
-
 import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.models.Item;
 
@@ -89,7 +86,6 @@ public class ListViewAdapter extends ArrayAdapter<Item> implements UpdateCallbac
 
     @Override
     public void onUpdate(final String itemId) {
-        System.out.println("[ CALLBACK ] onUpdate => Item image updated");
         ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {

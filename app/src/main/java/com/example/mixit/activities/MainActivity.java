@@ -2,16 +2,15 @@ package com.example.mixit.activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewStub;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import android.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -19,27 +18,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.mixit.R;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
-import com.example.mixit.models.User;
-import com.example.mixit.services.network.NetworkFunctions;
-import com.example.mixit.utilities.ListViewAdapter;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends GenericAbstractActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
-    private static final String ITEM_LIST_FRAGMENT_TAG = "item_list_fragment";
-
-    private User user;
-
-    private ListView listView;
-    private ViewStub stubList;
-    private ListViewAdapter listViewAdapter;
-    private TextView mNameUser, mEmailUser;
+//    private static final String ITEM_LIST_FRAGMENT_TAG = "item_list_fragment";
+//
+//    private User user;
+//
+//    private ListView listView;
+//    private ViewStub stubList;
+//    private ListViewAdapter listViewAdapter;
+//    private TextView mNameUser, mEmailUser;
 
     private ItemListFragment itemListFragment;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +100,19 @@ public class MainActivity extends GenericAbstractActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_settings);
+
+        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);
+
+        searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
+            searchView.setOnQueryTextListener(itemListFragment);
+//            searchView.setSubmitButtonEnabled(true);
+        }
         return true;
     }
 
