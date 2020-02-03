@@ -1,6 +1,7 @@
 package com.example.mixit.services.authentication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -129,7 +130,7 @@ public class FireBaseAuth {
         return successfulPhoto;
     }
 
-    public boolean updatePassword(String password){
+    public boolean updatePassword(String password, @Nullable final ProgressDialog progressDialog){
         successfulPassword = false;
         currentUser.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -141,6 +142,7 @@ public class FireBaseAuth {
                     EditText password2 = activity.findViewById(R.id.password2);
                     password1.setText("");
                     password2.setText("");
+                    progressDialog.dismiss();
                 }catch (Exception e){
                     Log.e(TAG, "exception", e);
                 }
@@ -191,22 +193,42 @@ public class FireBaseAuth {
         return successfullDeleted;
     }
 
-    public void updateProfile(String name, String photo, @Nullable final String password){
+    public void updateProfile(String name, String photo, @Nullable final String password, @Nullable final ProgressDialog progressDialog){
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .setPhotoUri(Uri.parse(photo))
                 .build();
-        currentUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (password != null){
-                            updatePassword(password);
-                        }else{
-                            showMessageUpdate();
+        if (progressDialog != null) {
+            currentUser.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (password != null) {
+                                updatePassword(password, progressDialog);
+                            } else {
+                                showMessageUpdate();
+                                progressDialog.dismiss();
+                            }
                         }
-                    }
-                });
+                    });
+        }else {
+            final ProgressDialog progressDialog2 = new ProgressDialog(context);
+            progressDialog2.setTitle(activity.getString(R.string.txt_loading_update));
+            progressDialog2.setCancelable(false);
+            progressDialog2.show();
+            currentUser.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (password != null) {
+                                updatePassword(password, progressDialog2);
+                            } else {
+                                showMessageUpdate();
+                                progressDialog2.dismiss();
+                            }
+                        }
+                    });
+        }
     }
 
     public FirebaseAuth getmAuth() {

@@ -236,5 +236,8 @@
     <string name="txt_gallery">Galeria</string>
     <string name="txt_cancel">cancelar</string>
     <string name="txt_title_change_profile_picture">Cambiar foto de perfil</string>
+    <string name="txt_loading_update">Actualizando información...</string>
+    <string name="txt_load">% cargado</string>
+    <string name="txt_error_update">Error al actualizar</string>
 
 </resources>

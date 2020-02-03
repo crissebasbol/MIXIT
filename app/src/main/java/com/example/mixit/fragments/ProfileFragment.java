@@ -3,6 +3,7 @@ package com.example.mixit.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,12 +23,16 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.mixit.R;
 import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.authentication.FireBaseAuth;
+import com.example.mixit.services.storage.FB_Storage;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,8 +51,13 @@ public class ProfileFragment extends Fragment {
     private RelativeLayout mProfileImageLayout;
     private FireBaseAuth fireBaseAuth;
     private OnFragmentInteractionListener mListener;
+    private Bitmap bitmapProfileImage = null;
+    private boolean changeProfileImage = false;
+    private FB_Storage fb_storage;
     public static final int RC_PROFILE_FRAGMENT = 8001;
-    private static final Byte REQUEST_CAMERA = 1, SELECT_FILE = 0;
+    private static final Byte REQUEST_CAMERA = 1;
+    private static final Byte SELECT_FILE = 0;
+    public static final Byte UPDATE_PROFILE = 2;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -65,6 +75,7 @@ public class ProfileFragment extends Fragment {
         sessionPreferences = SessionPreferences.get(mContext, getActivity(), null);
         fireBaseAuth = new FireBaseAuth(mContext, getActivity());
         this.mFragmentManager = ((Activity) mContext).getFragmentManager();
+        fb_storage = new FB_Storage(mContext, getActivity(), this);
     }
 
     @Override
@@ -99,8 +110,12 @@ public class ProfileFragment extends Fragment {
         updateProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: implement change of photo
-                updateProfile(mNameField.getText().toString(),sessionPreferences.getCurrentUser().getPhoto(), mPasswordField.getText().toString(), mPasswordField2.getText().toString());
+                if (changeProfileImage){
+                    fb_storage.uploadFile(bitmapProfileImage, "pictureOf_"+sessionPreferences.getCurrentUser().getEmail());
+                    changeProfileImage = false;
+                }else {
+                    updateProfile(sessionPreferences.getCurrentUser().getPhoto(), null);
+                }
             }
         });
 
@@ -133,15 +148,18 @@ public class ProfileFragment extends Fragment {
         });
         builder.show();
     }
-
-    private void updateProfile(String name, String photo, String password1, String password2) {
+    public void updateProfile(String urlPhoto, @Nullable ProgressDialog progressDialog){
+        updateProfile(mNameField.getText().toString(), urlPhoto, mPasswordField.getText().toString(), mPasswordField2.getText().toString(), progressDialog);
+    }
+    private void updateProfile(String name, String photo, String password1, String password2, @Nullable ProgressDialog progressDialog) {
         if (!validateForm(name, password1, password2)){
             return;
         }
+
         if (!password1.equals("")){
-            fireBaseAuth.updateProfile(name, photo, password1);
+            fireBaseAuth.updateProfile(name, photo, password1, progressDialog);
         }else{
-            fireBaseAuth.updateProfile(name, photo, null);
+            fireBaseAuth.updateProfile(name, photo, null, progressDialog);
         }
     }
 
@@ -217,18 +235,25 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        //FB_Storage.activityResult(requestCode,resultCode,data);
         if (resultCode==Activity.RESULT_OK){
+            bitmapProfileImage = null;
+            Uri selectedImage = null;
             if (requestCode == REQUEST_CAMERA){
                 Bundle extras = data.getExtras();
-                //addImage((Bitmap) extras.get("data"));
-                mProfilePicture.setImageBitmap((Bitmap) extras.get("data"));
+                bitmapProfileImage = (Bitmap) extras.get("data");
             }else if (requestCode == SELECT_FILE){
-                Uri selectedImage;
+                selectedImage = data.getData();
                 try {
-                    selectedImage = data.getData();
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                    mProfilePicture.setImageBitmap(bitmap);
-                }catch (Exception er){}
+                    bitmapProfileImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (bitmapProfileImage != null) {
+                mProfilePicture.setImageBitmap(bitmapProfileImage);
+                changeProfileImage = true;
+                //fb_storage.uploadFile(bitmapProfileImage);
             }
         }
     }
