@@ -2,15 +2,13 @@ package com.example.mixit.activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.SearchManager;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import android.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,6 +23,7 @@ public class MainActivity extends GenericAbstractActivity
         ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+    private MenuItem back;
 //    private static final String ITEM_LIST_FRAGMENT_TAG = "item_list_fragment";
 //
 //    private User user;
@@ -35,7 +34,6 @@ public class MainActivity extends GenericAbstractActivity
 //    private TextView mNameUser, mEmailUser;
 
     private ItemListFragment itemListFragment;
-    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,7 @@ public class MainActivity extends GenericAbstractActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle("");
 
 //        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
@@ -76,13 +74,6 @@ public class MainActivity extends GenericAbstractActivity
 //        } else {
 //
 //        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-//        getFragmentManager().putFragment(outState, "itemListFragment", itemListFragment);
     }
 
     @Override
@@ -102,17 +93,18 @@ public class MainActivity extends GenericAbstractActivity
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem searchItem = menu.findItem(R.id.action_settings);
 
-        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);
+        back = menu.findItem(R.id.action_back);
+        back.setVisible(false);
 
-        searchView = null;
+        SearchView searchView = null;
+
         if (searchItem != null) {
             searchView = (SearchView) searchItem.getActionView();
         }
         if (searchView != null) {
-//            searchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
             searchView.setOnQueryTextListener(itemListFragment);
-//            searchView.setSubmitButtonEnabled(true);
         }
+
         return true;
     }
 
@@ -173,6 +165,10 @@ public class MainActivity extends GenericAbstractActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+        System.out.println(uri);
+    }
 
+    public void setBackButtonVisibility (boolean visible) {
+        if (back != null) back.setVisible(visible);
     }
 }

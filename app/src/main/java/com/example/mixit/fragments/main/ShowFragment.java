@@ -1,5 +1,6 @@
 package com.example.mixit.fragments.main;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mixit.R;
+import com.example.mixit.activities.MainActivity;
 import com.example.mixit.models.Item;
 import com.example.mixit.services.assets.BlurImages;
 
@@ -65,6 +67,7 @@ public class ShowFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
             this.mItem = (Item) getArguments().getSerializable("item");
             this.mContext = getActivity();
+            ((MainActivity) this.mContext).setBackButtonVisibility(true);
         }
 
     }

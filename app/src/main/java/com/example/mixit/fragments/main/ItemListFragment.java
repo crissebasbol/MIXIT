@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.mixit.R;
+import com.example.mixit.activities.MainActivity;
 import com.example.mixit.interfaces.VolleyCallback;
 import com.example.mixit.models.Item;
 import com.example.mixit.services.network.JSONAPIRequest;
@@ -42,7 +43,6 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
 
     private View mView;
     private ListView listView;
-    private ViewStub stubList;
     private ListViewAdapter listViewAdapter = null;
     private List<Item> itemList = new ArrayList<>();
     private JSONArray APIResponse;
@@ -71,21 +71,16 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
     // TODO: Rename and change types and number of parameters
     public static ItemListFragment newInstance() {
 //    public static ItemListFragment newInstance(String param1, String param2) {
-        ItemListFragment fragment = new ItemListFragment();
-//        Bundle args = new Bundle();
+        //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
 //        fragment.setArguments(args);
-        return fragment;
+        return new ItemListFragment();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //Restore the fragment's state here
-
-        }
     }
 
     @Override
@@ -110,10 +105,11 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.setRetainInstance(true);
+        ((MainActivity) mContext).setBackButtonVisibility(false);
         if (mView == null) {
             // Inflate the layout for this fragment
             mView = inflater.inflate(R.layout.fragment_list, container, false);
-            stubList = mView.findViewById(R.id.stub_list);
+            ViewStub stubList = mView.findViewById(R.id.stub_list);
             stubList.inflate();
             listView = mView.findViewById(R.id.my_list_view);
             listView.setOnScrollListener(this);
@@ -136,6 +132,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -210,11 +207,11 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
     private void searchItems (String search) {
         JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
 
-        HashMap params = new HashMap();
-        params.put("glass", null);
-        params.put("alcohol", "Alcoholic");
-        params.put("category", null);
-        params.put("ingredient", null);
+//        HashMap params = new HashMap();
+//        params.put("glass", null);
+//        params.put("alcohol", "Alcoholic");
+//        params.put("category", null);
+//        params.put("ingredient", null);
 
         HashMap query = new HashMap();
         query.put("type", "search");

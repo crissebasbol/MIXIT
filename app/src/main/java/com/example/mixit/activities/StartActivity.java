@@ -1,9 +1,7 @@
 package com.example.mixit.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,26 +19,17 @@ import com.example.mixit.services.authentication.FireBaseAuth;
 import com.example.mixit.services.authentication.GoogleAuth;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private Button mLoginButton, mGoogleButton, mEmailButton, mAnonymousButton, mFacebookButton;
-
-    private TextView mTermsConditions;
 
     private CallbackManager callbackManager;
     private LoginButton loginButtonFacebook;
 
     private GoogleAuth googleAuth;
-    private AnonymousAuth anonymousAuth;
-    private FacebookAuth facebookAuth;
     private FireBaseAuth fireBaseAuth;
 
     @Override
@@ -48,13 +37,13 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        mTermsConditions = findViewById(R.id.terms_conditions);
+        TextView mTermsConditions = findViewById(R.id.terms_conditions);
 
-        mLoginButton = findViewById(R.id.login_button);
-        mGoogleButton = findViewById(R.id.google_button);
-        mEmailButton = findViewById(R.id.email_button);
-        mAnonymousButton = findViewById(R.id.anonymous_button);
-        mFacebookButton = (Button) findViewById(R.id.btnFa);
+        Button mLoginButton = findViewById(R.id.login_button);
+        Button mGoogleButton = findViewById(R.id.google_button);
+        Button mEmailButton = findViewById(R.id.email_button);
+        Button mAnonymousButton = findViewById(R.id.anonymous_button);
+        Button mFacebookButton = findViewById(R.id.btnFa);
 
         mLoginButton.setOnClickListener(this);
         mGoogleButton.setOnClickListener(this);
@@ -67,7 +56,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         //Facebook
         callbackManager = CallbackManager.Factory.create();
-        loginButtonFacebook = (LoginButton) findViewById(R.id.login_button_facebook);
+        loginButtonFacebook = findViewById(R.id.login_button_facebook);
         loginButtonFacebook.setPermissions(Arrays.asList("public_profile", "email"));
     }
 
@@ -78,7 +67,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         //Utilities.printHashKey(this);
         // Check if user is signed in (non-null) and update UI accordingly.
         if(fireBaseAuth.checkSigned()){
-            String email = fireBaseAuth.getmAuth().getCurrentUser().getEmail();
+            String email = Objects.requireNonNull(fireBaseAuth.getmAuth().getCurrentUser()).getEmail();
             String name = fireBaseAuth.getmAuth().getCurrentUser().getDisplayName();
             String photo = String.valueOf(fireBaseAuth.getmAuth().getCurrentUser().getPhotoUrl());
             User user = new User(email, name, photo);
@@ -91,30 +80,26 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        Intent intent = null;
+        Intent intent;
         switch (id){
             case R.id.login_button:
                 intent = new Intent(this, SignInActivity.class);
                 startActivity(intent);
                 break;
             case R.id.anonymous_button:
-                anonymousAuth = new AnonymousAuth(this);
+                new AnonymousAuth(this);
                 break;
             case R.id.google_button:
                 googleAuth = new GoogleAuth(this);
                 break;
             case R.id.btnFa:
                 loginButtonFacebook.performClick();
-                facebookAuth = new FacebookAuth(this, fireBaseAuth.getmAuth(), this);
+                FacebookAuth facebookAuth = new FacebookAuth(this, fireBaseAuth.getmAuth(), this);
                 loginButtonFacebook.registerCallback(callbackManager, facebookAuth.mFacebookCallback);
                 break;
             case R.id.email_button:
                 intent = new Intent(this, CreateAccountActivity.class);
-                //Bundle bundle = new Bundle();
-                //bundle.putBoolean("register", true);
-                //intent.putExtras(bundle);
                 startActivity(intent);
-                //finish();
                 break;
             case R.id.terms_conditions:
                 intent = new Intent(this, TermsAndConditionsActivity.class);
