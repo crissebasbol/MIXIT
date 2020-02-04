@@ -6,6 +6,7 @@
 
 package com.example.mixit.utilities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -19,14 +20,18 @@ import android.widget.TextView;
 
 import com.example.mixit.R;
 import com.example.mixit.fragments.main.ShowFragment;
+import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.models.Item;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ListViewAdapter extends ArrayAdapter<Item> {
+public class ListViewAdapter extends ArrayAdapter<Item> implements UpdateCallback {
     private Context mContext;
     private FragmentManager mFragmentManager;
+    private List<Item> mItems = new ArrayList<>();
+    private ViewGroup mViewGroup;
 
     public ListViewAdapter(FragmentManager fragmentManager, Context context, int resource, List<Item> objects){
         super(context, resource, objects);
@@ -38,19 +43,24 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
+        mViewGroup = parent;
         if(v == null){
             LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.list_item, null);
         }
         final Item item = getItem(position);
         ImageView img = v.findViewById(R.id.product_photo);
-        TextView txtTitle = (TextView) v.findViewById(R.id.product_title);
-        TextView txtDescription = (TextView) v.findViewById(R.id.product_description);
-        TextView txtTutorial = (TextView) v.findViewById(R.id.product_tutorial);
+        TextView txtTitle = v.findViewById(R.id.product_title);
+        TextView txtDescription = v.findViewById(R.id.product_description);
+        TextView txtTutorial = v.findViewById(R.id.product_tutorial);
 
         if(item.getImage() != null) {
             v.findViewById(R.id.loading_panel).setVisibility(View.GONE);
             img.setImageBitmap(item.getImage());
+        } else {
+            mItems.add(item);
+            v.setTag(item.getId());
+            item.setUpdateCallback(this);
         }
 
         txtTitle.setText(item.getTitle());
@@ -61,9 +71,6 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent= new Intent(mContext, ShowItemActivity.class);
-//                intent.putExtra("item", item);
-//                mContext.startActivity(intent);
                 ShowFragment showFragment = new ShowFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("item", item);
@@ -76,4 +83,27 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
 
         return v;
     }
+
+    @Override
+    public void onUpdate(final String itemId) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                View view = mViewGroup.findViewWithTag(itemId);
+                if (view != null) {
+                    for (Item item : mItems) {
+                        if (item.getId().equals(itemId)) {
+                            view.findViewById(R.id.loading_panel).setVisibility(View.GONE);
+                            ((ImageView) view.findViewById(R.id.product_photo))
+                                    .setImageBitmap(item.getImage());
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
+
+

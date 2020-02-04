@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@color/thirdColor">
 
     <LinearLayout
@@ -67,25 +68,31 @@
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/loading_panel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center" >
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3">
 
-                <ProgressBar
+                <ImageView
+                    android:id="@+id/product_photo"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
+
+                <RelativeLayout
+                    android:id="@+id/loading_panel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:indeterminate="true" />
-            </RelativeLayout>
+                    android:layout_gravity="center"
+                    android:gravity="center">
 
-            <ImageView
-                android:id="@+id/product_photo"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:layout_weight="0.3" />
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true" />
+                </RelativeLayout>
+            </FrameLayout>
 
         </LinearLayout>
 

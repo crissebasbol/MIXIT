@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.example.mixit.R;
+import com.example.mixit.activities.MainActivity;
 import com.example.mixit.interfaces.VolleyCallback;
 import com.example.mixit.models.Item;
 import com.example.mixit.services.network.JSONAPIRequest;
@@ -25,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -34,17 +38,23 @@ import java.util.List;
 // * Use the {@link ListFragment#newInstance} factory method to
 // * create an instance of this fragment.
 // */
-public class ItemListFragment extends Fragment implements VolleyCallback {
+public class ItemListFragment extends Fragment implements VolleyCallback,
+        AbsListView.OnScrollListener, SearchView.OnQueryTextListener {
 
     private View mView;
     private ListView listView;
-    private ViewStub stubList;
     private ListViewAdapter listViewAdapter = null;
     private List<Item> itemList = new ArrayList<>();
+    private JSONArray APIResponse;
     private Context mContext;
     private FragmentManager mFragmentManager;
 
     private OnFragmentInteractionListener mListener;
+
+    private Integer itemsByDefault = 10;
+    private Integer itemWindows;
+    private Integer windowCount = 0;
+    private Integer currentPosition = 0;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -61,12 +71,23 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
     // TODO: Rename and change types and number of parameters
     public static ItemListFragment newInstance() {
 //    public static ItemListFragment newInstance(String param1, String param2) {
-        ItemListFragment fragment = new ItemListFragment();
-//        Bundle args = new Bundle();
+        //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
 //        fragment.setArguments(args);
-        return fragment;
+        return new ItemListFragment();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Save the fragment's state here
+
     }
 
     @Override
@@ -83,26 +104,21 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_list, container, false);
-        stubList = mView.findViewById(R.id.stub_list);
-        stubList.inflate();
-        listView = mView.findViewById(R.id.my_list_view);
-        setAdapters();
+        this.setRetainInstance(true);
+        ((MainActivity) mContext).setBackButtonVisibility(false);
+        if (mView == null) {
+            // Inflate the layout for this fragment
+            mView = inflater.inflate(R.layout.fragment_list, container, false);
+            ViewStub stubList = mView.findViewById(R.id.stub_list);
+            stubList.inflate();
+            listView = mView.findViewById(R.id.my_list_view);
+            listView.setOnScrollListener(this);
+            setAdapters();
+            Random random = new Random();
+            char randomChar = (char)(random.nextInt(26) + 'a');
+            searchItems(Character.toString(randomChar));
+        }
 
-        JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
-
-        HashMap params = new HashMap();
-        params.put("glass", null);
-        params.put("alcohol", "Alcoholic");
-        params.put("category", null);
-        params.put("ingredient", null);
-
-        HashMap query = new HashMap();
-        query.put("type", "search");
-        query.put("search", "");
-
-        APIService.execute(query);
         return mView;
     }
 
@@ -116,6 +132,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -132,15 +149,35 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
 
     @Override
     public void onSuccess(JSONArray response) {
-        for (int i = 0; i < response.length(); i++) {
-            try {
-                itemList.add(new Item((JSONObject) response.get(i)));
-                setAdapters();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (response != null) {
+            itemWindows = (int) Math.ceil(response.length() / itemsByDefault);
+            APIResponse = response;
+            paginateItems();
         }
-        
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int currentItemCount = firstVisibleItem+visibleItemCount;
+        if ((currentItemCount == totalItemCount) && (currentItemCount > 0)) {
+            paginateItems();
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        searchItems(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     /**
@@ -164,6 +201,53 @@ public class ItemListFragment extends Fragment implements VolleyCallback {
             listView.setAdapter(listViewAdapter);
         } else {
             listViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void searchItems (String search) {
+        JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
+
+//        HashMap params = new HashMap();
+//        params.put("glass", null);
+//        params.put("alcohol", "Alcoholic");
+//        params.put("category", null);
+//        params.put("ingredient", null);
+
+        HashMap query = new HashMap();
+        query.put("type", "search");
+        query.put("search", search);
+
+        currentPosition = 0;
+        windowCount = 0;
+        itemWindows = null;
+        itemList.clear();
+
+        APIService.execute(query);
+    }
+
+    private void paginateItems () {
+        if ((itemWindows == windowCount) && (itemList.size() < APIResponse.length())) {
+
+            for (int i = currentPosition; i < APIResponse.length(); i++) {
+                try {
+                    itemList.add(new Item((JSONObject) APIResponse.get(i)));
+                    setAdapters();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (itemWindows > windowCount) {
+            windowCount++;
+            for (int i = currentPosition; i < windowCount*itemsByDefault; i++) {
+                try {
+                    itemList.add(new Item((JSONObject) APIResponse.get(i)));
+                    setAdapters();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                currentPosition++;
+            }
+            if (windowCount == itemWindows-1) windowCount++;
         }
     }
 }

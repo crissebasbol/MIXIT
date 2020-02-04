@@ -18,7 +18,8 @@ public class BlurImages {
     public static Bitmap blur (Context context, Bitmap image) {
         if (null == image) return null;
 
-        Bitmap outputBitmap = Bitmap.createBitmap(image);
+//        Bitmap outputBitmap = Bitmap.createBitmap(image);
+        Bitmap outputBitmap = image.copy(image.getConfig(), false);
         final RenderScript renderScript = RenderScript.create(context);
         Allocation tmpIn = Allocation.createFromBitmap(renderScript, image);
         Allocation tmpOut = Allocation.createFromBitmap(renderScript, outputBitmap);
