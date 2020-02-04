@@ -18,11 +18,22 @@ import com.example.mixit.R;
 import com.example.mixit.fragments.ProfileFragment;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
+import com.example.mixit.interfaces.VolleyCallback;
+import com.example.mixit.services.network.JSONAPIRequest;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.example.mixit.models.Item;
+
+import java.util.HashMap;
 
 public class MainActivity extends GenericAbstractActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener {
+        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener, VolleyCallback {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
     private MenuItem back;
@@ -140,12 +151,9 @@ public class MainActivity extends GenericAbstractActivity
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
             fragmentTransaction.commit();
-        }
-        // else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-        else if (id == R.id.nav_account) {
+        } else if (id == R.id.nav_surprise) {
+            fetchRandomItem();
+        } else if (id == R.id.nav_account) {
             ProfileFragment profileFragment = new ProfileFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, profileFragment);
@@ -179,5 +187,30 @@ public class MainActivity extends GenericAbstractActivity
 
     public void refreshNavigationDrawer(){
         setupGUINavigationDrawer();
+    }
+
+    public void fetchRandomItem () {
+        JSONAPIRequest APIService = new JSONAPIRequest(this, this);
+
+        HashMap query = new HashMap();
+        query.put("type", "random");
+
+        APIService.execute(query);
+    }
+
+    @Override
+    public void onSuccess(JSONArray response) {
+        try {
+            Item item = new Item((JSONObject) response.get(0));
+            ShowFragment showFragment = new ShowFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("item", item);
+            showFragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, showFragment);
+            fragmentTransaction.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
