@@ -194,6 +194,7 @@ public class MainActivity extends GenericAbstractActivity
 
         HashMap query = new HashMap();
         query.put("type", "random");
+        query.put("showFloating", true);
 
         APIService.execute(query);
     }
@@ -205,6 +206,7 @@ public class MainActivity extends GenericAbstractActivity
             ShowFragment showFragment = new ShowFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("item", item);
+            bundle.putBoolean("showFloating", true);
             showFragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, showFragment);
