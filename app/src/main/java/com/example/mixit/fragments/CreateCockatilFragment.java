@@ -54,7 +54,7 @@ public class CreateCockatilFragment extends Fragment implements View.OnClickList
     private LinearLayout mLayoutIngredients;
     private List<EditText> mIngredients = new ArrayList<EditText>();
     private List<EditText> mQuantity = new ArrayList<EditText>();
-    private EditText mDescription, mTitle;
+    private EditText mDescription, mTitle, mTutorial;
     private static final Byte REQUEST_CAMERA = 1;
     private static final Byte SELECT_FILE = 0;
     public static final String NAME_FOLDER = "cocktails_photos";
@@ -85,6 +85,7 @@ public class CreateCockatilFragment extends Fragment implements View.OnClickList
         addImage = mView.findViewById(R.id.add_image);
         mBtnSave = mView.findViewById(R.id.btn_save);
         mTitle = mView.findViewById(R.id.input_title_cocktail);
+        mTutorial = mView.findViewById(R.id.cocktail_tutorial);
         mQuantity.add((EditText) mView.findViewById(R.id.input_quantity));
         mAddIngredient = mView.findViewById(R.id.add_ingredient);
         mAddIngredient.setOnClickListener(this);
@@ -149,7 +150,8 @@ public class CreateCockatilFragment extends Fragment implements View.OnClickList
     public void saveCocktailDB(String urlPhoto, @Nullable ProgressDialog progressDialog){
         CloudFirestore cloudFirestore = new CloudFirestore(this, getActivity());
         FirebaseUser fu = FirebaseAuth.getInstance().getCurrentUser();
-        cloudFirestore.saveCocktail(mIngredients, mQuantity, mDescription.getText().toString(), urlPhoto, fu.getEmail(), progressDialog);
+        cloudFirestore.saveCocktail(mIngredients, mQuantity, mDescription.getText().toString(),
+                mTutorial.getText().toString(), urlPhoto, fu.getEmail(), progressDialog);
     }
     public void result(String data){
         Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();

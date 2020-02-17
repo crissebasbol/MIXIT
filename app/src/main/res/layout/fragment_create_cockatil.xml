@@ -52,7 +52,17 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_description"
                 android:inputType="textMultiLine"
-                android:lines="5"
+                android:lines="3"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:background="@drawable/rounded_whiterounded_white"/>
+            <EditText
+                android:id="@+id/cocktail_tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_tutorial"
+                android:inputType="textMultiLine"
+                android:lines="3"
                 android:layout_marginBottom="10dp"
                 android:padding="10dp"
                 android:background="@drawable/rounded_whiterounded_white"/>

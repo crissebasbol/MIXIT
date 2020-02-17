@@ -1,5 +1,7 @@
 package com.example.mixit.fragments;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
@@ -12,11 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.ListView;
 
 import com.example.mixit.R;
+import com.example.mixit.models.Item;
 import com.example.mixit.services.network.Firebase.CloudFirestore;
+import com.example.mixit.utilities.ListViewAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MyCocktailsFragment extends Fragment implements View.OnClickListener {
@@ -24,6 +33,11 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
     private OnFragmentInteractionListener mListener;
     private View mView;
     private FloatingActionButton createCocktailButton;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private ListView listView;
+    private ListViewAdapter listViewAdapter = null;
+    private FragmentManager mFragmentManager;
+    private List<Item> itemList = new ArrayList<>();
 
     public static final String TAG = "MyCocktailsFragment";
 
@@ -45,7 +59,7 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mFragmentManager = getActivity().getFragmentManager();
     }
 
     @Override
@@ -56,13 +70,31 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
             createCocktailButton = mView.findViewById(R.id.fab_button_create_cocktail);
             createCocktailButton.setOnClickListener(this);
             getActivity().setTitle(R.string.txt_my_cocktails);
+            ViewStub stubList = mView.findViewById(R.id.stub_list);
+            stubList.inflate();
+            listView = mView.findViewById(R.id.my_list_view);
+            //listView.setOnScrollListener(this);
+
+
             CloudFirestore cloudFirestore = new CloudFirestore(null, getActivity());
-            cloudFirestore.getDocument("cocktails", "cris-sebas192@hotmail.com");
+            cloudFirestore.getDocument(CloudFirestore.COCKTAIL_COLLECTION, user.getEmail());
         }
         return mView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void setAdapters() {
+        if (listViewAdapter == null) {
+            listViewAdapter = new ListViewAdapter(mFragmentManager, getContext(), R.layout.list_item, itemList);
+            listView.setAdapter(listViewAdapter);
+        } else {
+            listViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void fillItems(){
+
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

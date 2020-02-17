@@ -2,10 +2,8 @@ package com.example.mixit.services.network.Firebase;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,13 +29,14 @@ public class CloudFirestore {
     private Map<String, Object> dataToSave = new HashMap<>();
     private final static String TAG = "CloudFirestore";
     private  CreateCockatilFragment createCockatilFragment;
-    protected final static String AUTHOR_KEY = "author";
-    protected final static String DATE_KEY = "date";
-    protected final static String DESCRIPTION_KEY = "description";
-    protected final static String IMAGE_URL_KEY = "image_url";
-    protected final static String INGREDIENTS_KEY = "ingredient_";
-    protected final static String QUANTITY_KEY = "quantity_";
-    protected final static String COCKTAIL_COLLECTION = "cocktails";
+    public final static String AUTHOR_KEY = "author";
+    public final static String DATE_KEY = "date";
+    public final static String DESCRIPTION_KEY = "description";
+    public final static String TUTORIAL_KEY = "tutorial";
+    public final static String IMAGE_URL_KEY = "image_url";
+    public final static String INGREDIENTS_KEY = "ingredient_";
+    public final static String QUANTITY_KEY = "quantity_";
+    public final static String COCKTAIL_COLLECTION = "cocktails";
 
     private Activity activity;
 
@@ -53,11 +52,12 @@ public class CloudFirestore {
         }
     }
 
-    public void saveCocktail(List<EditText> ingredients, List<EditText> quantity, String description, String urlImage, String author, @Nullable ProgressDialog progressDialog){
+    public void saveCocktail(List<EditText> ingredients, List<EditText> quantity, String description, String tutorial, String urlImage, String author, @Nullable ProgressDialog progressDialog){
         Map<String, Object> cocktailToSave = new HashMap<>();
         cocktailToSave.put(AUTHOR_KEY, author);
         cocktailToSave.put(DATE_KEY, Calendar.getInstance().getTime());
         cocktailToSave.put(DESCRIPTION_KEY, description);
+        cocktailToSave.put(TUTORIAL_KEY, tutorial);
         cocktailToSave.put(IMAGE_URL_KEY, urlImage);
         for (int x=1; x<=ingredients.size(); x++){
             cocktailToSave.put(INGREDIENTS_KEY+x, ingredients.get(x-1).getText().toString());

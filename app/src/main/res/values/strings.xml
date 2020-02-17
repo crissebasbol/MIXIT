@@ -243,6 +243,7 @@
     <string name="prompt_ingredient">Escriba un ingrediente (Ej: Vodka)</string>
     <string name="prompt_quantity">Cantidad (Ej: 1/2 oz)</string>
     <string name="prompt_description">Agrega una descripción</string>
+    <string name="prompt_tutorial">Describe el proceso (Tutorial)</string>
     <string name="txt_add_image">Agregar Imágen</string>
     <string name="create_cocktail">Crear cóctel</string>
     <string name="txt_my_cocktails">Mis cocteles</string>

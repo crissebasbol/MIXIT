@@ -56,6 +56,32 @@ public class Item implements Serializable, FetchCallback {
         this.prepared = prepared;
     }
 
+    /*
+    public Item(String title, String imageUrl, String description, String creatorsEmail) {
+        HashMap tutorial = new HashMap();
+        this.title = title;
+        this.imageUrl = imageUrl;
+        tutorial.put("instructions", description);
+            params.put("url", object.get("strDrinkThumb"));
+            assetFetch.execute(params);
+            tutorial.put("instructions", object.get("strInstructions"));
+
+
+        tutorial.put("ingredients", parseIngredients(object));
+
+        this.tutorial = tutorial;
+
+        this.description = parseDescription(object);
+
+        this.creatorsEmail = creatorsEmail;
+
+        this.alarm = alarm;
+        this.favourite = favourite;
+        this.prepared = prepared;
+    }
+
+     */
+
     private String parseDescription(JSONObject object) {
         String description = new String();
         try {
@@ -66,6 +92,7 @@ public class Item implements Serializable, FetchCallback {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.println(description.trim());
         return description.trim();
     }
 

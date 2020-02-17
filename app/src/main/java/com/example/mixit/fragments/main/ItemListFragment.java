@@ -30,14 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Activities that contain this fragment must implement the
-// * {@link ListFragment.OnFragmentInteractionListener} interface
-// * to handle interaction events.
-// * Use the {@link ListFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
 public class ItemListFragment extends Fragment implements VolleyCallback,
         AbsListView.OnScrollListener, SearchView.OnQueryTextListener {
 
@@ -60,21 +52,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
         // Required empty public constructor
     }
 
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment ListFragment.
-//     */
-    // TODO: Rename and change types and number of parameters
     public static ItemListFragment newInstance() {
-//    public static ItemListFragment newInstance(String param1, String param2) {
-        //        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
         return new ItemListFragment();
     }
 
@@ -95,10 +73,6 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
         super.onCreate(savedInstanceState);
         this.mContext = getContext();
         this.mFragmentManager = ((Activity) mContext).getFragmentManager();
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override

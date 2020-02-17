@@ -26,7 +26,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_create_cocktail"
-                android:textColor="@color/colorSecondary"/>
+                android:textColor="@color/colorSecondary"
+                android:layout_marginBottom="20dp"/>
+            <ViewStub
+                android:id="@+id/stub_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout="@layout/my_listview" />
         </LinearLayout>
 
     </ScrollView>
