@@ -13,7 +13,6 @@ import android.os.Bundle;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.mixit.R;
 import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.authentication.FireBaseAuth;
-import com.example.mixit.services.storage.FB_Storage;
+import com.example.mixit.services.network.Firebase.FB_Storage;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -58,6 +57,7 @@ public class ProfileFragment extends Fragment {
     private static final Byte REQUEST_CAMERA = 1;
     private static final Byte SELECT_FILE = 0;
     public static final Byte UPDATE_PROFILE = 2;
+    public static final String NAME_FOLDER = "profile_photos";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment {
         sessionPreferences = SessionPreferences.get(mContext, getActivity(), null);
         fireBaseAuth = new FireBaseAuth(mContext, getActivity());
         this.mFragmentManager = ((Activity) mContext).getFragmentManager();
-        fb_storage = new FB_Storage(mContext, getActivity(), this);
+        fb_storage = new FB_Storage(mContext, getActivity(), this, null);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (changeProfileImage){
-                    fb_storage.uploadFile(bitmapProfileImage, "pictureOf_"+sessionPreferences.getCurrentUser().getEmail());
+                    fb_storage.uploadFile(bitmapProfileImage, "pictureOf_"+sessionPreferences.getCurrentUser().getEmail(), NAME_FOLDER);
                     changeProfileImage = false;
                 }else {
                     updateProfile(sessionPreferences.getCurrentUser().getPhoto(), null);
@@ -140,8 +140,8 @@ public class ProfileFragment extends Fragment {
                         intent.setAction(Intent.ACTION_GET_CONTENT);
                     }catch (Exception e){}
                      */
-                    startActivityForResult(intent.createChooser(intent, "Selecciona una foto"), SELECT_FILE);
-                }else if (items[which].equals("Cancelar")){
+                    startActivityForResult(intent.createChooser(intent, getString(R.string.txt_select_photo)), SELECT_FILE);
+                }else if (items[which].equals(getString(R.string.txt_cancel))){
                     dialog.dismiss();
                 }
             }

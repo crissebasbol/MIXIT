@@ -155,14 +155,7 @@
     </ScrollView>
     <Button
         android:id="@+id/btn_update_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorSecundary"
-        android:drawableStart="@drawable/baseline_check_circle_white_24"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="@string/txt_update_profile"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+        style="@style/buttonSave"
+        android:text="@string/txt_update_profile" />
 </RelativeLayout>

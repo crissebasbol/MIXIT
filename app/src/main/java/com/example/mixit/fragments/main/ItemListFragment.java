@@ -108,6 +108,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
         ((MainActivity) mContext).setBackButtonVisibility(false);
         if (mView == null) {
             // Inflate the layout for this fragment
+            getActivity().setTitle(R.string.app_name);
             mView = inflater.inflate(R.layout.fragment_list, container, false);
             ViewStub stubList = mView.findViewById(R.id.stub_list);
             stubList.inflate();

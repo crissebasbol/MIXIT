@@ -1,24 +1,19 @@
-package com.example.mixit.services.storage;
+package com.example.mixit.services.network.Firebase;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.mixit.R;
-import com.example.mixit.activities.MainActivity;
+import com.example.mixit.fragments.CreateCockatilFragment;
 import com.example.mixit.fragments.ProfileFragment;
-import com.example.mixit.services.authentication.FireBaseAuth;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -28,8 +23,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-import kotlin.coroutines.experimental.Continuation;
-
 
 public class FB_Storage {
 
@@ -38,22 +31,30 @@ public class FB_Storage {
     private Activity activity;
     private Context context;
     private ProfileFragment profileFragment;
+    private CreateCockatilFragment createCockatilFragment;
     private static final String TAG = "FB_Storage";
 
-    public FB_Storage(Context context, Activity activity, @Nullable  ProfileFragment profileFragment){
+    public FB_Storage(Context context, Activity activity, @Nullable  ProfileFragment profileFragment, @Nullable CreateCockatilFragment createCockatilFragment){
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         this.context = context;
         this.activity = activity;
         this.profileFragment = profileFragment;
+        this.createCockatilFragment = createCockatilFragment;
     }
 
-    public void uploadFile(Bitmap bitmap, final String namePicture){
+    public void uploadFile(Bitmap bitmap, final String namePicture, final String nameFolder){
         final ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle(activity.getString(R.string.txt_loading_update));
+        if (nameFolder == CreateCockatilFragment.NAME_FOLDER){
+            progressDialog.setTitle(activity.getString(R.string.txt_creating_cocktail));
+        }else if (nameFolder == ProfileFragment.NAME_FOLDER){
+            progressDialog.setTitle(activity.getString(R.string.txt_loading_update));
+        }else{
+            progressDialog.setTitle(activity.getString(R.string.loading));
+        }
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final StorageReference profileRed = storageRef.child("profile_photos/"+namePicture+".jpg");
+        final StorageReference profileRed = storageRef.child(nameFolder+"/"+namePicture+".jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         byte[] data = baos.toByteArray();
@@ -62,7 +63,7 @@ public class FB_Storage {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.v(TAG,"Update photo succesfull");
-                getUrlPhoto(namePicture, progressDialog);
+                getUrlPhoto(namePicture, nameFolder, progressDialog);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -80,14 +81,16 @@ public class FB_Storage {
         });
     }
 
-    public void getUrlPhoto(String namePicture, final ProgressDialog progressDialog){
-        final StorageReference profileRed = storageRef.child("profile_photos/"+namePicture+".jpg");
+    public void getUrlPhoto(final String namePicture, final String nameFolder, final ProgressDialog progressDialog){
+        final StorageReference profileRed = storageRef.child(nameFolder+"/"+namePicture+".jpg");
         profileRed.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri){
                 String urlPhoto = uri.toString();
                 if (profileFragment != null) {
                     profileFragment.updateProfile(urlPhoto, progressDialog);
+                }else if (createCockatilFragment != null){
+                    createCockatilFragment.saveCocktailDB(urlPhoto, progressDialog);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
