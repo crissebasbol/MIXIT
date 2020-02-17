@@ -15,6 +15,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mixit.R;
+import com.example.mixit.fragments.CreateCockatilFragment;
+import com.example.mixit.fragments.MyCocktailsFragment;
 import com.example.mixit.fragments.ProfileFragment;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
@@ -22,10 +24,11 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends GenericAbstractActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener {
+        ShowFragment.OnFragmentInteractionListener, ItemListFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener, MyCocktailsFragment.OnFragmentInteractionListener, CreateCockatilFragment.OnFragmentInteractionListener {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
     private MenuItem back;
+    private MenuItem searchItem;
 
     private ItemListFragment itemListFragment;
 
@@ -84,9 +87,8 @@ public class MainActivity extends GenericAbstractActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_settings);
-
         back = menu.findItem(R.id.action_back);
+        searchItem = menu.findItem(R.id.action_search);
         back.setVisible(false);
 
         SearchView searchView = null;
@@ -109,7 +111,7 @@ public class MainActivity extends GenericAbstractActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
@@ -134,11 +136,17 @@ public class MainActivity extends GenericAbstractActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         if (id == R.id.nav_home) {
+            searchItem.setVisible(true);
             ItemListFragment itemListFragment = new ItemListFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
+            fragmentTransaction.commit();
+        }
+        else if(id == R.id.nav_my_cocktails){
+            searchItem.setVisible(false);
+            MyCocktailsFragment myCocktailsFragment = new MyCocktailsFragment();
+            fragmentTransaction.replace(R.id.frame_layout, myCocktailsFragment);
             fragmentTransaction.commit();
         }
         // else if (id == R.id.nav_gallery) {
@@ -147,7 +155,6 @@ public class MainActivity extends GenericAbstractActivity
 //
         else if (id == R.id.nav_account) {
             ProfileFragment profileFragment = new ProfileFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, profileFragment);
             fragmentTransaction.commit();
         }

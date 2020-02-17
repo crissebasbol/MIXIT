@@ -223,7 +223,6 @@
     <string name="message_updated_successful">Información acualizada correctamente</string>
     <string name="txt_retry">Retry</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_update_profile">ACTUALIZAR PERFIL</string>
     <string name="txt_change_name">Cambiar Nombre</string>
@@ -234,10 +233,26 @@
     <string name="txt_min_characteres">Escribe al menos 6 caracteres</string>
     <string name="txt_camera">Cámara</string>
     <string name="txt_gallery">Galeria</string>
-    <string name="txt_cancel">cancelar</string>
+    <string name="txt_cancel">Cancelar</string>
     <string name="txt_title_change_profile_picture">Cambiar foto de perfil</string>
     <string name="txt_loading_update">Actualizando información...</string>
     <string name="txt_load">% cargado</string>
     <string name="txt_error_update">Error al actualizar</string>
+    <string name="txt_info_my_cocktails">En esta lista aparecerán los cocteles que has creado con tu imaginación y gusto</string>
+    <string name="txt_create_cocktail">¡Crea tu propio cocktail!</string>
+    <string name="prompt_ingredient">Escriba un ingrediente (Ej: Vodka)</string>
+    <string name="prompt_quantity">Cantidad (Ej: 1/2 oz)</string>
+    <string name="prompt_description">Agrega una descripción</string>
+    <string name="txt_add_image">Agregar Imágen</string>
+    <string name="create_cocktail">Crear cóctel</string>
+    <string name="txt_my_cocktails">Mis cocteles</string>
+    <string name="txt_add_imagen_cocktail">Agregar una imágen a tu cóctel</string>
+    <string name="txt_select_photo">Selecciona una foto</string>
+    <string name="txt_select_ingredients_like">Selecciona todos los ingredientes que gustes</string>
+    <string name="txt_save">Guardar</string>
+    <string name="prompt_title_cockatil">Ingrese un nombre a su cóctel (Ej: Spritz)</string>
+    <string name="txt_congratulations_correct_cocktail_added">¡Felcitaciones! Has creado tu cóctel correctamente</string>
+    <string name="txt_error_creating_cocktail">Ha ocurrido un error al crear tu cóctel</string>
+    <string name="txt_creating_cocktail">Creando cóctel</string>
 
 </resources>
