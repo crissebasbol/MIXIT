@@ -45,6 +45,9 @@ public class MainActivity extends GenericAbstractActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         itemListFragment = new ItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("showFavourites", false);
+        itemListFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_layout, itemListFragment);
         fragmentTransaction.addToBackStack(null);
@@ -145,17 +148,22 @@ public class MainActivity extends GenericAbstractActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         if (id == R.id.nav_home) {
             ItemListFragment itemListFragment = new ItemListFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_surprise) {
             fetchRandomItem();
+        } else if (id == R.id.nav_favourites){
+            ItemListFragment favouriteFragment = new ItemListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("showFavourites", true);
+            favouriteFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.frame_layout, favouriteFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_account) {
             ProfileFragment profileFragment = new ProfileFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, profileFragment);
             fragmentTransaction.commit();
         }
@@ -203,7 +211,6 @@ public class MainActivity extends GenericAbstractActivity
     public void onSuccess(JSONArray response) {
         try {
             Item item = new Item((JSONObject) response.get(0));
-            SessionPreferences sessionPreferences = super.getSessionPreferences();
             ShowFragment showFragment = new ShowFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("item", item);
