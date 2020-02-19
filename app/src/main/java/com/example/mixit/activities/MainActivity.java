@@ -19,6 +19,7 @@ import com.example.mixit.fragments.ProfileFragment;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
 import com.example.mixit.interfaces.VolleyCallback;
+import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.network.JSONAPIRequest;
 import com.google.android.material.navigation.NavigationView;
 
@@ -43,7 +44,6 @@ public class MainActivity extends GenericAbstractActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         itemListFragment = new ItemListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_layout, itemListFragment);
@@ -203,6 +203,7 @@ public class MainActivity extends GenericAbstractActivity
     public void onSuccess(JSONArray response) {
         try {
             Item item = new Item((JSONObject) response.get(0));
+            SessionPreferences sessionPreferences = super.getSessionPreferences();
             ShowFragment showFragment = new ShowFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("item", item);

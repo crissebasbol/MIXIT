@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -16,11 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.MainActivity;
 import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.models.Item;
+import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.assets.BlurImages;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,6 +51,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private TextView description, tutorial, ingredients;
     private FloatingActionButton mRandom;
     private boolean showFloating = false;
+    private Button mFavourite, mReminder;
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,7 +95,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         } else {
             mRandom.setVisibility(View.INVISIBLE);
         }
-
+        mFavourite = mView.findViewById(R.id.cocktail_favorite);
+        mFavourite.setOnClickListener(this);
         DisplayMetrics display = getResources().getDisplayMetrics();
         int width = display.widthPixels;
         picture = mView.findViewById(R.id.cocktail_picture);
@@ -153,9 +158,18 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
-        ((MainActivity) mContext).fetchRandomItem();
+        switch (v.getId()) {
+            case R.id.random:
+                ((MainActivity) mContext).fetchRandomItem();
+                break;
+            case R.id.cocktail_favorite:
+                SessionPreferences sessionPreferences = ((MainActivity) mContext).getSessionPreferences();
+                sessionPreferences.saveFavourite(mItem);
+                break;
+        }
     }
 
     /**

@@ -42,6 +42,10 @@ public abstract class GenericAbstractActivity extends AppCompatActivity implemen
         checkAndSetupLogin();
     }
 
+    public SessionPreferences getSessionPreferences () {
+        return sessionPreferences;
+    }
+
     private void checkAndSetupLogin() {
         if(!fireBaseAuth.checkSigned()){
             logOut();
