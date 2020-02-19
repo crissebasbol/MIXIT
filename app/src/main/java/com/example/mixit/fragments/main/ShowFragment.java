@@ -11,13 +11,18 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.example.mixit.R;
 import com.example.mixit.activities.MainActivity;
+import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.models.Item;
 import com.example.mixit.services.assets.BlurImages;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +32,7 @@ import com.example.mixit.services.assets.BlurImages;
  * Use the {@link ShowFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShowFragment extends Fragment {
+public class ShowFragment extends Fragment implements UpdateCallback, Button.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -41,6 +46,8 @@ public class ShowFragment extends Fragment {
     private Context mContext;
     private ImageView picture;
     private TextView description, tutorial, ingredients;
+    private FloatingActionButton mRandom;
+    private boolean showFloating = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,6 +75,7 @@ public class ShowFragment extends Fragment {
             this.mItem = (Item) getArguments().getSerializable("item");
             this.mContext = getActivity();
             ((MainActivity) this.mContext).setBackButtonVisibility(true);
+            this.showFloating = getArguments().getBoolean("showFloating", false);
         }
 
     }
@@ -77,6 +85,12 @@ public class ShowFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_show, container, false);
+        mRandom = mView.findViewById(R.id.random);
+        if (showFloating) {
+            mRandom.setOnClickListener(this);
+        } else {
+            mRandom.setVisibility(View.INVISIBLE);
+        }
 
         DisplayMetrics display = getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -88,9 +102,13 @@ public class ShowFragment extends Fragment {
         description.setText(this.mItem.getDescription());
         tutorial.setText(this.mItem.getTutorial().get("instructions").toString());
         ingredients.setText(this.mItem.getTutorial().get("ingredients").toString());
-        picture.setImageBitmap(this.mItem.getImage());
-        Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
-        picture.setBackground(drawablePicture);
+        if (this.mItem.getImage() == null) {
+            this.mItem.setUpdateCallback(this);
+        } else {
+            picture.setImageBitmap(this.mItem.getImage());
+            Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
+            picture.setBackground(drawablePicture);
+        }
         getActivity().setTitle(this.mItem.getTitle());
         return mView;
     }
@@ -117,6 +135,27 @@ public class ShowFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onUpdate(@Nullable String itemId) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            mView.findViewById(R.id.loading_panel).setVisibility(View.GONE);
+            ImageView picture = mView.findViewById(R.id.cocktail_picture);
+            picture.setImageBitmap(mItem.getImage());
+            picture.setImageBitmap(mItem.getImage());
+            Drawable drawablePicture = new BitmapDrawable(getResources(),
+                    BlurImages.blur(mContext, mItem.getImage()));
+            picture.setBackground(drawablePicture);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        ((MainActivity) mContext).fetchRandomItem();
     }
 
     /**
