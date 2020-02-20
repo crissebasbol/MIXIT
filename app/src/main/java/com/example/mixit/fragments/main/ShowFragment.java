@@ -1,8 +1,11 @@
 package com.example.mixit.fragments.main;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -22,6 +26,7 @@ import com.example.mixit.activities.MainActivity;
 import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.models.Item;
 import com.example.mixit.services.assets.BlurImages;
+import com.example.mixit.services.notifications.ReminderBroadcast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
@@ -48,6 +53,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private TextView description, tutorial, ingredients;
     private FloatingActionButton mRandom;
     private boolean showFloating = false;
+    private Button mAlarm;
 
     private OnFragmentInteractionListener mListener;
 
@@ -85,6 +91,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_show, container, false);
+        mAlarm = mView.findViewById(R.id.cocktail_alarm);
+        mAlarm.setOnClickListener(this);
         mRandom = mView.findViewById(R.id.random);
         if (showFloating) {
             mRandom.setOnClickListener(this);
@@ -155,7 +163,23 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
 
     @Override
     public void onClick(View v) {
-        ((MainActivity) mContext).fetchRandomItem();
+        int id = v.getId();
+        if (id == R.id.random) {
+            ((MainActivity) mContext).fetchRandomItem();
+        } else if (id == R.id.cocktail_alarm) {
+            Toast.makeText(mContext, "Reminder set!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(mContext, ReminderBroadcast.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+
+            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+            long timeAtButtonClick = System.currentTimeMillis();
+            long tenSecondsInMillis = 10*1000;
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtButtonClick + tenSecondsInMillis,
+                    pendingIntent);
+        }
+
     }
 
     /**

@@ -2,8 +2,11 @@ package com.example.mixit.activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,14 +22,13 @@ import com.example.mixit.fragments.ProfileFragment;
 import com.example.mixit.fragments.main.ItemListFragment;
 import com.example.mixit.fragments.main.ShowFragment;
 import com.example.mixit.interfaces.VolleyCallback;
+import com.example.mixit.models.Item;
 import com.example.mixit.services.network.JSONAPIRequest;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.example.mixit.models.Item;
 
 import java.util.HashMap;
 
@@ -44,6 +46,7 @@ public class MainActivity extends GenericAbstractActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        createNotificationChannel();
         itemListFragment = new ItemListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_layout, itemListFragment);
@@ -213,6 +216,19 @@ public class MainActivity extends GenericAbstractActivity
             fragmentTransaction.commit();
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void createNotificationChannel () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "notificationChannel";
+            String description = "Channel for notification reminder";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("notificationChannel", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 }
