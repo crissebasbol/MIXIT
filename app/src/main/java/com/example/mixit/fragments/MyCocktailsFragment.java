@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.example.mixit.R;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MyCocktailsFragment extends Fragment implements View.OnClickListener {
+public class MyCocktailsFragment extends Fragment implements View.OnClickListener, AbsListView.OnScrollListener {
 
     private OnFragmentInteractionListener mListener;
     private View mView;
@@ -73,10 +74,9 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
             ViewStub stubList = mView.findViewById(R.id.stub_list);
             stubList.inflate();
             listView = mView.findViewById(R.id.my_list_view);
-            //listView.setOnScrollListener(this);
-
-
-            CloudFirestore cloudFirestore = new CloudFirestore(null, getActivity());
+            listView.setOnScrollListener(this);
+            setAdapters();
+            CloudFirestore cloudFirestore = new CloudFirestore(null, getActivity(), this);
             cloudFirestore.getDocument(CloudFirestore.COCKTAIL_COLLECTION, user.getEmail());
         }
         return mView;
@@ -91,8 +91,11 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void fillItems(){
-
+    public void fillItems(List<Item> items){
+        for (int x = 0; x < items.size() ; x++) {
+            itemList.add(items.get(x));
+        }
+        setAdapters();
     }
 
     public void onButtonPressed(Uri uri) {
@@ -127,6 +130,16 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
             fragmentTransaction.replace(R.id.frame_layout, createCockatilFragment);
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
     }
 
     public interface OnFragmentInteractionListener {

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class ShowFragment extends Fragment {
     private Context mContext;
     private ImageView picture;
     private TextView description, tutorial, ingredients;
+    private static final String TAG = "ShowFragment";
 
     private OnFragmentInteractionListener mListener;
 
@@ -86,8 +88,12 @@ public class ShowFragment extends Fragment {
         tutorial = mView.findViewById(R.id.cocktail_tutorial);
         ingredients = mView.findViewById(R.id.cocktail_ingredients);
         description.setText(this.mItem.getDescription());
-        tutorial.setText(this.mItem.getTutorial().get("instructions").toString());
-        ingredients.setText(this.mItem.getTutorial().get("ingredients").toString());
+        try {
+            tutorial.setText(this.mItem.getTutorial().get("instructions").toString());
+            ingredients.setText(this.mItem.getTutorial().get("ingredients").toString());
+        }catch (Exception e){
+            Log.w(TAG, "Error: "+e);
+        }
         picture.setImageBitmap(this.mItem.getImage());
         Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
         picture.setBackground(drawablePicture);

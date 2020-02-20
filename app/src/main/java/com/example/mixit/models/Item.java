@@ -1,10 +1,13 @@
 package com.example.mixit.models;
 
 import android.graphics.Bitmap;
+import android.widget.EditText;
 
+import com.example.mixit.R;
 import com.example.mixit.interfaces.FetchCallback;
 import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.services.network.AssetFetch;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +15,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public class Item implements Serializable, FetchCallback {
     private String title;
@@ -56,22 +60,27 @@ public class Item implements Serializable, FetchCallback {
         this.prepared = prepared;
     }
 
-    /*
-    public Item(String title, String imageUrl, String description, String creatorsEmail) {
+    public Item(String id, String title, String imageUrl, String description, String instructions,
+                String creatorsEmail, List<String> ingredients, List<String> quantity) {
+        this.id = id;
+        AssetFetch assetFetch = new AssetFetch(this);
+        HashMap params = new HashMap();
+        params.put("type", "image");
+        params.put("url", imageUrl);
+        assetFetch.execute(params);
         HashMap tutorial = new HashMap();
         this.title = title;
         this.imageUrl = imageUrl;
-        tutorial.put("instructions", description);
-            params.put("url", object.get("strDrinkThumb"));
-            assetFetch.execute(params);
-            tutorial.put("instructions", object.get("strInstructions"));
-
-
-        tutorial.put("ingredients", parseIngredients(object));
+        tutorial.put("instructions", instructions);
+        String ingretesString = "";
+        for (int x=0; x<ingredients.size(); x++){
+            ingretesString = ingretesString + ingredients.get(x) + " - " + quantity.get(x) + "\n";
+        }
+        tutorial.put("ingredients", ingretesString);
 
         this.tutorial = tutorial;
 
-        this.description = parseDescription(object);
+        this.description = description;
 
         this.creatorsEmail = creatorsEmail;
 
@@ -79,8 +88,6 @@ public class Item implements Serializable, FetchCallback {
         this.favourite = favourite;
         this.prepared = prepared;
     }
-
-     */
 
     private String parseDescription(JSONObject object) {
         String description = new String();

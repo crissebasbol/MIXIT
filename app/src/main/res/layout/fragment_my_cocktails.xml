@@ -6,20 +6,19 @@
     tools:context=".fragments.MyCocktailsFragment"
     android:background="@color/gray_xxx_light">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="top"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_button_create_cocktail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/fab_margin"
+                android:layout_margin="5dp"
                 android:clickable="true"
                 android:src="@drawable/ic_add_white_48dp"/>
             <TextView
@@ -27,27 +26,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txt_create_cocktail"
                 android:textColor="@color/colorSecondary"
-                android:layout_marginBottom="20dp"/>
-            <ViewStub
-                android:id="@+id/stub_list"
+                android:layout_marginBottom="10dp"/>
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout="@layout/my_listview" />
+                android:layout_height="match_parent">
+                <ViewStub
+                    android:id="@+id/stub_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout="@layout/my_listview" />
+            </FrameLayout>
         </LinearLayout>
 
-    </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/txt_info_my_cocktails" />
-    </LinearLayout>
 
 
 </FrameLayout>

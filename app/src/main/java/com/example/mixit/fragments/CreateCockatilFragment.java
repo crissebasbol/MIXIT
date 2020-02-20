@@ -148,10 +148,10 @@ public class CreateCockatilFragment extends Fragment implements View.OnClickList
         fb_storage.uploadFile(bitmapCocktailImage, mTitle.getText().toString(), NAME_FOLDER);
     }
     public void saveCocktailDB(String urlPhoto, @Nullable ProgressDialog progressDialog){
-        CloudFirestore cloudFirestore = new CloudFirestore(this, getActivity());
+        CloudFirestore cloudFirestore = new CloudFirestore(this, getActivity(), null);
         FirebaseUser fu = FirebaseAuth.getInstance().getCurrentUser();
         cloudFirestore.saveCocktail(mIngredients, mQuantity, mDescription.getText().toString(),
-                mTutorial.getText().toString(), urlPhoto, fu.getEmail(), progressDialog);
+                mTutorial.getText().toString(), urlPhoto, fu.getEmail(), mTitle.getText().toString(), progressDialog);
     }
     public void result(String data){
         Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
