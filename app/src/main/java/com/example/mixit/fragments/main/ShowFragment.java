@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private Context mContext;
     private ImageView picture;
     private TextView description, tutorial, ingredients;
+    private static final String TAG = "ShowFragment";
     private FloatingActionButton mRandom;
     private boolean showFloating = false;
 
@@ -109,6 +111,15 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
             picture.setBackground(drawablePicture);
         }
+        try {
+            tutorial.setText(this.mItem.getTutorial().get("instructions").toString());
+            ingredients.setText(this.mItem.getTutorial().get("ingredients").toString());
+        }catch (Exception e){
+            Log.w(TAG, "Error: "+e);
+        }
+        picture.setImageBitmap(this.mItem.getImage());
+        Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
+        picture.setBackground(drawablePicture);
         getActivity().setTitle(this.mItem.getTitle());
         return mView;
     }

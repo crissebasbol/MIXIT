@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CreateCockatilFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+            android:gravity="center">
+            <EditText
+                android:id="@+id/input_title_cocktail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_whiterounded_white"
+                android:padding="10dp"
+                android:hint="@string/prompt_title_cockatil"
+                android:layout_marginBottom="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_select_ingredients_like"
+                android:textAlignment="center"
+                android:layout_marginBottom="10dp"
+                style="@style/AppTheme"/>
+            <include layout="@layout/item_ingredient"/>
+            <LinearLayout
+                android:id="@+id/layout_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+            <Button
+                android:id="@+id/add_ingredient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agregar otro ingrediente"
+                android:drawableStart="@drawable/ic_add_circle_pink_400_36dp"
+                android:background="@color/transparent"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"/>
+            <EditText
+                android:id="@+id/cocktail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_description"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:background="@drawable/rounded_whiterounded_white"/>
+            <EditText
+                android:id="@+id/cocktail_tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_tutorial"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:background="@drawable/rounded_whiterounded_white"/>
+            <Button
+                android:id="@+id/btn_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_add_image"
+                android:background="@color/transparent"
+                android:clickable="true"/>
+            <ImageView
+                android:id="@+id/add_image"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@drawable/icon_add_image"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="20dp"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center">
+        <Button
+            android:id="@+id/btn_save"
+            style="@style/buttonSave"
+            />
+    </LinearLayout>
+
+
+</FrameLayout>
