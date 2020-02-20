@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,15 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
 import com.example.mixit.R;
+import com.example.mixit.activities.GenericAbstractActivity;
 import com.example.mixit.activities.MainActivity;
 import com.example.mixit.interfaces.VolleyCallback;
 import com.example.mixit.models.Item;
+import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.network.JSONAPIRequest;
 import com.example.mixit.utilities.ListViewAdapter;
 
@@ -47,6 +53,10 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
     private Integer itemWindows;
     private Integer windowCount = 0;
     private Integer currentPosition = 0;
+    private Integer responseLength = 0;
+
+
+    private Boolean showFavourites = false;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -68,13 +78,20 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mContext = getContext();
         this.mFragmentManager = ((Activity) mContext).getFragmentManager();
+        if (getArguments() != null) {
+            this.showFavourites = getArguments().getBoolean("showFavourites", false);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,9 +106,23 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
             listView = mView.findViewById(R.id.my_list_view);
             listView.setOnScrollListener(this);
             setAdapters();
-            Random random = new Random();
-            char randomChar = (char)(random.nextInt(26) + 'a');
-            searchItems(Character.toString(randomChar));
+            if (showFavourites) {
+                currentPosition = 0;
+                windowCount = 0;
+                itemWindows = null;
+                SessionPreferences sessionPreferences =
+                        ((GenericAbstractActivity) mContext).getSessionPreferences();
+                if (sessionPreferences.getFavourites() != null) {
+                    for (Item item : sessionPreferences.getFavourites()) {
+                        itemList.add(item);
+                        setAdapters();
+                    }
+                }
+            } else {
+                Random random = new Random();
+                char randomChar = (char)(random.nextInt(26) + 'a');
+                searchItems(Character.toString(randomChar));
+            }
         }
 
         return mView;
@@ -127,6 +158,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
         if (response != null) {
             itemWindows = (int) Math.ceil(response.length() / itemsByDefault);
             APIResponse = response;
+            responseLength = response.length();
             paginateItems();
         }
     }
@@ -138,9 +170,11 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        int currentItemCount = firstVisibleItem+visibleItemCount;
-        if ((currentItemCount == totalItemCount) && (currentItemCount > 0)) {
-            paginateItems();
+        if (showFavourites == false) {
+            int currentItemCount = firstVisibleItem+visibleItemCount;
+            if ((currentItemCount == totalItemCount) && (currentItemCount > 0)) {
+                paginateItems();
+            }
         }
     }
 

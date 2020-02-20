@@ -52,6 +52,9 @@ public class MainActivity extends GenericAbstractActivity
 
         createNotificationChannel();
         itemListFragment = new ItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("showFavourites", false);
+        itemListFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_layout, itemListFragment);
         fragmentTransaction.addToBackStack(null);
@@ -159,6 +162,13 @@ public class MainActivity extends GenericAbstractActivity
             fragmentTransaction.commit();
         } else if (id == R.id.nav_surprise) {
             fetchRandomItem();
+        } else if (id == R.id.nav_favourites){
+            ItemListFragment favouriteFragment = new ItemListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("showFavourites", true);
+            favouriteFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.frame_layout, favouriteFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_account) {
         }
         else if(id == R.id.nav_my_cocktails){
