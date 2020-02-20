@@ -57,6 +57,8 @@
         </activity>
         <activity android:name=".services.authentication.GoogleAuth" />
 
+        <receiver android:name=".services.notifications.ReminderBroadcast"/>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
