@@ -8,14 +8,16 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.mixit.R;
+import com.example.mixit.models.Item;
 
 public class ReminderBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        Item item = (Item) intent.getSerializableExtra("item");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
                 "notificationChannel").setSmallIcon(R.drawable.com_facebook_button_icon)
-                .setContentTitle("MOFO")
-                .setContentText("Mofo")
+                .setContentTitle("Time to Mix It!")
+                .setContentText("Let's make your new favourite cocktail "+item.getTitle()+"!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
