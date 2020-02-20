@@ -17,7 +17,8 @@ public class ReminderBroadcast extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
                 "notificationChannel").setSmallIcon(R.drawable.com_facebook_button_icon)
                 .setContentTitle("Time to Mix It!")
-                .setContentText("Let's make your new favourite cocktail "+item.getTitle()+"!")
+//                .setContentText("Let's make your new favourite cocktail "+item.getTitle()+"!")
+                .setContentText("Let's make your new favourite cocktail!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
