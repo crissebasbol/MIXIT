@@ -96,7 +96,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         boolean valid = true;
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            mEmailField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mEmailField.setError(null);
@@ -132,7 +132,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            mEmailField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mEmailField.setError(null);
@@ -140,7 +140,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+            mPasswordField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mPasswordField.setError(null);

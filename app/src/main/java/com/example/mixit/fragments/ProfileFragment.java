@@ -166,7 +166,7 @@ public class ProfileFragment extends Fragment {
     private boolean validateForm(String name, String password1, String password2) {
         boolean valid = true;
         if (TextUtils.isEmpty(name)) {
-            mNameField.setError("Required.");
+            mNameField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mNameField.setError(null);
@@ -178,7 +178,7 @@ public class ProfileFragment extends Fragment {
             }
             else {
                 if (TextUtils.isEmpty(password2)) {
-                    mPasswordField2.setError("Required.");
+                    mPasswordField2.setError(getString(R.string.txt_required));
                     valid = false;
                 } else {
                     mPasswordField2.setError(null);

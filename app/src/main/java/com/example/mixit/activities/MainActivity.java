@@ -130,6 +130,7 @@ public class MainActivity extends GenericAbstractActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+
             return true;
         }
 

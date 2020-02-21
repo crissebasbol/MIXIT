@@ -16,9 +16,9 @@ public class ReminderBroadcast extends BroadcastReceiver {
         Item item = (Item) intent.getSerializableExtra("item");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
                 "notificationChannel").setSmallIcon(R.drawable.logo)
-                .setContentTitle("Time to Mix It!")
+                .setContentTitle(context.getString(R.string.txt_title_notification))
 //                .setContentText("Let's make your new favourite cocktail "+item.getTitle()+"!")
-                .setContentText("Let's make your new favourite cocktail!")
+                .setContentText(context.getString(R.string.txt_content_notifications))
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

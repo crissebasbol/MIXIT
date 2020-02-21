@@ -259,5 +259,9 @@
     <string name="txt_error_select_image">Por favor, seleccione una imágen.</string>
     <string name="txt_required">Requerido</string>
     <string name="txt_error_matches_password">Las claves no coinciden</string>
+    <string name="txt_title_notification">¡Hora de mezclar!</string>
+    <string name="txt_content_notifications">¡Hagamos tu nuevo cóctel favorito!</string>
+    <string name="txt_warning_past_alarm">¡No se puede configurar un recordatorio para una fecha u hora que ya ha pasó!</string>
+    <string name="txt_confirm_reminder">Recordatorio establecido!</string>
 
 </resources>
