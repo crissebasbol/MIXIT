@@ -11,7 +11,8 @@
         <item
             android:id="@+id/nav_filter"
             android:icon="@drawable/ic_filter_list_white_48dp"
-            android:title="Filtrar" />
+            android:title="Filtrar"
+            android:visible="false"/>
         <item
             android:id="@+id/nav_favourites"
             android:icon="@drawable/ic_star_white_48dp"
