@@ -1,21 +1,21 @@
 <resources>
-    <string name="app_name">Mixit</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="app_name" translatable="false">Mixit</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Inicio</string>
+    <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow" translatable="false">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
 
-    <string name="label_google_sign_in">Firebase + Google Sign In</string>
+    <string name="label_google_sign_in" translatable="false">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
@@ -24,11 +24,11 @@
     <string name="label_anonymous_auth">Anonymous Authentication</string>
     <string name="desc_anonymous_auth">Sign in anonymously and then later upgrade to a full Firebase Auth user.</string>
 
-    <string name="label_firebase_ui">FirebaseUI Auth</string>
-    <string name="desc_firebase_ui">Use the FirebaseUI-Android library to authenticate with Firebase.</string>
+    <string name="label_firebase_ui" translatable="false">FirebaseUI Auth</string>
+    <string name="desc_firebase_ui" translatable="false">Use the FirebaseUI-Android library to authenticate with Firebase.</string>
 
     <string name="hint_user_id">User ID</string>
-    <string name="get_custom_token">Get Token</string>
+    <string name="get_custom_token" translatable="false">Get Token</string>
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>
     <string name="send_link">Send Link</string>
@@ -38,11 +38,11 @@
     <string name="loading">Loading…</string>
     <string name="custom_token">Custom Token</string>
     <string name="signed_in">Signed In</string>
-    <string name="signed_out">Signed Out</string>
-    <string name="token_null">Token: null</string>
+    <string name="signed_out" translatable="false">Signed Out</string>
+    <string name="token_null" translatable="false">Token: null</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="desc_firebase_lockup">Firebase logo and name</string>
+    <string name="desc_firebase_lockup" translatable="false">Firebase logo and name</string>
     <string name="auth_failed">Authentication failed</string>
     <string name="start_phone_auth">Start</string>
     <string name="verify_phone_auth">Verify</string>
@@ -55,81 +55,79 @@
     <string name="status_sign_in_failed">Sign-in failed</string>
     <string name="instant_validation">(instant validation)</string>
 
-    <string name="firebase_status_fmt">Firebase User: %s</string>
-    <string name="firebase_user_management">Firebase User Management</string>
+    <string name="firebase_status_fmt" translatable="false">Firebase User: %s</string>
+    <string name="firebase_user_management" translatable="false">Firebase User Management</string>
 
-    <string name="google_status_fmt">Google User: %s</string>
+    <string name="google_status_fmt" translatable="false">Google User: %s</string>
     <string name="google_title_text">Google Sign In</string>
 
     <string name="emailpassword_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="emailpassword_title_text">Email and Password</string>
 
-    <string name="passwordless_status_fmt">Email User: %1$s (verified: %2$b)</string>
-    <string name="passwordless_title_text">Passwordless Sign In</string>
+    <string name="passwordless_status_fmt" translatable="false">Email User: %1$s (verified: %2$b)</string>
+    <string name="passwordless_title_text" translatable="false">Passwordless Sign In</string>
     <string name="status_email_not_sent">Send link to your email to get started.</string>
     <string name="status_email_sent">Link sent, check your email to continue.</string>
     <string name="status_link_found">Link received, enter email to sign in.</string>
 
-    <string name="firebaseui_status_fmt">Firebase User: %s</string>
-    <string name="firebaseui_title_text">FirebaseUI Auth</string>
+    <string name="firebaseui_status_fmt" translatable="false">Firebase User: %s</string>
+    <string name="firebaseui_title_text" translatable="false">FirebaseUI Auth</string>
 
-    <string name="id_fmt">User ID: %s</string>
+    <string name="id_fmt" translatable="false">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
 
     <!-- WalkthroughActivity Activity -->
-    <string name="facebook_app_id">424317441819524</string>
-    <string name="fb_login_protocol_scheme">fb424317441819524</string>
-    <string name="action_register_email">Registrar con Email</string>
-    <string name="action_continue_facebook">Continuar con Facebook</string>
-    <string name="action_continue_google">Continuar con Google</string>
+    <string name="facebook_app_id" translatable="false">424317441819524</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb424317441819524</string>
+    <string name="action_register_email">Register with email</string>
+    <string name="action_continue_facebook">Continue with Facebook</string>
+    <string name="action_continue_google">Continue  with Google</string>
 
     <!-- Walkthrough Fragments -->
-    <string name="action_skip">Omitir</string>
-    <string name="action_start">Comenzar</string>
-    <string name="action_txt_login">Iniciar sesión</string>
-    <string name="txt_skip_walkthrough">¿Ya formas parte de nuestra familia?</string>
-    <string name="txt_walkthrough1_title">Prepara los mejores cócteles</string>
-    <string name="txt_walkthrough2_title">Crea tus propias recetas</string>
-    <string name="txt_walkthrough3_title">Recordatorios</string>
-    <string name="txt_walkthrough4_title">Filtra por licores</string>
-    <string name="txt_walkthrough1_description">Consigue preparar los mejores cócteles con nuestras recetas, serás la sensación!</string>
-    <string name="txt_walkthrough2_description">Crea tus propios cócteles y almacenálo en nuestro sistema para que no los olvides!</string>
-    <string name="txt_walkthrough3_description">Agrega recordatorios a los cócteles que deseas preparar en un futuro</string>
-    <string name="txt_walkthrough4_description_1">¿Solo tienes unos cuantos ingrediente y no sabes qué preparar?</string>
-    <string name="txt_walkthrough4_description_2">No te preocupes, nosotros te ayudamos a buscar el cóctel ideal!</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_start">Start</string>
+    <string name="action_txt_login">Sign in</string>
+    <string name="txt_skip_walkthrough">Are you already part of our family?</string>
+    <string name="txt_walkthrough1_title">Prepare the best cocktails</string>
+    <string name="txt_walkthrough2_title">Create your own recipes</string>
+    <string name="txt_walkthrough3_title">Reminders</string>
+    <string name="txt_walkthrough4_title">Filter by liquors</string>
+    <string name="txt_walkthrough1_description">Get to prepare the best cocktails with our recipes, you will be the sensation!</string>
+    <string name="txt_walkthrough2_description">Create your own cocktails and store it in our system so you don\'t forget them!</string>
+    <string name="txt_walkthrough3_description">Add reminders to the cocktails you want to prepare in the future</string>
+    <string name="txt_walkthrough4_description_1">You only have a few ingredients and you don\'t know what to prepare?</string>
+    <string name="txt_walkthrough4_description_2">Don\'t worry, we help you find the ideal cocktail!</string>
 
     <!-- LogIn Activity -->
-    <string name="action_forgot_password">¿Olvidó la contraseña?</string>
-    <string name="action_sign_in">Iniciar sesión</string>
-    <string name="action_sign_up">Registrarse</string>
-    <string name="prompt_email">Ingrese su correo electrónico</string>
+    <string name="action_forgot_password">Forgot password?</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Register</string>
+    <string name="prompt_email">Enter your email</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="prompt_password">Ingrese una contraseña</string>
-    <string name="prompt_confirmed_password">Repita la contraseña</string>
-    <string name="txt_accept_register">Al registrarse, usted acepta los
-        <a href="/"> Términos de servicio y política de seguridad </a>
-    </string>
-    <string name="txt_start_session">¿Ya tienes una cuenta?</string>
-    <string name="txt_start_anonymous">Continuar sin registrarse</string>
+    <string name="prompt_password">Enter a password</string>
+    <string name="prompt_confirmed_password">Repeat password</string>
+    <string name="txt_accept_register">By registering, you accept the <a href="/"> Terms of service and security policy </a></string>
+    <string name="txt_start_session">Do you already have an account?</string>
+    <string name="txt_start_anonymous">Continue without registering</string>
 
 
-    <string name="txt_description">Descripción</string>
+    <string name="txt_description">Description</string>
     <string name="txt_tutorial">Tutorial</string>
-    <string name="txt_ingredients">Ingredientes</string>
-    <string name="txt_title">TÍTULO</string>
-    <string name="action_search">Buscar</string>
-    <string name="promp_name">Ingrese su nombre completo</string>
-    <string name="txt_create_account">Crear Cuenta</string>
-    <string name="txt_back">Regresar</string>
-    <string name="txt_asking_account">¿Necesitas una cuenta?</string>
-    <string name="txt_welcome_again">¡Es un placer tenerte de vuelta!</string>
-    <string name="txt_successful_password_reset">Te hemos enviado un link para reiniciar tu clave, revisa tu correo</string>
-    <string name="txt_error_password_reset">El correo para restablecer la contraseña no fie enviado, por favor intenta más tarde</string>
-    <string name="txt_error_login">Error al iniciar sesión</string>
-    <string name="txt_successful_register">Te has registrado exitosamente!</string>
-    <string name="txt_error_register">El registro ha fallado, por favor intenta más tarde</string>
-    <string name="title_activity_terms_and_conditions">Términos y condiciones</string>
-    <string name="large_text">
+    <string name="txt_ingredients">Ingredients</string>
+    <string name="txt_title">TITLE</string>
+    <string name="action_search">Search</string>
+    <string name="promp_name">Enter your full name</string>
+    <string name="txt_create_account">Create account</string>
+    <string name="txt_back">Return</string>
+    <string name="txt_asking_account">Do you need an account?</string>
+    <string name="txt_welcome_again">It\'s nice to have you back!</string>
+    <string name="txt_successful_password_reset">We have sent you a link to reset your password, check your email</string>
+    <string name="txt_error_password_reset">The email to reset the password was not sent, please try again later</string>
+    <string name="txt_error_login">Failed to login</string>
+    <string name="txt_successful_register">You have successfully registered!</string>
+    <string name="txt_error_register">Registration failed, please try again later.</string>
+    <string name="title_activity_terms_and_conditions">Terms and Conditions</string>
+    <string name="large_text" translatable="false">
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -218,50 +216,50 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="message_no_internet">Revisa tu conexión a internet</string>
-    <string name="message_updated_name_successful">Nombre acualizado correctamente</string>
-    <string name="message_updated_password_successful">Contraseña acualizada correctamente</string>
-    <string name="message_updated_successful">Información acualizada correctamente</string>
+    <string name="message_no_internet">Check your internet connection</string>
+    <string name="message_updated_name_successful">Name updated successfully</string>
+    <string name="message_updated_password_successful">Password updated successfully</string>
+    <string name="message_updated_successful">Information updated successfully</string>
     <string name="txt_retry">Retry</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="txt_update_profile">ACTUALIZAR PERFIL</string>
-    <string name="txt_change_name">Cambiar Nombre</string>
-    <string name="txt_change_password">Cambiar Contraseña</string>
-    <string name="txt_new_password1">Ingrese una nueva contraseña</string>
-    <string name="txt_new_password2">Confirme su nueva contraseña</string>
-    <string name="txt_error_same_passwords">Las contraseñas no son iguales</string>
-    <string name="txt_min_characteres">Escribe al menos 6 caracteres</string>
-    <string name="txt_camera">Cámara</string>
-    <string name="txt_gallery">Galeria</string>
-    <string name="txt_cancel">Cancelar</string>
-    <string name="txt_title_change_profile_picture">Cambiar foto de perfil</string>
-    <string name="txt_loading_update">Actualizando información...</string>
-    <string name="txt_load">% cargado</string>
-    <string name="txt_error_update">Error al actualizar</string>
-    <string name="txt_info_my_cocktails">En esta lista aparecerán los cocteles que has creado con tu imaginación y gusto</string>
-    <string name="txt_create_cocktail">¡Crea tu propio cocktail!</string>
-    <string name="prompt_ingredient">Escriba un ingrediente (Ej: Vodka)</string>
-    <string name="prompt_quantity">Cantidad (Ej: 1/2 oz)</string>
-    <string name="prompt_description">Agrega una descripción</string>
-    <string name="prompt_tutorial">Describe el proceso (Tutorial)</string>
-    <string name="txt_add_image">Agregar Imágen</string>
-    <string name="create_cocktail">Crear cóctel</string>
-    <string name="txt_my_cocktails">Mis cocteles</string>
-    <string name="txt_add_imagen_cocktail">Agregar una imágen a tu cóctel</string>
-    <string name="txt_select_photo">Selecciona una foto</string>
-    <string name="txt_select_ingredients_like">Selecciona todos los ingredientes que gustes</string>
-    <string name="txt_save">Guardar</string>
-    <string name="prompt_title_cockatil">Ingrese un nombre a su cóctel (Ej: Spritz)</string>
-    <string name="txt_congratulations_correct_cocktail_added">¡Felcitaciones! Has creado tu cóctel correctamente</string>
-    <string name="txt_error_creating_cocktail">Ha ocurrido un error al crear tu cóctel</string>
-    <string name="txt_creating_cocktail">Creando cóctel</string>
-    <string name="txt_error_select_image">Por favor, seleccione una imágen.</string>
-    <string name="txt_required">Requerido</string>
-    <string name="txt_error_matches_password">Las claves no coinciden</string>
-    <string name="txt_title_notification">¡Hora de mezclar!</string>
-    <string name="txt_content_notifications">¡Hagamos tu nuevo cóctel favorito!</string>
-    <string name="txt_warning_past_alarm">¡No se puede configurar un recordatorio para una fecha u hora que ya ha pasó!</string>
-    <string name="txt_confirm_reminder">Recordatorio establecido!</string>
+    <string name="txt_update_profile">UPDATE PROFILE</string>
+    <string name="txt_change_name">Change name</string>
+    <string name="txt_change_password">Change password</string>
+    <string name="txt_new_password1">Enter a new password</string>
+    <string name="txt_new_password2">Confirm your new password</string>
+    <string name="txt_error_same_passwords">Passwords are not equal</string>
+    <string name="txt_min_characteres">Enter at least 6 characters</string>
+    <string name="txt_camera">Camera</string>
+    <string name="txt_gallery">Gallery</string>
+    <string name="txt_cancel">Cancel</string>
+    <string name="txt_title_change_profile_picture">Change profile picture</string>
+    <string name="txt_loading_update">Updating information ...</string>
+    <string name="txt_load">% loaded</string>
+    <string name="txt_error_update">Update failed</string>
+    <string name="txt_info_my_cocktails">In this list will appear the cocktails that you have created with your imagination and taste</string>
+    <string name="txt_create_cocktail">Create your own cocktail!</string>
+    <string name="prompt_ingredient">Write an ingredient (Ex: Vodka)</string>
+    <string name="prompt_quantity">Quantity (Ex: 1/2 oz)</string>
+    <string name="prompt_description">Add a description</string>
+    <string name="prompt_tutorial">Describe the process (Tutorial)</string>
+    <string name="create_cocktail">Create cocktail</string>
+    <string name="txt_my_cocktails">My cocktails</string>
+    <string name="txt_add_imagen_cocktail">Add an image to your cocktail</string>
+    <string name="txt_select_photo">Select a photo</string>
+    <string name="txt_select_ingredients_like">Select all the ingredients you like</string>
+    <string name="txt_save">Save</string>
+    <string name="prompt_title_cockatil">Enter a name for your cocktail (Ex: Spritz)</string>
+    <string name="txt_congratulations_correct_cocktail_added">Congratulations! You have created your cocktail correctly</string>
+    <string name="txt_error_creating_cocktail">There was an error creating your cocktail</string>
+    <string name="txt_creating_cocktail">Creating cocktail</string>
+    <string name="txt_error_select_image">Please select an image.</string>
+    <string name="txt_required">Required</string>
+    <string name="txt_error_matches_password">The keys do not match</string>
+    <string name="txt_title_notification">Time to MixIt!</string>
+    <string name="txt_content_notifications">Let\'s make your new favorite cocktail!</string>
+    <string name="txt_warning_past_alarm">You cannot set a reminder for a date or time that has already passed!</string>
+    <string name="txt_confirm_reminder">Reminder set!</string>
+    <string name="txt_add_image">Add an image</string>
 
 </resources>
