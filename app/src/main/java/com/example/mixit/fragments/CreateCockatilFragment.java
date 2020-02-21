@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +37,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CreateCockatilFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CreateCockatilFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateCockatilFragment extends Fragment implements View.OnClickListener {
 
 
@@ -130,8 +123,42 @@ public class CreateCockatilFragment extends Fragment implements View.OnClickList
             selectImages();
         }
         else if (id == R.id.btn_save){
-            saveCocktail();
+            if (validateForm())
+                saveCocktail();
         }
+    }
+
+    private boolean validateForm() {
+        boolean valid = true;
+        String title = mTitle.getText().toString();
+        if (TextUtils.isEmpty(title)) {
+            mTitle.setError(getString(R.string.txt_required));
+            valid = false;
+        } else {
+            mTitle.setError(null);
+        }
+
+        String description = mDescription.getText().toString();
+        if (TextUtils.isEmpty(description)) {
+            mDescription.setError(getString(R.string.txt_required));
+            valid = false;
+        } else {
+            mDescription.setError(null);
+        }
+
+        String tutorial = mTutorial.getText().toString();
+        if (TextUtils.isEmpty(tutorial)) {
+            mTutorial.setError(getString(R.string.txt_required));
+            valid = false;
+        } else {
+            mTutorial.setError(null);
+        }
+
+        if (bitmapCocktailImage == null){
+            Toast.makeText(getContext(), R.string.txt_error_select_image, Toast.LENGTH_LONG).show();
+            valid = false;
+        }
+        return valid;
     }
 
     private void addLayoutIngredient() {

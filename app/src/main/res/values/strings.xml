@@ -256,5 +256,8 @@
     <string name="txt_congratulations_correct_cocktail_added">¡Felcitaciones! Has creado tu cóctel correctamente</string>
     <string name="txt_error_creating_cocktail">Ha ocurrido un error al crear tu cóctel</string>
     <string name="txt_creating_cocktail">Creando cóctel</string>
+    <string name="txt_error_select_image">Por favor, seleccione una imágen.</string>
+    <string name="txt_required">Requerido</string>
+    <string name="txt_error_matches_password">Las claves no coinciden</string>
 
 </resources>

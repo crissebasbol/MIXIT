@@ -103,7 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         String name = mNameField.getText().toString();
         if (TextUtils.isEmpty(name)) {
-            mNameField.setError("Required.");
+            mNameField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mNameField.setError(null);
@@ -111,7 +111,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            mEmailField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mEmailField.setError(null);
@@ -119,7 +119,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+            mPasswordField.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             mPasswordField.setError(null);
@@ -127,11 +127,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         String password2 = mPasswordField2.getText().toString();
         if (TextUtils.isEmpty(password2)) {
-            mPasswordField2.setError("Required.");
+            mPasswordField2.setError(getString(R.string.txt_required));
             valid = false;
         } else {
             if (!password2.equals(password)){
-                mPasswordField2.setError("Las claves no coinciden");
+                mPasswordField2.setError(getString(R.string.txt_error_matches_password));
                 valid = false;
             }
             else {
