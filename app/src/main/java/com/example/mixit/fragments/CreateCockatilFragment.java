@@ -1,6 +1,7 @@
 package com.example.mixit.fragments;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -180,8 +181,14 @@ public class CreateCockatilFragment extends Fragment implements View.OnClickList
         cloudFirestore.saveCocktail(mIngredients, mQuantity, mDescription.getText().toString(),
                 mTutorial.getText().toString(), urlPhoto, fu.getEmail(), mTitle.getText().toString(), progressDialog);
     }
-    public void result(String data){
+    public void result(String data, boolean error){
         Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
+        if (!error){
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            MyCocktailsFragment myCocktailsFragment = new MyCocktailsFragment();
+            fragmentTransaction.replace(R.id.frame_layout, myCocktailsFragment);
+            fragmentTransaction.commit();
+        }
     }
     private void selectImages() {
         final CharSequence[] items = {getString(R.string.txt_camera), getString(R.string.txt_gallery), getString(R.string.txt_cancel)};

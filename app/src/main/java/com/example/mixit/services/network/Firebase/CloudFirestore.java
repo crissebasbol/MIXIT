@@ -86,7 +86,7 @@ public class CloudFirestore {
                         Log.v(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         progressDialog.dismiss();
                         if (createCockatilFragment != null){
-                            createCockatilFragment.result(activity.getString(R.string.txt_congratulations_correct_cocktail_added));
+                            createCockatilFragment.result(activity.getString(R.string.txt_congratulations_correct_cocktail_added), false);
                         }
                     }
                 })
@@ -95,7 +95,7 @@ public class CloudFirestore {
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
                         progressDialog.dismiss();
-                        createCockatilFragment.result(activity.getString((R.string.txt_error_creating_cocktail)));
+                        createCockatilFragment.result(activity.getString((R.string.txt_error_creating_cocktail)), true);
                     }
                 });
     }

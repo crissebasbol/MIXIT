@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -43,38 +44,42 @@ public class MainActivity extends GenericAbstractActivity
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
     private MenuItem back;
     private MenuItem searchItem;
+    private boolean instance = false;
+    private static final String TAG = "MainActivity";
 
     private ItemListFragment itemListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v(TAG, "onCreate:");
+            createNotificationChannel();
+            itemListFragment = new ItemListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("showFavourites", false);
+            itemListFragment.setArguments(bundle);
+            if (savedInstanceState == null) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.frame_layout, itemListFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
 
-        createNotificationChannel();
-        itemListFragment = new ItemListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("showFavourites", false);
-        itemListFragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.frame_layout, itemListFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
 
+            setContentView(R.layout.activity_main);
+            setupGUINavigationDrawer();
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        setContentView(R.layout.activity_main);
-        setupGUINavigationDrawer();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            NavigationView navigationView = findViewById(R.id.nav_view);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-        setTitle("");
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            navigationView.setNavigationItemSelectedListener(this);
+            setTitle("");
 
 //        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
 //        if (!isConnected) {
@@ -88,6 +93,7 @@ public class MainActivity extends GenericAbstractActivity
 //        } else {
 //
 //        }
+
     }
 
     @Override
@@ -103,6 +109,7 @@ public class MainActivity extends GenericAbstractActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.v(TAG, "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         back = menu.findItem(R.id.action_back);
@@ -123,6 +130,7 @@ public class MainActivity extends GenericAbstractActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.v(TAG, "onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -139,6 +147,7 @@ public class MainActivity extends GenericAbstractActivity
     }
 
     private void returnToFragment() {
+        Log.v(TAG, "returnFragment");
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -153,6 +162,7 @@ public class MainActivity extends GenericAbstractActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.v(TAG, "onNavigationItemSelected");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
