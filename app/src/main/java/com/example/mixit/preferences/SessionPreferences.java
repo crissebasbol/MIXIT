@@ -117,24 +117,25 @@ public class SessionPreferences {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean verifyFavourites (@Nullable List<Item> favourites, Item item) {
         boolean present = false;
-        boolean isNull = true;
+        boolean listNull = true;
 
         if (favourites == null) {
             favourites = getPreferenceList(PREF_FAVOURITES);
-            isNull = favourites != null ? false : true;
+        } else {
+            listNull = false;
         }
 
-        if (!isNull) {
+        if (favourites != null) {
             for (int i = 0; i < favourites.size(); i++){
                 if (favourites.get(i).getId().equals(item.getId())) {
-                    if (isNull) {
+                    if (listNull) {
                         favourites.remove(i);
-                        setPreferenceList(favourites, PREF_FAVOURITES);
                     }
                     present = true;
                     break;
                 }
             }
+            setPreferenceList(favourites, PREF_FAVOURITES);
         }
         return present;
     }

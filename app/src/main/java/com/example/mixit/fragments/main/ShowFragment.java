@@ -214,8 +214,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             datePickerDialog.show();
         } else if (id == R.id.cocktail_favorite) {
             mSessionPreferences.saveFavourite(mItem);
-            updateButtons();
         }
+        updateButtons();
 
     }
 
