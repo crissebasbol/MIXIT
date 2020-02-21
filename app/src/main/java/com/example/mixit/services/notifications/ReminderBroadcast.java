@@ -19,7 +19,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
                 .setContentTitle("Time to Mix It!")
 //                .setContentText("Let's make your new favourite cocktail "+item.getTitle()+"!")
                 .setContentText("Let's make your new favourite cocktail!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 

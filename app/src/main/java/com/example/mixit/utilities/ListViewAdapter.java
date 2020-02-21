@@ -8,12 +8,8 @@ package com.example.mixit.utilities;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +21,6 @@ import com.example.mixit.R;
 import com.example.mixit.fragments.main.ShowFragment;
 import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.models.Item;
-import com.example.mixit.services.assets.BlurImages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,9 +75,10 @@ public class ListViewAdapter extends ArrayAdapter<Item> implements UpdateCallbac
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("item", item);
                 showFragment.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame_layout, showFragment);
-                fragmentTransaction.commit();
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, showFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

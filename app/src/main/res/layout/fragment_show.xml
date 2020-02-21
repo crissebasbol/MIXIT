@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_margin="10dp"
+                android:layout_marginRight="5dp"
                 android:orientation="vertical">
 
                 <Button

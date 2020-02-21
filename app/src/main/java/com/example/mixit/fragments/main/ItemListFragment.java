@@ -15,7 +15,6 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.mixit.R;
@@ -112,8 +111,9 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                 itemWindows = null;
                 SessionPreferences sessionPreferences =
                         ((GenericAbstractActivity) mContext).getSessionPreferences();
-                if (sessionPreferences.getFavourites() != null) {
-                    for (Item item : sessionPreferences.getFavourites()) {
+                if (sessionPreferences.getPreferenceList(SessionPreferences.PREF_FAVOURITES) != null) {
+                    for (Item item : sessionPreferences
+                            .getPreferenceList(SessionPreferences.PREF_FAVOURITES)) {
                         itemList.add(item);
                         setAdapters();
                     }

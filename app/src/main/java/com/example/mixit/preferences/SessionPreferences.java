@@ -19,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -30,9 +29,10 @@ public class SessionPreferences {
 
     private Context context;
 
-    private final String PREFS_NAME = "MIXIT_SESSION_PREFS";
-    private final String PREF_USER = "PREF_USER";
-    private final String PREF_FAVOURITES = "PREF_FAVOURITES";
+    private static final String PREFS_NAME = "MIXIT_SESSION_PREFS";
+    private static final String PREF_USER = "PREF_USER";
+    public static final String PREF_FAVOURITES = "PREF_FAVOURITES";
+    public static final String PREF_REMINDERS = "PREF_REMINDERS";
     private SharedPreferences.Editor editor;
     private FireBaseAuth fireBaseAuth;
 
@@ -90,33 +90,88 @@ public class SessionPreferences {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveFavourite(Item item){
-        // Storing
-        List<Item> favourites = getFavourites();
+        List<Item> favourites = getPreferenceList(PREF_FAVOURITES);
         if (favourites != null) {
-            for (int i = 0; i < favourites.size(); i++){
-                System.out.println(favourites.get(i).getTitle());
-                if (favourites.get(i).getId() == item.getId()) {
-                    // TODO: Handler for duplicate element.
-                    break;
-                }
-            }
-            favourites.add(item);
+            if (!verifyFavourites(favourites, item)) favourites.add(item);
         } else {
             favourites = new ArrayList<>();
             favourites.add(item);
         }
-        setFavourites(favourites);
+        setPreferenceList(favourites, PREF_FAVOURITES);
 //        REREAD_PREFERENCES = true;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setFavourites (List<Item> favourites) {
+    public void saveReminder(Item item){
+        List<Item> reminders = getPreferenceList(PREF_REMINDERS);
+        if (reminders != null) {
+            if (!verifyReminders(reminders, item)) reminders.add(item);
+        } else {
+            reminders = new ArrayList<>();
+            reminders.add(item);
+        }
+        setPreferenceList(reminders, PREF_REMINDERS);
+//        REREAD_PREFERENCES = true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean verifyFavourites (@Nullable List<Item> favourites, Item item) {
+        boolean present = false;
+        boolean isNull = true;
+
+        if (favourites == null) {
+            favourites = getPreferenceList(PREF_FAVOURITES);
+            isNull = favourites != null ? false : true;
+        }
+
+        if (!isNull) {
+            for (int i = 0; i < favourites.size(); i++){
+                if (favourites.get(i).getId().equals(item.getId())) {
+                    if (isNull) {
+                        favourites.remove(i);
+                        setPreferenceList(favourites, PREF_FAVOURITES);
+                    }
+                    present = true;
+                    break;
+                }
+            }
+        }
+        return present;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean verifyReminders (@Nullable List<Item> reminders, Item item) {
+        boolean present = false;
+        boolean isNull = true;
+
+        if (reminders == null) {
+            reminders = getPreferenceList(PREF_REMINDERS);
+            isNull = reminders != null ? false : true;
+        }
+
+        if (!isNull) {
+            for (int i = 0; i < reminders.size(); i++){
+                if (reminders.get(i).getId().equals(item.getId())) {
+                    if (isNull) {
+                        reminders.remove(i);
+                        setPreferenceList(reminders, PREF_REMINDERS);
+                    }
+                    present = true;
+                    break;
+                }
+            }
+        }
+        return present;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setPreferenceList (List<Item> preferenceList, String pref) {
         try {
             ByteArrayOutputStream bo = new ByteArrayOutputStream();
             ObjectOutputStream so = new ObjectOutputStream(bo);
-            so.writeObject(favourites);
+            so.writeObject(preferenceList);
             so.flush();
-            editor.putString(PREF_FAVOURITES, Base64.getEncoder().encodeToString(bo.toByteArray()));
+            editor.putString(pref, Base64.getEncoder().encodeToString(bo.toByteArray()));
             editor.apply();
         } catch (Exception e) {
             System.out.println(e);
@@ -124,10 +179,10 @@ public class SessionPreferences {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Item> getFavourites () {
+    public List<Item> getPreferenceList (String pref) {
         List<Item> obj = null;
         try {
-            String strFavourites = preferences.getString(PREF_FAVOURITES, null);
+            String strFavourites = preferences.getString(pref, null);
             byte b[] = Base64.getDecoder().decode(strFavourites);
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
