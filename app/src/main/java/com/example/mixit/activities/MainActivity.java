@@ -1,5 +1,6 @@
 package com.example.mixit.activities;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationChannel;
@@ -41,13 +42,14 @@ public class MainActivity extends GenericAbstractActivity
         ProfileFragment.OnFragmentInteractionListener, MyCocktailsFragment.OnFragmentInteractionListener,
         CreateCockatilFragment.OnFragmentInteractionListener {
 
-    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
     private MenuItem back;
     private MenuItem searchItem;
     private boolean instance = false;
     private static final String TAG = "MainActivity";
 
     private ItemListFragment itemListFragment;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +61,17 @@ public class MainActivity extends GenericAbstractActivity
             bundle.putBoolean("showFavourites", false);
             itemListFragment.setArguments(bundle);
             if (savedInstanceState == null) {
+                /*
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.add(R.id.frame_layout, itemListFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                 */
+                mFragmentManager = getFragmentManager();
+                mFragmentTransaction = mFragmentManager.beginTransaction();
+                mFragmentTransaction.replace(R.id.frame_layout, itemListFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
 
 
@@ -147,15 +156,7 @@ public class MainActivity extends GenericAbstractActivity
     }
 
     private void returnToFragment() {
-        Log.v(TAG, "returnFragment");
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        // Add the new tab fragment
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, itemListFragment)
-                .addToBackStack(BACK_STACK_ROOT_TAG)
-                .commit();
+        mFragmentManager.popBackStack();
         setTitle("");
     }
     // TODO: REFACTOR SWITCH FOR BETTER CODE.
@@ -165,12 +166,10 @@ public class MainActivity extends GenericAbstractActivity
         Log.v(TAG, "onNavigationItemSelected");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         if (id == R.id.nav_home) {
             searchItem.setVisible(true);
             ItemListFragment itemListFragment = new ItemListFragment();
-            fragmentTransaction.replace(R.id.frame_layout, itemListFragment);
-            fragmentTransaction.commit();
+            commitFragment(itemListFragment);
         } else if (id == R.id.nav_surprise) {
             fetchRandomItem();
         } else if (id == R.id.nav_favourites){
@@ -178,28 +177,14 @@ public class MainActivity extends GenericAbstractActivity
             Bundle bundle = new Bundle();
             bundle.putBoolean("showFavourites", true);
             favouriteFragment.setArguments(bundle);
-            fragmentTransaction.replace(R.id.frame_layout, favouriteFragment);
-            fragmentTransaction.commit();
-        } else if (id == R.id.nav_account) {
-            searchItem.setVisible(false);
-            ProfileFragment profileFragment = new ProfileFragment();
-            fragmentTransaction.replace(R.id.frame_layout, profileFragment);
-            fragmentTransaction.commit();
-        }
-        else if(id == R.id.nav_my_cocktails){
+            commitFragment(favouriteFragment);
+        } else if(id == R.id.nav_my_cocktails){
             searchItem.setVisible(false);
             MyCocktailsFragment myCocktailsFragment = new MyCocktailsFragment();
-            fragmentTransaction.replace(R.id.frame_layout, myCocktailsFragment);
-            fragmentTransaction.commit();
-        }
-        // else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-        else if (id == R.id.nav_account) {
+            commitFragment(myCocktailsFragment);
+        } else if (id == R.id.nav_account) {
             ProfileFragment profileFragment = new ProfileFragment();
-            fragmentTransaction.replace(R.id.frame_layout, profileFragment);
-            fragmentTransaction.commit();
+            commitFragment(profileFragment);
         }
         else if (id == R.id.nav_privacy_terms) {
             Intent intent = new Intent(this, TermsAndConditionsActivity.class);
@@ -208,7 +193,6 @@ public class MainActivity extends GenericAbstractActivity
         else if (id == R.id.nav_logout) {
             logOut();
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -250,9 +234,7 @@ public class MainActivity extends GenericAbstractActivity
             bundle.putSerializable("item", item);
             bundle.putBoolean("showFloating", true);
             showFragment.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_layout, showFragment);
-            fragmentTransaction.commit();
+            commitFragment(showFragment);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -262,12 +244,20 @@ public class MainActivity extends GenericAbstractActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "notificationChannel";
             String description = "Channel for notification reminder";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("notificationChannel", name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void commitFragment (Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

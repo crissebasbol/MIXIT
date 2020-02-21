@@ -37,8 +37,10 @@ import com.example.mixit.services.assets.BlurImages;
 import com.example.mixit.services.notifications.ReminderBroadcast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.time.Instant;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ShowFragment extends Fragment implements UpdateCallback, Button.OnClickListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -54,15 +56,16 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private static final String TAG = "ShowFragment";
     private FloatingActionButton mRandom;
     private boolean showFloating = false;
-    private Button mAlarm;
     private Calendar calendar;
     private DatePickerDialog datePickerDialog;
-    private Button mFavourite, mReminder;
+    private Button mFavourite, mAlarm;
 
     private OnFragmentInteractionListener mListener;
 
     private int finalDay, finalMonth, finalYear, currentDay, currentMonth, currentYear;
     private boolean sameDay, sameMonth, sameYear;
+
+    private SessionPreferences mSessionPreferences;
 
     public ShowFragment() {
         // Required empty public constructor
@@ -95,6 +98,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mSessionPreferences = ((MainActivity) mContext).getSessionPreferences();
         mView = inflater.inflate(R.layout.fragment_show, container, false);
         mAlarm = mView.findViewById(R.id.cocktail_alarm);
         mAlarm.setOnClickListener(this);
@@ -106,6 +110,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         }
         mFavourite = mView.findViewById(R.id.cocktail_favorite);
         mFavourite.setOnClickListener(this);
+        updateButtons();
         DisplayMetrics display = getResources().getDisplayMetrics();
         int width = display.widthPixels;
         picture = mView.findViewById(R.id.cocktail_picture);
@@ -120,7 +125,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             this.mItem.setUpdateCallback(this);
         } else {
             picture.setImageBitmap(this.mItem.getImage());
-            Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
+            Drawable drawablePicture = new BitmapDrawable(getResources(),
+                    BlurImages.blur(this.mContext, this.mItem.getImage()));
             picture.setBackground(drawablePicture);
         }
         try {
@@ -130,7 +136,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             Log.w(TAG, "Error: "+e);
         }
         picture.setImageBitmap(this.mItem.getImage());
-        Drawable drawablePicture = new BitmapDrawable(getResources(), BlurImages.blur(this.mContext, this.mItem.getImage()));
+        Drawable drawablePicture = new BitmapDrawable(getResources(),
+                BlurImages.blur(this.mContext, this.mItem.getImage()));
         picture.setBackground(drawablePicture);
         getActivity().setTitle(this.mItem.getTitle());
         calendar = Calendar.getInstance();
@@ -191,17 +198,11 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             datePickerDialog = new DatePickerDialog(mContext, this, currentYear, currentMonth, currentDay);
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePickerDialog.show();
+        } else if (id == R.id.cocktail_favorite) {
+            mSessionPreferences.saveFavourite(mItem);
         }
+        updateButtons();
 
-        switch (v.getId()) {
-            case R.id.random:
-                ((MainActivity) mContext).fetchRandomItem();
-                break;
-            case R.id.cocktail_favorite:
-                SessionPreferences sessionPreferences = ((MainActivity) mContext).getSessionPreferences();
-                sessionPreferences.saveFavourite(mItem);
-                break;
-        }
     }
 
     @Override
@@ -228,19 +229,28 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             Toast.makeText(mContext, R.string.txt_warning_past_alarm, Toast.LENGTH_SHORT).show();
         } else {
             String strDay = (finalDay < 10) ? ("0" + finalDay) : String.valueOf(finalDay);
-            String strMonth = (finalMonth < 10) ? ("0" + finalMonth) : String.valueOf(finalMonth);
+            String strMonth = ((finalMonth+1) < 10) ? ("0" + (finalMonth+1)) : String.valueOf(finalMonth+1);
             String strMinute = (minute < 10) ? ("0" + minute) : String.valueOf(minute);
             String strHour = (hourOfDay < 10) ? ("0" + hourOfDay) : String.valueOf(hourOfDay);
-            String finalDate = finalYear+"-"+strMonth+"-"+strDay+"T"+strHour+":"+strMinute+":00.500Z";
-            long millisFromEpoch = Instant.parse(finalDate).toEpochMilli();
+            String finalDate = finalYear+"-"+strMonth+"-"+strDay+" "+strHour+":"+strMinute+":00";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            try {
+                date = simpleDateFormat.parse(finalDate);
+                long millis = date.getTime();
 
             Toast.makeText(mContext, R.string.txt_confirm_reminder, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(mContext, ReminderBroadcast.class);
             intent.putExtra("item", mItem);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
-            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, millisFromEpoch, pendingIntent);
+                AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC, millis, pendingIntent);
+                mSessionPreferences.saveReminder(mItem);
+                updateButtons();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -259,5 +269,18 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void updateButtons () {
+        if (mSessionPreferences.verifyFavourites(null, mItem)) {
+            mFavourite.setBackgroundResource(R.drawable.ic_favorite_red_a700_24dp);
+        } else {
+            mFavourite.setBackgroundResource(R.drawable.ic_favorite_border_red_a700_24dp);
+        }
+        if (mSessionPreferences.verifyReminders(null, mItem)) {
+            mAlarm.setBackgroundResource(R.drawable.ic_alarm_on_cyan_700_24dp);
+        } else {
+            mAlarm.setBackgroundResource(R.drawable.ic_alarm_add_cyan_700_24dp);
+        }
     }
 }
