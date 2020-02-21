@@ -170,6 +170,10 @@ public class MainActivity extends GenericAbstractActivity
             fragmentTransaction.replace(R.id.frame_layout, favouriteFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_account) {
+            searchItem.setVisible(false);
+            ProfileFragment profileFragment = new ProfileFragment();
+            fragmentTransaction.replace(R.id.frame_layout, profileFragment);
+            fragmentTransaction.commit();
         }
         else if(id == R.id.nav_my_cocktails){
             searchItem.setVisible(false);
