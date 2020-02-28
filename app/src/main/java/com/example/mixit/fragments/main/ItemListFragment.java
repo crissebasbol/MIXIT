@@ -96,7 +96,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                              Bundle savedInstanceState) {
         this.setRetainInstance(true);
         ((MainActivity) mContext).setBackButtonVisibility(false);
-        if (mView == null) {
+        if (mView == null || showFavourites) {
             // Inflate the layout for this fragment
             getActivity().setTitle(R.string.app_name);
             mView = inflater.inflate(R.layout.fragment_list, container, false);
@@ -106,6 +106,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
             listView.setOnScrollListener(this);
             setAdapters();
             if (showFavourites) {
+                System.out.println("Entering");
                 currentPosition = 0;
                 windowCount = 0;
                 itemWindows = null;
@@ -114,6 +115,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                 if (sessionPreferences.getPreferenceList(SessionPreferences.PREF_FAVOURITES) != null) {
                     for (Item item : sessionPreferences
                             .getPreferenceList(SessionPreferences.PREF_FAVOURITES)) {
+                        System.out.println("Iterating");
                         itemList.add(item);
                         setAdapters();
                     }

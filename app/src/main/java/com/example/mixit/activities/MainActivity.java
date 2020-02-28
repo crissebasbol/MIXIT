@@ -172,7 +172,14 @@ public class MainActivity extends GenericAbstractActivity
             commitFragment(itemListFragment);
         } else if (id == R.id.nav_surprise) {
             fetchRandomItem();
-        } else if (id == R.id.nav_favourites){
+        }else if (id == R.id.nav_remember) {
+            ItemListFragment rememberFragment = new ItemListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("showRemember", true);
+            rememberFragment .setArguments(bundle);
+            commitFragment(rememberFragment );
+        }
+        else if (id == R.id.nav_favourites){
             ItemListFragment favouriteFragment = new ItemListFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean("showFavourites", true);
