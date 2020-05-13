@@ -41,7 +41,6 @@ public class ListViewAdapter extends ArrayAdapter<Item> implements UpdateCallbac
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        System.out.println("Executing shit");
         View v = convertView;
         mViewGroup = parent;
         if(v == null){

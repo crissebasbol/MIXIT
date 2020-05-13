@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.github.florent37:singledateandtimepicker:2.2.5'
 }
 repositories {
     mavenCentral()

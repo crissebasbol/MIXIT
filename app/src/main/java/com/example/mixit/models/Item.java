@@ -1,13 +1,10 @@
 package com.example.mixit.models;
 
 import android.graphics.Bitmap;
-import android.widget.EditText;
 
-import com.example.mixit.R;
 import com.example.mixit.interfaces.FetchCallback;
 import com.example.mixit.interfaces.UpdateCallback;
 import com.example.mixit.services.network.AssetFetch;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,7 +96,6 @@ public class Item implements Serializable, FetchCallback {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(description.trim());
         return description.trim();
     }
 

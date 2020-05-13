@@ -2,16 +2,13 @@ package com.example.mixit.fragments.main;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -19,14 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.example.mixit.R;
 import com.example.mixit.activities.MainActivity;
@@ -35,11 +29,9 @@ import com.example.mixit.models.Item;
 import com.example.mixit.preferences.SessionPreferences;
 import com.example.mixit.services.assets.BlurImages;
 import com.example.mixit.services.notifications.ReminderBroadcast;
+import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -51,7 +43,7 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class ShowFragment extends Fragment implements UpdateCallback, Button.OnClickListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+        SingleDateAndTimePickerDialog.Listener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,16 +60,11 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private static final String TAG = "ShowFragment";
     private FloatingActionButton mRandom;
     private boolean showFloating = false;
-    private Calendar calendar;
-    private DatePickerDialog datePickerDialog;
     private Button mFavourite, mAlarm;
     private boolean isFavourite = false;
     private boolean hasReminder = false;
 
     private OnFragmentInteractionListener mListener;
-
-    private int finalDay, finalMonth, finalYear, currentDay, currentMonth, currentYear;
-    private boolean sameDay, sameMonth, sameYear;
 
     private SessionPreferences mSessionPreferences;
 
@@ -89,10 +76,6 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     // TODO: Rename and change types and number of parameters
     public static ShowFragment newInstance() {
         ShowFragment fragment = new ShowFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -158,7 +141,6 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
                 BlurImages.blur(this.mContext, this.mItem.getImage()));
         picture.setBackground(drawablePicture);
         getActivity().setTitle(this.mItem.getTitle());
-        calendar = Calendar.getInstance();
         return mView;
     }
 
@@ -202,7 +184,6 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -210,15 +191,12 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             ((MainActivity) mContext).fetchRandomItem();
         } else if (id == R.id.cocktail_alarm) {
             if (hasReminder) {
-
+                // Update or delete
+                Item item = mSessionPreferences.readResource(SessionPreferences.PREF_REMINDERS, mItem);
+                item.getAlarm();
             } else {
-                currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-                currentMonth = calendar.get(Calendar.MONTH);
-                currentYear = calendar.get(Calendar.YEAR);
-
-                datePickerDialog = new DatePickerDialog(mContext, this, currentYear, currentMonth, currentDay);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-                datePickerDialog.show();
+                new SingleDateAndTimePickerDialog.Builder(mContext).bottomSheet().curved()
+                        .mustBeOnFuture().listener(this).display();
             }
         } else if (id == R.id.cocktail_favorite) {
             if (isFavourite) {
@@ -226,63 +204,26 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             } else {
                 isFavourite = mSessionPreferences.createResource(SessionPreferences.PREF_FAVOURITES, mItem);
             }
-
         }
         updateButtons();
 
     }
 
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        finalYear = year;
-        finalMonth = month;
-        finalDay = dayOfMonth;
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, this, hour, minute,true);
-        sameDay = finalDay == currentDay;
-        sameMonth = finalMonth == currentMonth;
-        sameYear = finalYear == currentYear;
+    public void onDateSelected(Date date) {
+        long millis = date.getTime();
 
-        timePickerDialog.show();
+        Toast.makeText(mContext, "Reminder set!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(mContext, ReminderBroadcast.class);
+        intent.putExtra("item", mItem);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, millis, pendingIntent);
+        mItem.setAlarm(date);
+        hasReminder = mSessionPreferences.createResource(SessionPreferences.PREF_REMINDERS, mItem);
+        updateButtons();
     }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = calendar.get(Calendar.MINUTE);
-        boolean sameMinute = minute <= currentMinute;
-        boolean sameHour = hourOfDay <= currentHour;
-        if (sameDay && sameMonth && sameYear && sameHour && sameMinute) {
-            Toast.makeText(mContext, "Can't set reminder for the past!", Toast.LENGTH_SHORT).show();
-        } else {
-            String strDay = (finalDay < 10) ? ("0" + finalDay) : String.valueOf(finalDay);
-            String strMonth = ((finalMonth+1) < 10) ? ("0" + (finalMonth+1)) : String.valueOf(finalMonth+1);
-            String strMinute = (minute < 10) ? ("0" + minute) : String.valueOf(minute);
-            String strHour = (hourOfDay < 10) ? ("0" + hourOfDay) : String.valueOf(hourOfDay);
-            String finalDate = finalYear+"-"+strMonth+"-"+strDay+" "+strHour+":"+strMinute+":00";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = null;
-            try {
-                date = simpleDateFormat.parse(finalDate);
-                long millis = date.getTime();
-
-                Toast.makeText(mContext, "Reminder set!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContext, ReminderBroadcast.class);
-                intent.putExtra("item", mItem);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
-
-                AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC, millis, pendingIntent);
-                mItem.setAlarm(date);
-                mSessionPreferences.createResource(SessionPreferences.PREF_REMINDERS, mItem);
-                updateButtons();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
 
     /**

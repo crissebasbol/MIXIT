@@ -111,6 +111,16 @@ public class SessionPreferences {
         return updated;
     }
 
+    public Item readResource (String pref, Item item) {
+        Item resource = null;
+        int index = findResource(pref, item);
+        if (index >= 0) {
+            List<Item> resources = getPreferencesList(pref);
+            resource = resources.get(index);
+        }
+        return resource;
+    }
+
     public boolean createResource (String pref, Item item) {
         boolean created = false;
         int index = findResource(pref, item);
