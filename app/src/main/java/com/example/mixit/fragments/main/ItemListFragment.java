@@ -111,9 +111,9 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                 itemWindows = null;
                 SessionPreferences sessionPreferences =
                         ((GenericAbstractActivity) mContext).getSessionPreferences();
-                if (sessionPreferences.getPreferenceList(SessionPreferences.PREF_FAVOURITES) != null) {
+                if (sessionPreferences.getPreferencesList(SessionPreferences.PREF_FAVOURITES) != null) {
                     for (Item item : sessionPreferences
-                            .getPreferenceList(SessionPreferences.PREF_FAVOURITES)) {
+                            .getPreferencesList(SessionPreferences.PREF_FAVOURITES)) {
                         itemList.add(item);
                         setAdapters();
                     }

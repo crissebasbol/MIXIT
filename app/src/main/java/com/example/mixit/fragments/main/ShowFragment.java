@@ -71,6 +71,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private Calendar calendar;
     private DatePickerDialog datePickerDialog;
     private Button mFavourite, mAlarm;
+    private boolean isFavourite = false;
+    private boolean hasReminder = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -124,6 +126,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         }
         mFavourite = mView.findViewById(R.id.cocktail_favorite);
         mFavourite.setOnClickListener(this);
+        isFavourite = mSessionPreferences.verifyResources(mItem)[0];
+        hasReminder = mSessionPreferences.verifyResources(mItem)[1];
         updateButtons();
         DisplayMetrics display = getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -205,15 +209,24 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         if (id == R.id.random) {
             ((MainActivity) mContext).fetchRandomItem();
         } else if (id == R.id.cocktail_alarm) {
-            currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-            currentMonth = calendar.get(Calendar.MONTH);
-            currentYear = calendar.get(Calendar.YEAR);
+            if (hasReminder) {
 
-            datePickerDialog = new DatePickerDialog(mContext, this, currentYear, currentMonth, currentDay);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-            datePickerDialog.show();
+            } else {
+                currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                currentMonth = calendar.get(Calendar.MONTH);
+                currentYear = calendar.get(Calendar.YEAR);
+
+                datePickerDialog = new DatePickerDialog(mContext, this, currentYear, currentMonth, currentDay);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.show();
+            }
         } else if (id == R.id.cocktail_favorite) {
-            mSessionPreferences.saveFavourite(mItem);
+            if (isFavourite) {
+                isFavourite = !mSessionPreferences.deleteResource(SessionPreferences.PREF_FAVOURITES, mItem);
+            } else {
+                isFavourite = mSessionPreferences.createResource(SessionPreferences.PREF_FAVOURITES, mItem);
+            }
+
         }
         updateButtons();
 
@@ -230,6 +243,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         sameDay = finalDay == currentDay;
         sameMonth = finalMonth == currentMonth;
         sameYear = finalYear == currentYear;
+
         timePickerDialog.show();
     }
 
@@ -260,7 +274,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
 
                 AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC, millis, pendingIntent);
-                mSessionPreferences.saveReminder(mItem);
+                mItem.setAlarm(date);
+                mSessionPreferences.createResource(SessionPreferences.PREF_REMINDERS, mItem);
                 updateButtons();
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -286,12 +301,12 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     }
 
     private void updateButtons () {
-        if (mSessionPreferences.verifyFavourites(null, mItem)) {
+        if (isFavourite) {
             mFavourite.setBackgroundResource(R.drawable.ic_favorite_red_a700_24dp);
         } else {
             mFavourite.setBackgroundResource(R.drawable.ic_favorite_border_red_a700_24dp);
         }
-        if (mSessionPreferences.verifyReminders(null, mItem)) {
+        if (hasReminder) {
             mAlarm.setBackgroundResource(R.drawable.ic_alarm_on_cyan_700_24dp);
         } else {
             mAlarm.setBackgroundResource(R.drawable.ic_alarm_add_cyan_700_24dp);

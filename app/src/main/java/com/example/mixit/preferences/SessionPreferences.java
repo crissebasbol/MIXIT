@@ -3,11 +3,10 @@ package com.example.mixit.preferences;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.example.mixit.models.Item;
 import com.example.mixit.models.User;
@@ -18,9 +17,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
+
+// import java.util.Base64;
 
 public class SessionPreferences {
 
@@ -88,103 +87,81 @@ public class SessionPreferences {
         REREAD_PREFERENCES = true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void saveFavourite(Item item){
-        List<Item> favourites = getPreferenceList(PREF_FAVOURITES);
-        if (favourites != null) {
-            if (!verifyFavourites(favourites, item)) favourites.add(item);
-        } else {
-            favourites = new ArrayList<>();
-            favourites.add(item);
+    public boolean deleteResource (String pref, Item item) {
+        boolean deleted = false;
+        int index = findResource(pref, item);
+        if (index >= -1) {
+            List<Item> resources = getPreferencesList(pref);
+            resources.remove(index);
+            setPreferencesList(resources, pref);
+            deleted = true;
         }
-        setPreferenceList(favourites, PREF_FAVOURITES);
-//        REREAD_PREFERENCES = true;
+        return deleted;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void saveReminder(Item item){
-        List<Item> reminders = getPreferenceList(PREF_REMINDERS);
-        if (reminders != null) {
-            if (!verifyReminders(reminders, item)) reminders.add(item);
-        } else {
-            reminders = new ArrayList<>();
-            reminders.add(item);
+    public boolean updateResource (String pref, Item item) {
+        boolean updated = false;
+        int index = findResource(pref, item);
+        if (index >= -1) {
+            List<Item> resources = getPreferencesList(pref);
+            resources.set(index, item);
+            setPreferencesList(resources, pref);
+            updated = true;
         }
-        setPreferenceList(reminders, PREF_REMINDERS);
-//        REREAD_PREFERENCES = true;
+        return updated;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean verifyFavourites (@Nullable List<Item> favourites, Item item) {
-        boolean present = false;
-        boolean listNull = true;
-
-        if (favourites == null) {
-            favourites = getPreferenceList(PREF_FAVOURITES);
-        } else {
-            listNull = false;
+    public boolean createResource (String pref, Item item) {
+        boolean created = false;
+        int index = findResource(pref, item);
+        if (index == -1) {
+            List<Item> resources = getPreferencesList(pref);
+            resources.add(item);
+            setPreferencesList(resources, pref);
+            created = true;
         }
+        return created;
+    }
 
-        if (favourites != null) {
-            for (int i = 0; i < favourites.size(); i++){
-                if (favourites.get(i).getId().equals(item.getId())) {
-                    if (listNull) {
-                        favourites.remove(i);
-                    }
-                    present = true;
-                    break;
-                }
+    public boolean[] verifyResources (Item item) {
+        boolean favouritePresent = findResource(PREF_FAVOURITES, item) >= 0;
+        boolean reminderPresent = findResource(PREF_REMINDERS, item) >= 0;
+        return new boolean[]{favouritePresent, reminderPresent};
+    }
+
+    public int findResource (String pref, Item item) {
+        List<Item> resources = getPreferencesList(pref);
+        int index = 0;
+        boolean found = false;
+        for (Item currentItem : resources) {
+            if (item.getId().equals(currentItem.getId())) {
+                found = true;
+                break;
             }
-            setPreferenceList(favourites, PREF_FAVOURITES);
+            index++;
         }
-        return present;
+        if (!found) { index = -1; }
+        return index;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean verifyReminders (@Nullable List<Item> reminders, Item item) {
-        boolean present = false;
-        boolean isNull = true;
-
-        if (reminders == null) {
-            reminders = getPreferenceList(PREF_REMINDERS);
-            isNull = reminders != null ? false : true;
-        }
-
-        if (!isNull) {
-            for (int i = 0; i < reminders.size(); i++){
-                if (reminders.get(i).getId().equals(item.getId())) {
-                    if (isNull) {
-                        reminders.remove(i);
-                        setPreferenceList(reminders, PREF_REMINDERS);
-                    }
-                    present = true;
-                    break;
-                }
-            }
-        }
-        return present;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setPreferenceList (List<Item> preferenceList, String pref) {
+    public void setPreferencesList (List<Item> preferenceList, String pref) {
         try {
             ByteArrayOutputStream bo = new ByteArrayOutputStream();
             ObjectOutputStream so = new ObjectOutputStream(bo);
             so.writeObject(preferenceList);
             so.flush();
-            editor.putString(pref, Base64.getEncoder().encodeToString(bo.toByteArray()));
+            editor.putString(pref, Base64.encodeToString(bo.toByteArray(), Base64.DEFAULT));
             editor.apply();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Item> getPreferenceList (String pref) {
+    public List<Item> getPreferencesList (String pref) {
         List<Item> obj = null;
         try {
             String strFavourites = preferences.getString(pref, null);
-            byte b[] = Base64.getDecoder().decode(strFavourites);
+            byte b[] = Base64.decode(strFavourites, Base64.DEFAULT);
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
             obj = (List<Item>) si.readObject();
