@@ -50,8 +50,6 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private Item mItem;
     private View mView;
     private Context mContext;
@@ -83,10 +81,17 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            this.mItem = (Item) getArguments().getSerializable("item");
             this.mContext = getActivity();
+
+            mSessionPreferences = ((MainActivity) mContext).getSessionPreferences();
+
+            if (getArguments().getSerializable("item") != null) {
+                this.mItem = (Item) getArguments().getSerializable("item");
+            } else {
+                String id = getArguments().getString("id");
+                this.mItem = mSessionPreferences.showResource(SessionPreferences.PREF_REMINDERS, id);
+            }
+
             ((MainActivity) this.mContext).setBackButtonVisibility(true);
             this.showFloating = getArguments().getBoolean("showFloating", false);
         }
@@ -97,7 +102,6 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mSessionPreferences = ((MainActivity) mContext).getSessionPreferences();
         mView = inflater.inflate(R.layout.fragment_show, container, false);
         mAlarm = mView.findViewById(R.id.cocktail_alarm);
         mAlarm.setOnClickListener(this);
@@ -195,8 +199,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
                 Item item = mSessionPreferences.readResource(SessionPreferences.PREF_REMINDERS, mItem);
                 item.getAlarm();
             } else {
-                new SingleDateAndTimePickerDialog.Builder(mContext).bottomSheet().curved()
-                        .mustBeOnFuture().listener(this).display();
+                new SingleDateAndTimePickerDialog.Builder(mContext).minutesStep(1).bottomSheet()
+                        .curved().mustBeOnFuture().listener(this).display();
             }
         } else if (id == R.id.cocktail_favorite) {
             if (isFavourite) {
@@ -215,7 +219,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
 
         Toast.makeText(mContext, "Reminder set!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(mContext, ReminderBroadcast.class);
-        intent.putExtra("item", mItem);
+        intent.putExtra("id", mItem.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);

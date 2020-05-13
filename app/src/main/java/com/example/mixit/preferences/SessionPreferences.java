@@ -38,7 +38,7 @@ public class SessionPreferences {
     private static SessionPreferences INSTANCE;
     private static boolean REREAD_PREFERENCES = false;
 
-    public SessionPreferences(Context context, Activity activity, @Nullable FireBaseAuth fireBaseAuth){
+    public SessionPreferences(Context context, @Nullable Activity activity, @Nullable FireBaseAuth fireBaseAuth){
         this.context = context;
         if (fireBaseAuth == null){
             this.fireBaseAuth = new FireBaseAuth(context, activity);
@@ -152,6 +152,37 @@ public class SessionPreferences {
         }
         if (!found) { index = -1; }
         return index;
+    }
+
+    public Item showResource (String pref, String id) {
+        List<Item> resources = getPreferencesList(pref);
+        Item item = null;
+        for (Item currentItem : resources) {
+            if (id.equals(currentItem.getId())) {
+                item = currentItem;
+                break;
+            }
+        }
+        if (item == null) { System.out.println("Not found"); }
+        return item;
+    }
+
+    public Item deleteReminder (String pref, String id) {
+        List<Item> resources = getPreferencesList(pref);
+        Item item = null;
+        int index = 0;
+        for (Item currentItem : resources) {
+            if (id.equals(currentItem.getId())) {
+                item = currentItem;
+                // resources.remove(index);
+                resources.get(index).setAlarm(null);
+                setPreferencesList(resources, pref);
+                break;
+            }
+            index++;
+        }
+        if (item == null) { System.out.println("Not found"); }
+        return item;
     }
 
     public void setPreferencesList (List<Item> preferenceList, String pref) {

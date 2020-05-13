@@ -47,6 +47,7 @@ public class MainActivity extends GenericAbstractActivity
     private ItemListFragment itemListFragment;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
+    private Fragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +55,31 @@ public class MainActivity extends GenericAbstractActivity
 
         createNotificationChannel();
 
+        if (getIntent() != null) {
+            if (getIntent().getStringExtra("id") != null) {
+                String itemId = getIntent().getStringExtra("id");
+                mainFragment = new ShowFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", itemId);
+                mainFragment.setArguments(bundle);
+            } else {
+                mainFragment = new ItemListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("showFavourites", false);
+                mainFragment.setArguments(bundle);
+            }
+
+        }
+        /*
         itemListFragment = new ItemListFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean("showFavourites", false);
         itemListFragment.setArguments(bundle);
-
+        */
+        // mFragmentTransaction.replace(R.id.frame_layout, itemListFragment)
         mFragmentManager = getFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.frame_layout, itemListFragment)
+        mFragmentTransaction.replace(R.id.frame_layout, mainFragment)
                 .addToBackStack(null)
                 .commit();
 
@@ -79,19 +97,6 @@ public class MainActivity extends GenericAbstractActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         setTitle("");
-
-//        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
-//        if (!isConnected) {
-//            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
-//                    .setAction("Retry", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    }).show();
-//        } else {
-//
-//        }
     }
 
     @Override
