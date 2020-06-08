@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -73,6 +72,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.mContext = getContext();
         sessionPreferences = SessionPreferences.get(mContext, getActivity(), null);
+        getActivity().setTitle(R.string.txt_my_account);
         fireBaseAuth = new FireBaseAuth(mContext, getActivity());
         this.mFragmentManager = ((Activity) mContext).getFragmentManager();
         fb_storage = new FB_Storage(mContext, getActivity(), this, null);
@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView =  inflater.inflate(R.layout.fragment_profile, container, false);
+        mView = inflater.inflate(R.layout.fragment_profile, container, false);
         mNameField = mView.findViewById(R.id.input_name);
         mPasswordField = mView.findViewById(R.id.password1);
         mPasswordField2 = mView.findViewById(R.id.password2);
@@ -110,10 +110,10 @@ public class ProfileFragment extends Fragment {
         updateProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (changeProfileImage){
-                    fb_storage.uploadFile(bitmapProfileImage, "pictureOf_"+sessionPreferences.getCurrentUser().getEmail(), NAME_FOLDER);
+                if (changeProfileImage) {
+                    fb_storage.uploadFile(bitmapProfileImage, "pictureOf_" + sessionPreferences.getCurrentUser().getEmail(), NAME_FOLDER);
                     changeProfileImage = false;
-                }else {
+                } else {
                     updateProfile(sessionPreferences.getCurrentUser().getPhoto(), null);
                 }
             }
@@ -129,10 +129,10 @@ public class ProfileFragment extends Fragment {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (items[which].equals(getString(R.string.txt_camera))){
+                if (items[which].equals(getString(R.string.txt_camera))) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
-                }else if (items[which].equals(getString(R.string.txt_gallery))){
+                } else if (items[which].equals(getString(R.string.txt_gallery))) {
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     /*
@@ -141,24 +141,26 @@ public class ProfileFragment extends Fragment {
                     }catch (Exception e){}
                      */
                     startActivityForResult(intent.createChooser(intent, getString(R.string.txt_select_photo)), SELECT_FILE);
-                }else if (items[which].equals(getString(R.string.txt_cancel))){
+                } else if (items[which].equals(getString(R.string.txt_cancel))) {
                     dialog.dismiss();
                 }
             }
         });
         builder.show();
     }
-    public void updateProfile(String urlPhoto, @Nullable ProgressDialog progressDialog){
+
+    public void updateProfile(String urlPhoto, @Nullable ProgressDialog progressDialog) {
         updateProfile(mNameField.getText().toString(), urlPhoto, mPasswordField.getText().toString(), mPasswordField2.getText().toString(), progressDialog);
     }
+
     private void updateProfile(String name, String photo, String password1, String password2, @Nullable ProgressDialog progressDialog) {
-        if (!validateForm(name, password1, password2)){
+        if (!validateForm(name, password1, password2)) {
             return;
         }
 
-        if (!password1.equals("")){
+        if (!password1.equals("")) {
             fireBaseAuth.updateProfile(name, photo, password1, progressDialog);
-        }else{
+        } else {
             fireBaseAuth.updateProfile(name, photo, null, progressDialog);
         }
     }
@@ -172,11 +174,10 @@ public class ProfileFragment extends Fragment {
             mNameField.setError(null);
         }
         if (!TextUtils.isEmpty(password1)) {
-            if (password1.length()<6){
+            if (password1.length() < 6) {
                 mPasswordField.setError(getString(R.string.txt_min_characteres));
                 valid = false;
-            }
-            else {
+            } else {
                 if (TextUtils.isEmpty(password2)) {
                     mPasswordField2.setError(getString(R.string.txt_required));
                     valid = false;
@@ -233,16 +234,16 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //FB_Storage.activityResult(requestCode,resultCode,data);
-        if (resultCode==Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
             bitmapProfileImage = null;
             Uri selectedImage = null;
-            if (requestCode == REQUEST_CAMERA){
+            if (requestCode == REQUEST_CAMERA) {
                 Bundle extras = data.getExtras();
                 bitmapProfileImage = (Bitmap) extras.get("data");
-            }else if (requestCode == SELECT_FILE){
+            } else if (requestCode == SELECT_FILE) {
                 selectedImage = data.getData();
                 try {
                     bitmapProfileImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);

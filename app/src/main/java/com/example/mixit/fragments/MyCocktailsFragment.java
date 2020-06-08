@@ -1,15 +1,11 @@
 package com.example.mixit.fragments;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import android.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MyCocktailsFragment extends Fragment implements View.OnClickListener, AbsListView.OnScrollListener {
 
@@ -91,8 +86,8 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void fillItems(List<Item> items){
-        for (int x = 0; x < items.size() ; x++) {
+    public void fillItems(List<Item> items) {
+        for (int x = 0; x < items.size(); x++) {
             itemList.add(items.get(x));
         }
         setAdapters();
@@ -124,7 +119,7 @@ public class MyCocktailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.fab_button_create_cocktail){
+        if (id == R.id.fab_button_create_cocktail) {
             CreateCockatilFragment createCockatilFragment = new CreateCockatilFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, createCockatilFragment);

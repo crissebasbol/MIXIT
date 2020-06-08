@@ -50,59 +50,39 @@ public class MainActivity extends GenericAbstractActivity
     private ItemListFragment itemListFragment;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
+    private SearchView searchView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v(TAG, "onCreate:");
-            createNotificationChannel();
-            itemListFragment = new ItemListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("showFavourites", false);
-            itemListFragment.setArguments(bundle);
-            if (savedInstanceState == null) {
-                /*
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.frame_layout, itemListFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                 */
-                mFragmentManager = getFragmentManager();
-                mFragmentTransaction = mFragmentManager.beginTransaction();
-                mFragmentTransaction.replace(R.id.frame_layout, itemListFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+        createNotificationChannel();
+        itemListFragment = new ItemListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("showFavourites", false);
+        itemListFragment.setArguments(bundle);
+        if (savedInstanceState == null) {
+            mFragmentManager = getFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.frame_layout, itemListFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
 
+        setContentView(R.layout.activity_main);
+        setupGUINavigationDrawer();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            setContentView(R.layout.activity_main);
-            setupGUINavigationDrawer();
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            NavigationView navigationView = findViewById(R.id.nav_view);
-
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-            navigationView.setNavigationItemSelectedListener(this);
-            setTitle("");
-
-//        boolean isConnected = NetworkFunctions.checkNetworkStatus(this);
-//        if (!isConnected) {
-//            Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content), "No Internet connection detected", Snackbar.LENGTH_INDEFINITE)
-//                    .setAction("Retry", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    }).show();
-//        } else {
-//
-//        }
-
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        setTitle("");
     }
 
     @Override
@@ -111,7 +91,6 @@ public class MainActivity extends GenericAbstractActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            // super.onBackPressed();
             returnToFragment();
         }
     }
@@ -124,8 +103,6 @@ public class MainActivity extends GenericAbstractActivity
         back = menu.findItem(R.id.action_back);
         searchItem = menu.findItem(R.id.action_search);
         back.setVisible(false);
-
-        SearchView searchView = null;
 
         if (searchItem != null) {
             searchView = (SearchView) searchItem.getActionView();
@@ -159,45 +136,48 @@ public class MainActivity extends GenericAbstractActivity
         mFragmentManager.popBackStack();
         setTitle("");
     }
-    // TODO: REFACTOR SWITCH FOR BETTER CODE.
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Log.v(TAG, "onNavigationItemSelected");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        searchView.onActionViewCollapsed();
+        searchView.clearFocus();
         if (id == R.id.nav_home) {
             searchItem.setVisible(true);
-            ItemListFragment itemListFragment = new ItemListFragment();
-            commitFragment(itemListFragment);
+            this.itemListFragment.onDetach();
+            itemListFragment = new ItemListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("refresh", true);
+            this.itemListFragment.setArguments(bundle);
+            searchView.setOnQueryTextListener(itemListFragment);
+            commitFragment(this.itemListFragment);
         } else if (id == R.id.nav_surprise) {
             fetchRandomItem();
-        }else if (id == R.id.nav_remember) {
+        } else if (id == R.id.nav_remember) {
             ItemListFragment rememberFragment = new ItemListFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean("showRemember", true);
-            rememberFragment .setArguments(bundle);
-            commitFragment(rememberFragment );
-        }
-        else if (id == R.id.nav_favourites){
+            rememberFragment.setArguments(bundle);
+            commitFragment(rememberFragment);
+        } else if (id == R.id.nav_favourites) {
             ItemListFragment favouriteFragment = new ItemListFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean("showFavourites", true);
             favouriteFragment.setArguments(bundle);
             commitFragment(favouriteFragment);
-        } else if(id == R.id.nav_my_cocktails){
+        } else if (id == R.id.nav_my_cocktails) {
             searchItem.setVisible(false);
             MyCocktailsFragment myCocktailsFragment = new MyCocktailsFragment();
             commitFragment(myCocktailsFragment);
         } else if (id == R.id.nav_account) {
             ProfileFragment profileFragment = new ProfileFragment();
             commitFragment(profileFragment);
-        }
-        else if (id == R.id.nav_privacy_terms) {
+        } else if (id == R.id.nav_privacy_terms) {
             Intent intent = new Intent(this, TermsAndConditionsActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
             logOut();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -209,7 +189,7 @@ public class MainActivity extends GenericAbstractActivity
     public void onFragmentInteraction(Uri uri) {
     }
 
-    public void setBackButtonVisibility (boolean visible) {
+    public void setBackButtonVisibility(boolean visible) {
         if (back != null) back.setVisible(visible);
     }
 
@@ -218,11 +198,11 @@ public class MainActivity extends GenericAbstractActivity
 
     }
 
-    public void refreshNavigationDrawer(){
+    public void refreshNavigationDrawer() {
         setupGUINavigationDrawer();
     }
 
-    public void fetchRandomItem () {
+    public void fetchRandomItem() {
         JSONAPIRequest APIService = new JSONAPIRequest(this, this);
 
         HashMap query = new HashMap();
@@ -247,8 +227,8 @@ public class MainActivity extends GenericAbstractActivity
         }
     }
 
-    private void createNotificationChannel () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "notificationChannel";
             String description = "Channel for notification reminder";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -260,7 +240,7 @@ public class MainActivity extends GenericAbstractActivity
         }
     }
 
-    private void commitFragment (Fragment fragment) {
+    private void commitFragment(Fragment fragment) {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, fragment)

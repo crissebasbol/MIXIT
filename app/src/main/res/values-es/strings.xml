@@ -109,6 +109,7 @@
     <string name="txt_error_select_image">Por favor, seleccione una imágen.</string>
     <string name="txt_info_my_cocktails">En esta lista aparecerán los cocteles que has creado con tu imaginación y gusto</string>
     <string name="txt_my_cocktails">Mis cócteles</string>
+    <string name="txt_my_account">Mi cuenta</string>
     <string name="txt_new_password1">Ingrese una nueva contraseña</string>
     <string name="txt_new_password2">Confirme su nueva contraseña</string>
     <string name="txt_retry">Reintentar</string>

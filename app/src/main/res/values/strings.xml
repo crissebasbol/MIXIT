@@ -245,6 +245,7 @@
     <string name="prompt_tutorial">Describe the process (Tutorial)</string>
     <string name="create_cocktail">Create cocktail</string>
     <string name="txt_my_cocktails">My cocktails</string>
+    <string name="txt_my_account">My account</string>
     <string name="txt_add_imagen_cocktail">Add an image to your cocktail</string>
     <string name="txt_select_photo">Select a photo</string>
     <string name="txt_select_ingredients_like">Select all the ingredients you like</string>

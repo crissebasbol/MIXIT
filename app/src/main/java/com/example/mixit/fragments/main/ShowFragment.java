@@ -114,7 +114,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         DisplayMetrics display = getResources().getDisplayMetrics();
         int width = display.widthPixels;
         picture = mView.findViewById(R.id.cocktail_picture);
-        picture.getLayoutParams().height =(int) (width*0.6);
+        picture.getLayoutParams().height = (int) (width * 0.6);
         description = mView.findViewById(R.id.cocktail_description);
         tutorial = mView.findViewById(R.id.cocktail_tutorial);
         ingredients = mView.findViewById(R.id.cocktail_ingredients);
@@ -132,8 +132,8 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         try {
             tutorial.setText(this.mItem.getTutorial().get("instructions").toString());
             ingredients.setText(this.mItem.getTutorial().get("ingredients").toString());
-        }catch (Exception e){
-            Log.w(TAG, "Error: "+e);
+        } catch (Exception e) {
+            Log.w(TAG, "Error: " + e);
         }
         picture.setImageBitmap(this.mItem.getImage());
         Drawable drawablePicture = new BitmapDrawable(getResources(),
@@ -173,13 +173,13 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-            mView.findViewById(R.id.loading_panel).setVisibility(View.GONE);
-            ImageView picture = mView.findViewById(R.id.cocktail_picture);
-            picture.setImageBitmap(mItem.getImage());
-            picture.setImageBitmap(mItem.getImage());
-            Drawable drawablePicture = new BitmapDrawable(getResources(),
-                    BlurImages.blur(mContext, mItem.getImage()));
-            picture.setBackground(drawablePicture);
+                mView.findViewById(R.id.loading_panel).setVisibility(View.GONE);
+                ImageView picture = mView.findViewById(R.id.cocktail_picture);
+                picture.setImageBitmap(mItem.getImage());
+                picture.setImageBitmap(mItem.getImage());
+                Drawable drawablePicture = new BitmapDrawable(getResources(),
+                        BlurImages.blur(mContext, mItem.getImage()));
+                picture.setBackground(drawablePicture);
             }
         });
     }
@@ -212,7 +212,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         finalDay = dayOfMonth;
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, this, hour, minute,true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, this, hour, minute, true);
         sameDay = finalDay == currentDay;
         sameMonth = finalMonth == currentMonth;
         sameYear = finalYear == currentYear;
@@ -229,20 +229,20 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             Toast.makeText(mContext, R.string.txt_warning_past_alarm, Toast.LENGTH_SHORT).show();
         } else {
             String strDay = (finalDay < 10) ? ("0" + finalDay) : String.valueOf(finalDay);
-            String strMonth = ((finalMonth+1) < 10) ? ("0" + (finalMonth+1)) : String.valueOf(finalMonth+1);
+            String strMonth = ((finalMonth + 1) < 10) ? ("0" + (finalMonth + 1)) : String.valueOf(finalMonth + 1);
             String strMinute = (minute < 10) ? ("0" + minute) : String.valueOf(minute);
             String strHour = (hourOfDay < 10) ? ("0" + hourOfDay) : String.valueOf(hourOfDay);
-            String finalDate = finalYear+"-"+strMonth+"-"+strDay+" "+strHour+":"+strMinute+":00";
+            String finalDate = finalYear + "-" + strMonth + "-" + strDay + " " + strHour + ":" + strMinute + ":00";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
             try {
                 date = simpleDateFormat.parse(finalDate);
                 long millis = date.getTime();
 
-            Toast.makeText(mContext, R.string.txt_confirm_reminder, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(mContext, ReminderBroadcast.class);
-            intent.putExtra("item", mItem);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+                Toast.makeText(mContext, R.string.txt_confirm_reminder, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, ReminderBroadcast.class);
+                intent.putExtra("item", mItem);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 
                 AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC, millis, pendingIntent);
@@ -253,7 +253,6 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
             }
         }
     }
-
 
 
     /**
@@ -271,7 +270,7 @@ public class ShowFragment extends Fragment implements UpdateCallback, Button.OnC
         void onFragmentInteraction(Uri uri);
     }
 
-    private void updateButtons () {
+    private void updateButtons() {
         if (mSessionPreferences.verifyFavourites(null, mItem)) {
             mFavourite.setBackgroundResource(R.drawable.ic_favorite_red_a700_24dp);
         } else {

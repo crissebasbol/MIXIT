@@ -96,6 +96,9 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                              Bundle savedInstanceState) {
         this.setRetainInstance(true);
         ((MainActivity) mContext).setBackButtonVisibility(false);
+        if (getArguments() != null) {
+            if (getArguments().getBoolean("refresh")) mView = null;
+        }
         if (mView == null || showFavourites) {
             // Inflate the layout for this fragment
             getActivity().setTitle(R.string.app_name);
@@ -122,7 +125,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                 }
             } else {
                 Random random = new Random();
-                char randomChar = (char)(random.nextInt(26) + 'a');
+                char randomChar = (char) (random.nextInt(26) + 'a');
                 searchItems(Character.toString(randomChar));
             }
         }
@@ -173,7 +176,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (showFavourites == false) {
-            int currentItemCount = firstVisibleItem+visibleItemCount;
+            int currentItemCount = firstVisibleItem + visibleItemCount;
             if ((currentItemCount == totalItemCount) && (currentItemCount > 0)) {
                 paginateItems();
             }
@@ -205,7 +208,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
         }
     }
 
-    private void searchItems (String search) {
+    private void searchItems(String search) {
         JSONAPIRequest APIService = new JSONAPIRequest(mContext, this);
 
 //        HashMap params = new HashMap();
@@ -226,7 +229,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
         APIService.execute(query);
     }
 
-    private void paginateItems () {
+    private void paginateItems() {
         if ((itemWindows == windowCount) && (itemList.size() < APIResponse.length())) {
 
             for (int i = currentPosition; i < APIResponse.length(); i++) {
@@ -239,7 +242,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
             }
         } else if (itemWindows > windowCount) {
             windowCount++;
-            for (int i = currentPosition; i < windowCount*itemsByDefault; i++) {
+            for (int i = currentPosition; i < windowCount * itemsByDefault; i++) {
                 try {
                     itemList.add(new Item((JSONObject) APIResponse.get(i)));
                     setAdapters();
@@ -248,7 +251,7 @@ public class ItemListFragment extends Fragment implements VolleyCallback,
                 }
                 currentPosition++;
             }
-            if (windowCount == itemWindows-1) windowCount++;
+            if (windowCount == itemWindows - 1) windowCount++;
         }
     }
 }
